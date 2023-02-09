@@ -13,10 +13,7 @@ class Game
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
-    #[ORM\Column]
-    private ?int $id = null;
-
-    #[ORM\Column]
+    #[ORM\Column()]
     private ?int $game_id = null;
 
     #[ORM\Column]
@@ -29,10 +26,10 @@ class Game
     private ?\DateTimeInterface $date = null;
 
     #[ORM\ManyToOne(inversedBy: 'games')]
-    #[ORM\JoinColumn(nullable: false)]
-    private ?User $user_id = null;
+    #[ORM\JoinColumn(name: "user_id", referencedColumnName: "user_id", nullable: false)]
+    private ?user $user_id = null;
 
-    #[ORM\OneToMany(mappedBy: 'game_id', targetEntity: GameQuestion::class)]
+    #[ORM\OneToMany(mappedBy: 'game_id', targetEntity: GameQuestion::class, orphanRemoval: true)]
     private Collection $gameQuestions;
 
     public function __construct()
@@ -42,19 +39,7 @@ class Game
 
     public function getId(): ?int
     {
-        return $this->id;
-    }
-
-    public function getGameId(): ?int
-    {
         return $this->game_id;
-    }
-
-    public function setGameId(int $game_id): self
-    {
-        $this->game_id = $game_id;
-
-        return $this;
     }
 
     public function getTotalQuestions(): ?int
@@ -93,12 +78,12 @@ class Game
         return $this;
     }
 
-    public function getUserId(): ?User
+    public function getUserId(): ?user
     {
         return $this->user_id;
     }
 
-    public function setUserId(?User $user_id): self
+    public function setUserId(?user $user_id): self
     {
         $this->user_id = $user_id;
 

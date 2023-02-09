@@ -13,10 +13,7 @@ class Question
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
-    #[ORM\Column]
-    private ?int $id = null;
-
-    #[ORM\Column]
+    #[ORM\Column()]
     private ?int $question_id = null;
 
     #[ORM\Column(type: Types::TEXT)]
@@ -26,35 +23,24 @@ class Question
     private ?string $question_answer = null;
 
     #[ORM\ManyToOne(inversedBy: 'questions')]
-    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\JoinColumn(name: "question_type_id", referencedColumnName: "question_type_id", nullable: false)]
     private ?QuestionType $question_type_id = null;
 
-    #[ORM\OneToOne(mappedBy: 'question_id', cascade: ['persist', 'remove'])]
-    private ?QuestionOption $questionOption = null;
+    #[ORM\OneToMany(mappedBy: 'question_id', targetEntity: QuestionOption::class, orphanRemoval: true)]
+    private Collection $questionOptions;
 
-    #[ORM\OneToMany(mappedBy: 'question_id', targetEntity: GameQuestion::class)]
+    #[ORM\OneToMany(mappedBy: 'question_id', targetEntity: GameQuestion::class, orphanRemoval: true)]
     private Collection $gameQuestions;
 
     public function __construct()
     {
+        $this->questionOptions = new ArrayCollection();
         $this->gameQuestions = new ArrayCollection();
     }
 
     public function getId(): ?int
     {
-        return $this->id;
-    }
-
-    public function getQuestionId(): ?int
-    {
         return $this->question_id;
-    }
-
-    public function setQuestionId(int $question_id): self
-    {
-        $this->question_id = $question_id;
-
-        return $this;
     }
 
     public function getQuestionText(): ?string
@@ -93,19 +79,32 @@ class Question
         return $this;
     }
 
-    public function getQuestionOption(): ?QuestionOption
+    /**
+     * @return Collection<int, QuestionOption>
+     */
+    public function getQuestionOptions(): Collection
     {
-        return $this->questionOption;
+        return $this->questionOptions;
     }
 
-    public function setQuestionOption(QuestionOption $questionOption): self
+    public function addQuestionOption(QuestionOption $questionOption): self
     {
-        // set the owning side of the relation if necessary
-        if ($questionOption->getQuestionId() !== $this) {
+        if (!$this->questionOptions->contains($questionOption)) {
+            $this->questionOptions->add($questionOption);
             $questionOption->setQuestionId($this);
         }
 
-        $this->questionOption = $questionOption;
+        return $this;
+    }
+
+    public function removeQuestionOption(QuestionOption $questionOption): self
+    {
+        if ($this->questionOptions->removeElement($questionOption)) {
+            // set the owning side to null (unless already changed)
+            if ($questionOption->getQuestionId() === $this) {
+                $questionOption->setQuestionId(null);
+            }
+        }
 
         return $this;
     }

@@ -11,10 +11,7 @@ class Settings
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
-    #[ORM\Column]
-    private ?int $id = null;
-
-    #[ORM\Column]
+    #[ORM\Column()]
     private ?int $settings_id = null;
 
     #[ORM\Column(type: Types::TEXT)]
@@ -24,24 +21,12 @@ class Settings
     private ?string $foreground_color = null;
 
     #[ORM\OneToOne(inversedBy: 'settings', cascade: ['persist', 'remove'])]
-    #[ORM\JoinColumn(nullable: false)]
-    private ?User $user_id = null;
+    #[ORM\JoinColumn(name: "user_id", referencedColumnName: "user_id", nullable: false)]
+    private ?user $user_id = null;
 
     public function getId(): ?int
     {
-        return $this->id;
-    }
-
-    public function getSettingsId(): ?int
-    {
         return $this->settings_id;
-    }
-
-    public function setSettingsId(int $settings_id): self
-    {
-        $this->settings_id = $settings_id;
-
-        return $this;
     }
 
     public function getBackgroundColor(): ?string
@@ -68,12 +53,12 @@ class Settings
         return $this;
     }
 
-    public function getUserId(): ?User
+    public function getUserId(): ?user
     {
         return $this->user_id;
     }
 
-    public function setUserId(User $user_id): self
+    public function setUserId(user $user_id): self
     {
         $this->user_id = $user_id;
 

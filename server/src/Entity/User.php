@@ -14,10 +14,7 @@ class User
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
-    #[ORM\Column]
-    private ?int $id = null;
-
-    #[ORM\Column]
+    #[ORM\Column()]
     private ?int $user_id = null;
 
     #[ORM\Column(type: Types::TEXT)]
@@ -36,7 +33,7 @@ class User
     private ?string $password = null;
 
     #[ORM\ManyToOne(inversedBy: 'users')]
-    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\JoinColumn(name: "user_type_id", referencedColumnName: "user_type_id", nullable: false)]
     private ?UserType $user_type_id = null;
 
     #[ORM\OneToOne(mappedBy: 'user_id', cascade: ['persist', 'remove'])]
@@ -55,19 +52,7 @@ class User
 
     public function getId(): ?int
     {
-        return $this->id;
-    }
-
-    public function getUserId(): ?int
-    {
         return $this->user_id;
-    }
-
-    public function setUserId(int $user_id): self
-    {
-        $this->user_id = $user_id;
-
-        return $this;
     }
 
     public function getFirstName(): ?string

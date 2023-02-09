@@ -13,10 +13,7 @@ class QuestionType
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
-    #[ORM\Column]
-    private ?int $id = null;
-
-    #[ORM\Column]
+    #[ORM\Column()]
     private ?int $question_type_id = null;
 
     #[ORM\Column(type: Types::TEXT)]
@@ -32,19 +29,7 @@ class QuestionType
 
     public function getId(): ?int
     {
-        return $this->id;
-    }
-
-    public function getQuestionTypeId(): ?int
-    {
         return $this->question_type_id;
-    }
-
-    public function setQuestionTypeId(int $question_type_id): self
-    {
-        $this->question_type_id = $question_type_id;
-
-        return $this;
     }
 
     public function getQuestionType(): ?string

@@ -13,10 +13,7 @@ class UserType
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
-    #[ORM\Column]
-    private ?int $id = null;
-
-    #[ORM\Column]
+    #[ORM\Column()]
     private ?int $user_type_id = null;
 
     #[ORM\Column(type: Types::TEXT)]
@@ -32,19 +29,7 @@ class UserType
 
     public function getId(): ?int
     {
-        return $this->id;
-    }
-
-    public function getUserTypeId(): ?int
-    {
         return $this->user_type_id;
-    }
-
-    public function setUserTypeId(int $user_type_id): self
-    {
-        $this->user_type_id = $user_type_id;
-
-        return $this;
     }
 
     public function getUserType(): ?string
