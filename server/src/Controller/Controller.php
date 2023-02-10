@@ -1,6 +1,8 @@
 <?php
 
+
 namespace App\Controller;
+
 
 use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -9,11 +11,6 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class Controller extends AbstractController
 {
-    #[Route('/')]
-    #[Route('/health')]
-    public function health(): Response {
-        return new Response();
-    }
 
     #[Route('/log/{name}')]
     public function log(string $name, LoggerInterface $logger): Response {
@@ -24,4 +21,5 @@ class Controller extends AbstractController
             'name' => $name
         ]);
     }
+
 }
