@@ -119,15 +119,26 @@ class ComposerStaticInite4afc132fba9d0b1d061ca05631c7c6d
         'N' => 
         array (
             'Nelmio\\CorsBundle\\' => 18,
+            'Negotiation\\' => 12,
         ),
         'M' => 
         array (
             'Monolog\\' => 8,
+            'Metadata\\' => 9,
             'Masterminds\\' => 12,
         ),
         'L' => 
         array (
             'Laminas\\Code\\' => 13,
+        ),
+        'J' => 
+        array (
+            'JMS\\Serializer\\' => 15,
+            'JMS\\SerializerBundle\\' => 21,
+        ),
+        'F' => 
+        array (
+            'FOS\\RestBundle\\' => 15,
         ),
         'E' => 
         array (
@@ -482,9 +493,17 @@ class ComposerStaticInite4afc132fba9d0b1d061ca05631c7c6d
         array (
             0 => __DIR__ . '/..' . '/nelmio/cors-bundle',
         ),
+        'Negotiation\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/willdurand/negotiation/src/Negotiation',
+        ),
         'Monolog\\' => 
         array (
             0 => __DIR__ . '/..' . '/monolog/monolog/src/Monolog',
+        ),
+        'Metadata\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/jms/metadata/src',
         ),
         'Masterminds\\' => 
         array (
@@ -493,6 +512,18 @@ class ComposerStaticInite4afc132fba9d0b1d061ca05631c7c6d
         'Laminas\\Code\\' => 
         array (
             0 => __DIR__ . '/..' . '/laminas/laminas-code/src',
+        ),
+        'JMS\\Serializer\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/jms/serializer/src',
+        ),
+        'JMS\\SerializerBundle\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/jms/serializer-bundle',
+        ),
+        'FOS\\RestBundle\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/friendsofsymfony/rest-bundle',
         ),
         'Egulias\\EmailValidator\\' => 
         array (
@@ -570,6 +601,16 @@ class ComposerStaticInite4afc132fba9d0b1d061ca05631c7c6d
         'App\\' => 
         array (
             0 => __DIR__ . '/../..' . '/src',
+        ),
+    );
+
+    public static $prefixesPsr0 = array (
+        'J' => 
+        array (
+            'JsonpCallbackValidator' => 
+            array (
+                0 => __DIR__ . '/..' . '/willdurand/jsonp-callback-validator/src',
+            ),
         ),
     );
 
@@ -1215,6 +1256,7 @@ class ComposerStaticInite4afc132fba9d0b1d061ca05631c7c6d
         return \Closure::bind(function () use ($loader) {
             $loader->prefixLengthsPsr4 = ComposerStaticInite4afc132fba9d0b1d061ca05631c7c6d::$prefixLengthsPsr4;
             $loader->prefixDirsPsr4 = ComposerStaticInite4afc132fba9d0b1d061ca05631c7c6d::$prefixDirsPsr4;
+            $loader->prefixesPsr0 = ComposerStaticInite4afc132fba9d0b1d061ca05631c7c6d::$prefixesPsr0;
             $loader->classMap = ComposerStaticInite4afc132fba9d0b1d061ca05631c7c6d::$classMap;
 
         }, null, ClassLoader::class);
