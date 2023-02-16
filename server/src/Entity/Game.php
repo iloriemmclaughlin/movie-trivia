@@ -16,18 +16,18 @@ class Game
     #[ORM\Column()]
     private ?int $game_id = null;
 
-    #[ORM\Column]
+    #[ORM\Column(type: Types::INTEGER, options: ['default' => 0])]
     private ?int $total_questions = null;
 
-    #[ORM\Column]
+    #[ORM\Column(type: Types::INTEGER, options: ['default' => 0])]
     private ?int $score = null;
 
     #[ORM\Column(type: Types::DATE_MUTABLE)]
-    private ?\DateTimeInterface $date = null;
+    private ?\DateTime $date = null;
 
     #[ORM\ManyToOne(inversedBy: 'games')]
     #[ORM\JoinColumn(name: "user_id", referencedColumnName: "user_id", nullable: false)]
-    private ?user $user_id = null;
+    private ?User $user_id = null;
 
     #[ORM\OneToMany(mappedBy: 'game_id', targetEntity: GameQuestion::class, orphanRemoval: true)]
     private Collection $gameQuestions;
@@ -66,24 +66,24 @@ class Game
         return $this;
     }
 
-    public function getDate(): ?\DateTimeInterface
+    public function getDate(): ?\DateTime
     {
         return $this->date;
     }
 
-    public function setDate(\DateTimeInterface $date): self
+    public function setDate(\DateTime $date): self
     {
         $this->date = $date;
 
         return $this;
     }
 
-    public function getUserId(): ?user
+    public function getUserId(): ?User
     {
         return $this->user_id;
     }
 
-    public function setUserId(?user $user_id): self
+    public function setUserId(?User $user_id): self
     {
         $this->user_id = $user_id;
 

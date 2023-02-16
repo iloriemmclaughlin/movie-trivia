@@ -2,8 +2,10 @@
 
 namespace App\Controller;
 
+use App\Repository\GameRepository;
 use App\Repository\UserTypeRepository;
 use Doctrine\Persistence\ManagerRegistry;
+use App\Service\UserService;
 use PHPUnit\Util\Json;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
@@ -29,43 +31,33 @@ class UserController extends AbstractController
 
 
     #[Route('/api/users', methods: ['GET'])]
-    public function getAllUsers(UserRepository $userRepository): Response
+    public function getAllUsers(UserService $userService): Response
     {
-        $users = $userRepository->findAll();
-        $data = [];
-
-        foreach($users as $user) {
-            $data[] = [
-                'user_id' => $user->getId(),
-                'user_type_id' => $user->getUserTypeId(),
-                'first_name' => $user->getFirstName(),
-                'last_name' => $user->getLastName(),
-                'email' => $user->getEmail(),
-                'username' => $user->getUsername(),
-                'password' => $user->getPassword()
-            ];
-        }
-
-        return new JsonResponse($data);
+        return $this->json($userService->returnAllUsers());
     }
 
     #[Route('/api/users/{userId}', methods: ['GET'])]
-    public function getUserById(int $userId, UserRepository $userRepository): Response
+    public function getUserById(int $userId, UserService $userService): Response
     {
-        $user = $userRepository->find($userId);
-        $firstName = $user->getFirstName();
-        $lastName = $user->getLastName();
-        $email = $user->getEmail();
-        $username = $user->getUsername();
-        $password = $user->getPassword();
+        return $this->json($userService->returnUserById($userId));
+    }
 
-        return new JsonResponse([
-            'firstName' => $firstName,
-            'lastName' => $lastName,
-            'email' => $email,
-            'username' => $username,
-            'password' => $password,
-        ]);
+    #[Route('/api/users/{userId}/games', methods: ['GET'])]
+    public function getUserGames(int $userId, UserService $userService): Response
+    {
+        return $this->json($userService->returnUserGames($userId));
+    }
+
+    #[Route('/api/users/{userId}/stats', methods: ['GET'])]
+    public function getUserStats(int $userId, UserService $userService): Response
+    {
+        return $this->json($userService->returnUserStats($userId));
+    }
+
+    #[Route('/api/users/{userId}/settings', methods: ['GET'])]
+    public function getUserSettings(int $userId, UserService $userService): Response
+    {
+        return $this->json($userService->returnUserSettings($userId));
     }
 
     #[Route('/api/users', methods: ['POST'])]
@@ -75,7 +67,7 @@ class UserController extends AbstractController
         $userInput = json_decode($request->getContent(), true);
 
         $newUser = new User();
-        $userType = $this->userTypeRepository->findOneBy(array('user_type_id' => $userInput['userType']));
+        $userType = $this->userTypeRepository->findOneBy(array('user_type_id' => 2));
         $newUser->setUserType($userType);
         $newUser->setFirstName($userInput['firstName']);
         $newUser->setLastName($userInput['lastName']);
@@ -90,7 +82,15 @@ class UserController extends AbstractController
 
     }
 
-    #[Route('/users/{id}/settings', name: 'edit_user', methods: ['PUT'])]
+    #[Route('/api/users/{userId}/games', methods: ['PUT'])]
+    public function updateUserGame(Request $request, int $userId, UserRepository $userRepository, ManagerRegistry $doctrine): Response
+    {
+
+
+        return new JsonResponse();
+    }
+
+    #[Route('/api/users/{userId}/settings', methods: ['PUT'])]
     public function editUser(Request $request, int $userId, UserRepository $userRepository, ManagerRegistry $doctrine): Response {
 
         $updatedUser = json_decode($request->getContent(), true);
@@ -106,16 +106,18 @@ class UserController extends AbstractController
         $user->setEmail($updatedUser['email']);
         $user->setUsername($updatedUser['username']);
         $user->setPassword($updatedUser['password']);
+        $user->getSettings()->setBackgroundColor($updatedUser['backgroundColor']);
+        $user->getSettings()->setForegroundColor($updatedUser['foregroundColor']);
         $doctrine->getManager()->flush();
 
-        return new JsonResponse('User ID ' . $userId . 'was successfully updated.');
+        return new JsonResponse('User ID ' . $userId . ' was successfully updated.');
 
     }
 
-    #[Route('/users/{id}/settings', name: 'edit_user_settings', methods: ['PUT'])]
-    public function editUserSettings(Request $request, int $userId, UserRepository $userRepository, ManagerRegistry $doctrine): Response {
+    #[Route('/api/users/{userId}/stats', methods: ['PUT'])]
+    public function updateUserStats(Request $request, int $userId, UserRepository $userRepository, ManagerRegistry $doctrine): Response {
 
-        $newColors = json_decode($request->getContent(), true);
+        $updatedStats = json_decode($request->getContent(), true);
 
         $user = $userRepository->find($userId);
 
@@ -123,15 +125,15 @@ class UserController extends AbstractController
             return $this->json('No user found for id' . $userId, 404);
         }
 
-        $user->setBackgroundColor($newColors['backgroundColor']);
-        $user->setForegroundColor($newColors['foregroundColor']);
+        $user->getStats()->setGamesPlayed($updatedStats['gamesPlayed']);
+        $user->getStats()->setHighScore($updatedStats['highScore']);
         $doctrine->getManager()->flush();
 
-        return new JsonResponse('Your profile was successfully updated.');
+        return new JsonResponse('User ID ' . $userId . ' was successfully updated.');
 
     }
 
-    #[Route('/users/{id}', name: 'delete_user', methods: ['DELETE'])]
+    #[Route('/api/users/{userId}', name: 'delete_user', methods: ['DELETE'])]
     public function deleteUser(int $userId, UserRepository $userRepository, ManagerRegistry $doctrine): Response {
 
         $user = $userRepository->find($userId);
@@ -143,7 +145,7 @@ class UserController extends AbstractController
         $doctrine->getManager()->remove($user);
         $doctrine->getManager()->flush();
 
-        return new JsonResponse('User ID ' . $userId . 'was successfully deleted.');
+        return new JsonResponse('User ID ' . $userId . ' was successfully deleted.');
 
     }
 

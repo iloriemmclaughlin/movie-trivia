@@ -23,18 +23,18 @@ class User
     #[ORM\Column(type: Types::TEXT)]
     private ?string $last_name = null;
 
-    #[ORM\Column(type: Types::TEXT)]
+    #[ORM\Column(type: Types::TEXT, unique: true)]
     private ?string $email = null;
 
-    #[ORM\Column(type: Types::TEXT)]
+    #[ORM\Column(type: Types::TEXT, unique: true)]
     private ?string $username = null;
 
     #[ORM\Column(type: Types::TEXT)]
     private ?string $password = null;
 
     #[ORM\ManyToOne(inversedBy: 'users')]
-    #[ORM\JoinColumn(name: "user_type_id", referencedColumnName: "user_type_id", nullable: false)]
-    private ?UserType $user_type = null;
+    #[ORM\JoinColumn(name: "user_type_id", referencedColumnName: "user_type_id", nullable: false, options: ['default' => 2])]
+    private UserType $user_type;
 
     #[ORM\OneToOne(mappedBy: 'user_id', cascade: ['persist', 'remove'])]
     private ?Settings $settings = null;
