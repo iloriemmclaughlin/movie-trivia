@@ -51,7 +51,7 @@ class UserController extends AbstractController
     #[Route('/api/users', methods: ['POST'])]
     public function createNewUser(Request $request, UserService $userService): Response
     {
-        return $this->json($userService->returnNewUser($request));
+        return $this->json($userService->createNewUser($request));
     }
 
     #[Route('/api/users/{userId}/games', methods: ['PUT'])]
