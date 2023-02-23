@@ -18,40 +18,48 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 class UserController extends AbstractController
 {
 
-    #[Route('/api/users', methods: ['GET'])]
-    public function getAllUsers(UserService $userService): Response
+    private UserService $userService;
+
+    public function __construct(UserService $userService)
     {
-        return $this->json($userService->returnAllUsers());
+        $this->userService = $userService;
+    }
+
+
+    #[Route('/api/users', methods: ['GET'])]
+    public function getAllUsers(): Response
+    {
+        return $this->json($this->userService->getAllUsers());
     }
 
     #[Route('/api/users/{userId}', methods: ['GET'])]
-    public function getUserById(int $userId, UserService $userService): Response
+    public function getUserById(int $userId): Response
     {
-        return $this->json($userService->returnUserById($userId));
+        return $this->json($this->userService->getUserById($userId));
     }
 
     #[Route('/api/users/{userId}/games', methods: ['GET'])]
-    public function getUserGames(int $userId, UserService $userService): Response
+    public function getUserGames(int $userId): Response
     {
-        return $this->json($userService->returnUserGames($userId));
+        return $this->json($this->userService->getUserGames($userId));
     }
 
     #[Route('/api/users/{userId}/stats', methods: ['GET'])]
-    public function getUserStats(int $userId, UserService $userService): Response
+    public function getUserStats(int $userId): Response
     {
-        return $this->json($userService->returnUserStats($userId));
+        return $this->json($this->userService->getUserStats($userId));
     }
 
     #[Route('/api/users/{userId}/settings', methods: ['GET'])]
-    public function getUserSettings(int $userId, UserService $userService): Response
+    public function getUserSettings(int $userId): Response
     {
-        return $this->json($userService->returnUserSettings($userId));
+        return $this->json($this->userService->getUserSettings($userId));
     }
 
     #[Route('/api/users', methods: ['POST'])]
-    public function createNewUser(Request $request, UserService $userService): Response
+    public function createNewUser(Request $request): Response
     {
-        return $this->json($userService->createNewUser($request));
+        return $this->json($this->userService->createNewUser($request));
     }
 
     #[Route('/api/users/{userId}/games', methods: ['PUT'])]
@@ -63,21 +71,21 @@ class UserController extends AbstractController
     }
 
     #[Route('/api/users/{userId}/settings', methods: ['PUT'])]
-    public function editUser(Request $request, int $userId, UserService $userService): Response
+    public function editUser(Request $request, int $userId): Response
     {
-        return $this->json($userService->updateUser($request, $userId));
+        return $this->json($this->userService->updateUser($request, $userId));
     }
 
     #[Route('/api/users/{userId}/stats', methods: ['PUT'])]
-    public function updateUserStats(Request $request, int $userId, UserService $userService): Response
+    public function updateUserStats(Request $request, int $userId): Response
     {
-        return $this->json($userService->updateUserStats($request, $userId));
+        return $this->json($this->userService->updateUserStats($request, $userId));
     }
 
     #[Route('/api/users/{userId}', name: 'delete_user', methods: ['DELETE'])]
-    public function deleteUser(int $userId, UserService $userService): Response
+    public function deleteUser(int $userId): Response
     {
-        return $this->json($userService->deleteUser($userId));
+        return $this->json($this->userService->deleteUser($userId));
     }
 
 }

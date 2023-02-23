@@ -2,6 +2,9 @@
 
 namespace App\Service;
 
+use App\Dto\Response\Transformer\GameQuestionResponseDtoTransformer;
+use App\Dto\Response\Transformer\GameResponseDtoTransformer;
+use App\Dto\Response\Transformer\QuestionResponseDtoTransformer;
 use App\Entity\Game;
 use App\Entity\Question;
 use App\Repository\GameRepository;
@@ -18,43 +21,47 @@ class GameService
     private QuestionRepository $questionRepository;
     private QuestionService $questionService;
     private ManagerRegistry $managerRegistry;
+    private GameResponseDtoTransformer $gameResponseDtoTransformer;
+    private QuestionResponseDtoTransformer $questionResponseDtoTransformer;
+    private GameQuestionResponseDtoTransformer $gameQuestionResponseDtoTransformer;
 
-    public function __construct(GameRepository $gameRepository, UserRepository $userRepository, QuestionRepository $questionRepository, QuestionService $questionService, ManagerRegistry $managerRegistry)
+    public function __construct(
+        GameRepository $gameRepository,
+        UserRepository $userRepository,
+        QuestionRepository $questionRepository,
+        QuestionService $questionService,
+        ManagerRegistry $managerRegistry,
+        GameResponseDtoTransformer $gameResponseDtoTransformer,
+        QuestionResponseDtoTransformer $questionResponseDtoTransformer,
+        GameQuestionResponseDtoTransformer $gameQuestionResponseDtoTransformer)
     {
         $this->gameRepository = $gameRepository;
         $this->userRepository = $userRepository;
         $this->questionRepository = $questionRepository;
         $this->questionService = $questionService;
         $this->managerRegistry = $managerRegistry;
+        $this->gameResponseDtoTransformer = $gameResponseDtoTransformer;
+        $this->questionResponseDtoTransformer = $questionResponseDtoTransformer;
+        $this->gameQuestionResponseDtoTransformer = $gameQuestionResponseDtoTransformer;
     }
 
-    public function returnAllGames(): array
+    public function returnAllGames()
     {
         $games = $this->gameRepository->findAll();
-        $allGames = [];
 
-        foreach($games as $game) {
-            $allGames[] = [
-                'game_id' => $game->getId(),
-                'user_id' => $game->getUserId()->getId(),
-                'score' => $game->getScore(),
-                'total_questions' => $game->getTotalQuestions(),
-                'date' => $game->getDate()
-            ];
-        }
-        return $allGames;
+        $dto = $this->gameResponseDtoTransformer->transformFromObjects($games);
+
+        return $dto;
     }
 
-    public function returnGameQuestions($gameId): array
+    public function returnGameQuestions($gameId)
     {
         $game = $this->gameRepository->find($gameId);
+        $gameQuestions = $game->getGameQuestions();
 
-        $gameQuestions = [
-            'game_id' => $game->getId(),
-            'questions' => $game->getGameQuestions()->getValues(),
-        ];
+        $dto = $this->gameQuestionResponseDtoTransformer->transformFromObjects($gameQuestions);
 
-        return $gameQuestions;
+        return $dto;
     }
 
     public function createNewGame($userId): array
@@ -120,18 +127,18 @@ class GameService
 
     }
 
-    private function getRandomQuestion(): Question
-    {
-        $questions = $this->questionService->returnAllQuestions();
+//    private function getRandomQuestion(): Question
+//    {
+//        $questions = $this->questionService->returnAllQuestions();
+//
+//        $question = array_rand($questions);
+//
+//        return $question;
+//    }
 
-        $question = array_rand($questions);
-
-        return $question;
-    }
-
-    private function questionCheck($gameId, $userResponse): void //bool
-    {
-
-    }
+//    private function questionCheck($gameId, $userResponse): void //bool
+//    {
+//
+//    }
 
 }

@@ -20,7 +20,7 @@ class GameController extends AbstractController
     #[Route('/api/games/{gameId}/questions', methods: ['GET'])]
     public function getGameQuestions(int $gameId, GameService $gameService): Response
     {
-        return $this->json($gameService->returnGameQuestions());
+        return $this->json($gameService->returnGameQuestions($gameId));
     }
 
     #[Route('/api/games/{userId}', methods: ['POST'])]

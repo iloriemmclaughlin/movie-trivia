@@ -2,6 +2,10 @@
 
 namespace App\Service;
 
+use App\Dto\Response\Transformer\GameResponseDtoTransformer;
+use App\Dto\Response\Transformer\SettingsResponseDtoTransformer;
+use App\Dto\Response\Transformer\StatsResponseDtoTransformer;
+use App\Dto\Response\Transformer\UserResponseDtoTransformer;
 use App\Entity\Stats;
 use App\Entity\User;
 use App\Repository\UserRepository;
@@ -14,104 +18,79 @@ class UserService
     private UserRepository $userRepository;
     private UserTypeRepository $userTypeRepository;
     private ManagerRegistry $managerRegistry;
+    private UserResponseDtoTransformer $userResponseDtoTransformer;
+    private GameResponseDtoTransformer $gameResponseDtoTransformer;
+    private StatsResponseDtoTransformer $statsResponseDtoTransformer;
+    private SettingsResponseDtoTransformer $settingsResponseDtoTransformer;
 
-    public function __construct(UserRepository $userRepository, UserTypeRepository $userTypeRepository, ManagerRegistry $managerRegistry)
+
+    public function __construct(
+        UserRepository $userRepository,
+        UserTypeRepository $userTypeRepository,
+        ManagerRegistry $managerRegistry,
+        UserResponseDtoTransformer $userResponseDtoTransformer,
+        GameResponseDtoTransformer $gameResponseDtoTransformer,
+        StatsResponseDtoTransformer $statsResponseDtoTransformer,
+        SettingsResponseDtoTransformer $settingsResponseDtoTransformer)
     {
         $this->userRepository = $userRepository;
         $this->userTypeRepository = $userTypeRepository;
         $this->managerRegistry = $managerRegistry;
+        $this->userResponseDtoTransformer = $userResponseDtoTransformer;
+        $this->gameResponseDtoTransformer = $gameResponseDtoTransformer;
+        $this->statsResponseDtoTransformer = $statsResponseDtoTransformer;
+        $this->settingsResponseDtoTransformer = $settingsResponseDtoTransformer;
     }
 
-    public function returnAllUsers(): array
+    public function getAllUsers()
     {
-        $allUsers = [];
         $users = $this->userRepository->findAll();
 
+        $dto = $this->userResponseDtoTransformer->transformFromObjects($users);
 
-        foreach($users as $user) {
-            $allUsers[] = [
-                'user_id' => $user->getId(),
-                'user_type' => $user->getUserType()->getUserType(),
-                'first_name' => $user->getFirstName(),
-                'last_name' => $user->getLastName(),
-                'email' => $user->getEmail(),
-                'username' => $user->getUsername(),
-                'password' => $user->getPassword()
-            ];
-        }
-
-        return $allUsers;
+        return $dto;
     }
 
-    public function returnUserById($userId): array
+    public function getUserById($userId)
     {
         $user = $this->userRepository->find($userId);
 
-        $userType = $user->getUserType()->getUserType();
-        $firstName = $user->getFirstName();
-        $lastName = $user->getLastName();
-        $email = $user->getEmail();
-        $username = $user->getUsername();
-        $password = $user->getPassword();
+        $dto = $this->userResponseDtoTransformer->transformFromObject($user);
 
-        $userInfo = [
-            'user_id' => $userId,
-            'user_type' => $userType,
-            'first_name' => $firstName,
-            'last_name' => $lastName,
-            'email' => $email,
-            'username' => $username,
-            'password' => $password
-        ];
-
-        return $userInfo;
+        return $dto;
     }
 
-    public function returnUserGames($userId): array
+    public function getUserGames($userId)
     {
         $user = $this->userRepository->find($userId);
         $userGames = $user->getGames();
-        $userGamesArray = [];
 
-        foreach($userGames as $game) {
-            $userGamesArray[] = [
-                'game_id' => $game->getId(),
-                'score' => $game->getScore(),
-                'total_questions' => $game->getTotalQuestions(),
-                'date' => $game->getDate()
-            ];
-        }
+        $dto = $this->gameResponseDtoTransformer->transformFromObjects($userGames);
 
-        return $userGamesArray;
+        return $dto;
     }
 
-    public function returnUserStats($userId): array
+    public function getUserStats($userId)
     {
         $user = $this->userRepository->find($userId);
+        $userStats = $user->getStats();
 
-        $userStats = [
-            'user_id' => $user->getId(),
-            'games_played' => $user->getStats()->getGamesPlayed(),
-            'high_score' => $user->getStats()->getHighScore()
-        ];
+        $dto = $this->statsResponseDtoTransformer->transformFromObject($userStats);
 
-        return $userStats;
+        return $dto;
     }
 
-    public function returnUserSettings($userId): array
+    public function getUserSettings($userId)
     {
         $user = $this->userRepository->find($userId);
+        $userSettings = $user->getSettings();
 
-        $userSettings = [
-            'user_id' => $user->getId(),
-            'background_color' => $user->getSettings()->getBackgroundColor(),
-            'foreground_color' => $user->getSettings()->getForegroundColor()
-        ];
+        $dto = $this->settingsResponseDtoTransformer->transformFromObject($userSettings);
 
-        return $userSettings;
+        return $dto;
     }
 
-    public function createNewUser($request): array
+    public function createNewUser($request)
     {
         $userInput = json_decode($request->getContent(), true);
 
@@ -124,21 +103,24 @@ class UserService
         $newUser->setUsername($userInput['username']);
         $newUser->setPassword($userInput['password']);
 
-        $createdUser = [
-            'user_id' => $newUser->getId(),
-            'user_type' => $newUser->getUserType()->getUserType(),
-            'first_name' => $newUser->getFirstName(),
-            'last_name' => $newUser->getLastName(),
-            'email' => $newUser->getLastName(),
-            'username' => $newUser->getUsername(),
-            'password' => $newUser->getPassword()
-        ];
-
         $id = $newUser->getId();
         $this->createUserStats($id);
 
         $this->managerRegistry->getManager()->persist($newUser);
         $this->managerRegistry->getManager()->flush();
+
+
+        $createdUser = $this->userResponseDtoTransformer->transformFromObject($newUser);
+
+//        $createdUser = [
+//            'user_id' => $newUser->getId(),
+//            'user_type' => $newUser->getUserType()->getUserType(),
+//            'first_name' => $newUser->getFirstName(),
+//            'last_name' => $newUser->getLastName(),
+//            'email' => $newUser->getLastName(),
+//            'username' => $newUser->getUsername(),
+//            'password' => $newUser->getPassword()
+//        ];
 
         return $createdUser;
     }
