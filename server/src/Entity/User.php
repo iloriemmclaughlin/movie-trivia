@@ -32,12 +32,15 @@ class User
     #[ORM\Column(type: Types::TEXT)]
     private ?string $password = null;
 
+    #[ORM\Column(type: Types::TEXT, nullable: true)]
+    private ?string $background_color;
+
+    #[ORM\Column(type: Types::TEXT, nullable: true)]
+    private ?string $foreground_color;
+
     #[ORM\ManyToOne(inversedBy: 'users')]
     #[ORM\JoinColumn(name: "user_type_id", referencedColumnName: "user_type_id", nullable: false, options: ['default' => 2])]
     private UserType $user_type;
-
-    #[ORM\OneToOne(mappedBy: 'user_id', cascade: ['persist', 'remove'])]
-    private ?Settings $settings = null;
 
     #[ORM\OneToOne(mappedBy: 'user_id', cascade: ['persist', 'remove'])]
     private ?Stats $stats = null;
@@ -115,6 +118,30 @@ class User
         return $this;
     }
 
+    public function getBackgroundColor(): ?string
+    {
+        return $this->background_color;
+    }
+
+    public function setBackgroundColor(string $background_color): self
+    {
+        $this->background_color = $background_color;
+
+        return $this;
+    }
+
+    public function getForegroundColor(): ?string
+    {
+        return $this->foreground_color;
+    }
+
+    public function setForegroundColor(string $foreground_color): self
+    {
+        $this->foreground_color = $foreground_color;
+
+        return $this;
+    }
+
     public function getUserType(): ?UserType
     {
         return $this->user_type;
@@ -123,23 +150,6 @@ class User
     public function setUserType(?UserType $user_type): self
     {
         $this->user_type = $user_type;
-
-        return $this;
-    }
-
-    public function getSettings(): ?Settings
-    {
-        return $this->settings;
-    }
-
-    public function setSettings(Settings $settings): self
-    {
-        // set the owning side of the relation if necessary
-        if ($settings->getUserId() !== $this) {
-            $settings->setUserId($this);
-        }
-
-        $this->settings = $settings;
 
         return $this;
     }

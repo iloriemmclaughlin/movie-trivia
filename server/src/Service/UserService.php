@@ -2,14 +2,13 @@
 
 namespace App\Service;
 
-use App\Dto\Response\Transformer\GameResponseDtoTransformer;
-use App\Dto\Response\Transformer\SettingsResponseDtoTransformer;
-use App\Dto\Response\Transformer\StatsResponseDtoTransformer;
-use App\Dto\Response\Transformer\UserResponseDtoTransformer;
-use App\Entity\Stats;
+use App\Dto\Incoming\CreateUserDto;
+use App\Dto\Outgoing\UserDto;
 use App\Entity\User;
+use App\Repository\StatsRepository;
 use App\Repository\UserRepository;
 use App\Repository\UserTypeRepository;
+use Symfony\Component\HttpFoundation\Request;
 use Doctrine\Persistence\ManagerRegistry;
 
 
@@ -17,36 +16,39 @@ class UserService
 {
     private UserRepository $userRepository;
     private UserTypeRepository $userTypeRepository;
+    private StatsRepository $statsRepository;
+    private UserTypeService $userTypeService;
+    private GameService $gameService;
+    private StatsService $statsService;
     private ManagerRegistry $managerRegistry;
-    private UserResponseDtoTransformer $userResponseDtoTransformer;
-    private GameResponseDtoTransformer $gameResponseDtoTransformer;
-    private StatsResponseDtoTransformer $statsResponseDtoTransformer;
-    private SettingsResponseDtoTransformer $settingsResponseDtoTransformer;
 
 
     public function __construct(
         UserRepository $userRepository,
         UserTypeRepository $userTypeRepository,
-        ManagerRegistry $managerRegistry,
-        UserResponseDtoTransformer $userResponseDtoTransformer,
-        GameResponseDtoTransformer $gameResponseDtoTransformer,
-        StatsResponseDtoTransformer $statsResponseDtoTransformer,
-        SettingsResponseDtoTransformer $settingsResponseDtoTransformer)
+        StatsRepository $statsRepository,
+        UserTypeService $userTypeService,
+        GameService $gameService,
+        StatsService $statsService,
+        ManagerRegistry $managerRegistry)
     {
         $this->userRepository = $userRepository;
         $this->userTypeRepository = $userTypeRepository;
+        $this->statsRepository = $statsRepository;
+        $this->userTypeService = $userTypeService;
+        $this->gameService = $gameService;
+        $this->statsService = $statsService;
         $this->managerRegistry = $managerRegistry;
-        $this->userResponseDtoTransformer = $userResponseDtoTransformer;
-        $this->gameResponseDtoTransformer = $gameResponseDtoTransformer;
-        $this->statsResponseDtoTransformer = $statsResponseDtoTransformer;
-        $this->settingsResponseDtoTransformer = $settingsResponseDtoTransformer;
     }
 
     public function getAllUsers()
     {
         $users = $this->userRepository->findAll();
+        $dto = [];
 
-        $dto = $this->userResponseDtoTransformer->transformFromObjects($users);
+        foreach($users as $user) {
+            $dto[] = $this->transformToDto($user);
+        }
 
         return $dto;
     }
@@ -55,19 +57,29 @@ class UserService
     {
         $user = $this->userRepository->find($userId);
 
-        $dto = $this->userResponseDtoTransformer->transformFromObject($user);
-
-        return $dto;
+        return $this->transformToDto($user);
     }
 
     public function getUserGames($userId)
     {
+
         $user = $this->userRepository->find($userId);
         $userGames = $user->getGames();
 
-        $dto = $this->gameResponseDtoTransformer->transformFromObjects($userGames);
+        $dto = [];
+
+        foreach($userGames as $game) {
+            $dto[] = $this->gameService->transformToDto($game);
+        }
 
         return $dto;
+//
+////        $user = $this->userRepository->find($userId);
+////        $userGames = $user->getGames();
+////
+////        $dto = $this->gameResponseDtoTransformer->transformFromObjects($userGames);
+////
+////        return $dto;
     }
 
     public function getUserStats($userId)
@@ -75,54 +87,36 @@ class UserService
         $user = $this->userRepository->find($userId);
         $userStats = $user->getStats();
 
-        $dto = $this->statsResponseDtoTransformer->transformFromObject($userStats);
+        $dto = $this->statsService->transformToDto($userStats);
 
         return $dto;
+
+//        $user = $this->userRepository->find($userId);
+//        $userStats = $user->getStats();
+//
+//        $dto = $this->statsResponseDtoTransformer->transformFromObject($userStats);
+//
+//        return $dto;
     }
 
-    public function getUserSettings($userId)
+    public function createUser(CreateUserDto $dto): ?UserDto
     {
-        $user = $this->userRepository->find($userId);
-        $userSettings = $user->getSettings();
-
-        $dto = $this->settingsResponseDtoTransformer->transformFromObject($userSettings);
-
-        return $dto;
-    }
-
-    public function createNewUser($request)
-    {
-        $userInput = json_decode($request->getContent(), true);
-
-        $newUser = new User();
         $userType = $this->userTypeRepository->findOneBy(array('user_type_id' => 2));
-        $newUser->setUserType($userType);
-        $newUser->setFirstName($userInput['firstName']);
-        $newUser->setLastName($userInput['lastName']);
-        $newUser->setEmail($userInput['email']);
-        $newUser->setUsername($userInput['username']);
-        $newUser->setPassword($userInput['password']);
 
-        $id = $newUser->getId();
-        $this->createUserStats($id);
+        $user = new User();
+        $user->setUserType($userType);
+        $user->setFirstName($dto->getFirstName());
+        $user->setLastName($dto->getLastName());
+        $user->setEmail($dto->getEmail());
+        $user->setUsername($dto->getUsername());
+        $user->setPassword($dto->getPassword());
+        $user->setBackgroundColor($dto->getBackgroundColor());
+        $user->setForegroundColor($dto->getForegroundColor());
+        $this->userRepository->save($user, true);
 
-        $this->managerRegistry->getManager()->persist($newUser);
-        $this->managerRegistry->getManager()->flush();
+        $this->createUserStats($user->getId());
 
-
-        $createdUser = $this->userResponseDtoTransformer->transformFromObject($newUser);
-
-//        $createdUser = [
-//            'user_id' => $newUser->getId(),
-//            'user_type' => $newUser->getUserType()->getUserType(),
-//            'first_name' => $newUser->getFirstName(),
-//            'last_name' => $newUser->getLastName(),
-//            'email' => $newUser->getLastName(),
-//            'username' => $newUser->getUsername(),
-//            'password' => $newUser->getPassword()
-//        ];
-
-        return $createdUser;
+        return $this->transformToDto($user);
     }
 
     private function createUserStats($userId): void
@@ -132,12 +126,11 @@ class UserService
         $newStats->setGamesPlayed(0);
         $newStats->setHighScore(0);
 
-        $this->managerRegistry->getManager()->persist($newStats);
-        $this->managerRegistry->getManager()->flush();
+        $this->statsRepository->save($newStats, true);
 
     }
 
-    public function updateUser($request, $userId): array
+    public function updateUser(Request $request, int $userId): ?UserDto
     {
         $userInput = json_decode($request->getContent(), true);
 
@@ -148,24 +141,15 @@ class UserService
         $user->setEmail($userInput['email']);
         $user->setUsername($userInput['username']);
         $user->setPassword($userInput['password']);
-        $user->getSettings()->setBackgroundColor($userInput['backgroundColor']);
-        $user->getSettings()->setForegroundColor($userInput['foregroundColor']);
-        $this->managerRegistry->getManager()->flush();
+        $user->setBackgroundColor($userInput['backgroundColor']);
+        $user->setForegroundColor($userInput['foregroundColor']);
 
-        $updatedUser = [
-            'user_id' => $user->getId(),
-            'user_type' => $user->getUserType()->getUserType(),
-            'first_name' => $user->getFirstName(),
-            'last_name' => $user->getLastName(),
-            'email' => $user->getLastName(),
-            'username' => $user->getUsername(),
-            'password' => $user->getPassword()
-        ];
+        $this->userRepository->save($user);
 
-        return $updatedUser;
+        return $this->transformToDto($user);
     }
 
-    public function updateUserStats($request, $userId): string
+    public function updateUserStats(Request $request, int $userId): string
     {
         $updatedStats = json_decode($request->getContent(), true);
 
@@ -177,12 +161,13 @@ class UserService
 
         $user->getStats()->setGamesPlayed($updatedStats['gamesPlayed']);
         $user->getStats()->setHighScore($updatedStats['highScore']);
-        $this->managerRegistry->getManager()->flush();
+        $this->userRepository->save($user);
+        $this->statsRepository->save($updatedStats);
 
         return ('Stats have been successfully updated!');
     }
 
-    public function deleteUser($userId): string
+    public function deleteUser(int $userId): string
     {
         $user = $this->userRepository->find($userId);
 
@@ -190,10 +175,24 @@ class UserService
             return ('No user found for id' . $userId);
         }
 
-        $this->managerRegistry->getManager()->remove($user);
-        $this->managerRegistry->getManager()->flush();
+        $this->userRepository->remove($user, true);
 
         return ('User has been successfully deleted!');
+    }
+
+    public function transformToDto(User $user): UserDto
+    {
+        return new UserDto(
+            $user->getId(),
+            $this->userTypeService->transformToDto($user->getUserType()),
+            $user->getFirstName(),
+            $user->getLastName(),
+            $user->getEmail(),
+            $user->getUsername(),
+            $user->getPassword(),
+            $user->getBackgroundColor(),
+            $user->getForegroundColor()
+        );
     }
 
 }

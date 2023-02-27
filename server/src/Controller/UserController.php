@@ -2,29 +2,28 @@
 
 namespace App\Controller;
 
-use App\Repository\UserTypeRepository;
+use App\Dto\Incoming\CreateUserDto;
 use Doctrine\Persistence\ManagerRegistry;
 use App\Service\UserService;
-use PHPUnit\Util\Json;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use App\Serialization\SerializationService;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
-use App\Entity\User;
 use App\Repository\UserRepository;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
 
-class UserController extends AbstractController
+class UserController extends ApiController
 {
-
     private UserService $userService;
 
-    public function __construct(UserService $userService)
-    {
+    public function __construct(
+        SerializationService $serializationService,
+        UserService $userService
+    ) {
+        parent::__construct($serializationService);
         $this->userService = $userService;
     }
-
 
     #[Route('/api/users', methods: ['GET'])]
     public function getAllUsers(): Response
@@ -50,20 +49,15 @@ class UserController extends AbstractController
         return $this->json($this->userService->getUserStats($userId));
     }
 
-    #[Route('/api/users/{userId}/settings', methods: ['GET'])]
-    public function getUserSettings(int $userId): Response
-    {
-        return $this->json($this->userService->getUserSettings($userId));
-    }
-
     #[Route('/api/users', methods: ['POST'])]
     public function createNewUser(Request $request): Response
     {
-        return $this->json($this->userService->createNewUser($request));
+        $dto = $this->getValidatedDto($request, CreateUserDto::class);
+        return $this->json($this->userService->createUser($dto));
     }
 
     #[Route('/api/users/{userId}/games', methods: ['PUT'])]
-    public function updateUserGame(Request $request, int $userId, UserRepository $userRepository, ManagerRegistry $doctrine): Response
+    public function updateUserGame(Request $request, int $userId): Response
     {
     // FIGURE OUT LATER?
 
