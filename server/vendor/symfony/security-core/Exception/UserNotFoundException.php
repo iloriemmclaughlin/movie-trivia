@@ -12,7 +12,7 @@
 namespace Symfony\Component\Security\Core\Exception;
 
 /**
- * UserNotFoundException is thrown if a User cannot be found for the given identifier.
+ * UserNotFoundException is thrown if a Homepage cannot be found for the given identifier.
  *
  * @author Fabien Potencier <fabien@symfony.com>
  * @author Alexander <iam.asm89@gmail.com>

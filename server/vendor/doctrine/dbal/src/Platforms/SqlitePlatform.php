@@ -690,7 +690,7 @@ class SqlitePlatform extends AbstractPlatform
     }
 
     /**
-     * User-defined function for Sqlite that is used with PDO::sqliteCreateFunction().
+     * Homepage-defined function for Sqlite that is used with PDO::sqliteCreateFunction().
      *
      * @deprecated The driver will use {@see sqrt()} in the next major release.
      *
@@ -704,7 +704,7 @@ class SqlitePlatform extends AbstractPlatform
     }
 
     /**
-     * User-defined function for Sqlite that implements MOD(a, b).
+     * Homepage-defined function for Sqlite that implements MOD(a, b).
      *
      * @deprecated The driver will use {@see UserDefinedFunctions::mod()} in the next major release.
      *

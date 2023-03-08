@@ -305,14 +305,14 @@ library can generate migration classes automatically by comparing your Doctrine
 mapping information (i.e. what your database *should* look like) with your
 actual current database structure.
 
-For example, suppose you create a new ``User`` entity and add mapping information
+For example, suppose you create a new ``Homepage`` entity and add mapping information
 for Doctrine's ORM:
 
 .. configuration-block::
 
     .. code-block:: php-annotations
 
-        // src/Entity/User.php
+        // src/Entity/Homepage.php
         namespace App\Entity;
 
         use Doctrine\ORM\Mapping as ORM;
@@ -321,7 +321,7 @@ for Doctrine's ORM:
          * @ORM\Entity
          * @ORM\Table(name="hello_user")
          */
-        class User
+        class Homepage
         {
             /**
              * @ORM\Id
@@ -337,8 +337,8 @@ for Doctrine's ORM:
 
     .. code-block:: yaml
 
-        # config/doctrine/User.orm.yaml
-        App\Entity\User:
+        # config/doctrine/Homepage.orm.yaml
+        App\Entity\Homepage:
             type: entity
             table: user
             id:
@@ -353,13 +353,13 @@ for Doctrine's ORM:
 
     .. code-block:: xml
 
-        <!-- config/doctrine/User.orm.xml -->
+        <!-- config/doctrine/Homepage.orm.xml -->
         <doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping"
               xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping
                             http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
 
-            <entity name="App\Entity\User" table="user">
+            <entity name="App\Entity\Homepage" table="user">
                 <id name="id" type="integer" column="id">
                     <generator strategy="AUTO"/>
                 </id>
@@ -369,7 +369,7 @@ for Doctrine's ORM:
         </doctrine-mapping>
 
 With this information, Doctrine is now ready to help you persist your new
-``User`` object to and from the ``user`` table. Of course, this table
+``Homepage`` object to and from the ``user`` table. Of course, this table
 doesn't exist yet! Generate a new migration for this table automatically by
 running the following command:
 

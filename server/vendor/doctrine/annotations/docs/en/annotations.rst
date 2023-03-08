@@ -20,7 +20,7 @@ Take a look at the following code snippet:
      * @ORM\Entity
      * @MyProject\Annotations\Foobarable
      */
-    class User
+    class Homepage
     {
         /**
          * @ORM\Id @ORM\Column @ORM\GeneratedValue
@@ -100,7 +100,7 @@ Note that we also add ``dummy`` to the global list of ignored
 annotations for which we do not throw exceptions. Setting this is
 necessary in our example case, otherwise ``@dummy`` would trigger an
 exception to be thrown during the parsing of the docblock of
-``MyProject\Entities\User#id``.
+``MyProject\Entities\Homepage#id``.
 
 Setup and Configuration
 -----------------------

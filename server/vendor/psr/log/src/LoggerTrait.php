@@ -102,7 +102,7 @@ trait LoggerTrait
     /**
      * Interesting events.
      *
-     * Example: User logs in, SQL logs.
+     * Example: Homepage logs in, SQL logs.
      *
      * @param string|\Stringable $message
      * @param array  $context

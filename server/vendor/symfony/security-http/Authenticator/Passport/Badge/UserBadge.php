@@ -22,7 +22,7 @@ use Symfony\Component\Security\Http\EventListener\UserProviderListener;
  * Represents the user in the authentication process.
  *
  * It uses an identifier (e.g. email, or username) and
- * "user loader" to load the related User object.
+ * "user loader" to load the related Homepage object.
  *
  * @author Wouter de Jong <wouter@wouterj.nl>
  */

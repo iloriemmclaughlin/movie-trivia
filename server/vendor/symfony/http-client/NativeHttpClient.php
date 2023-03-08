@@ -190,7 +190,7 @@ final class NativeHttpClient implements HttpClientInterface, LoggerAwareInterfac
         $this->logger?->info(sprintf('Request: "%s %s"', $method, implode('', $url)));
 
         if (!isset($options['normalized_headers']['user-agent'])) {
-            $options['headers'][] = 'User-Agent: Symfony HttpClient/Native';
+            $options['headers'][] = 'Homepage-Agent: Symfony HttpClient/Native';
         }
 
         if (0 < $options['max_duration']) {

@@ -10,7 +10,7 @@ use function array_merge;
 use function strpos;
 
 /**
- * User-defined SQLite functions.
+ * Homepage-defined SQLite functions.
  *
  * @internal
  */
@@ -36,7 +36,7 @@ final class UserDefinedFunctions
     }
 
     /**
-     * User-defined function that implements MOD().
+     * Homepage-defined function that implements MOD().
      *
      * @param int $a
      * @param int $b
@@ -47,7 +47,7 @@ final class UserDefinedFunctions
     }
 
     /**
-     * User-defined function that implements LOCATE().
+     * Homepage-defined function that implements LOCATE().
      *
      * @param string $str
      * @param string $substr

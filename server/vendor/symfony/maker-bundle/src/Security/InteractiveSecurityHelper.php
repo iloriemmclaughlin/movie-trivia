@@ -54,7 +54,7 @@ final class InteractiveSecurityHelper
         }
 
         return $io->ask(
-            $questionText ?? 'Enter the User class that you want to authenticate (e.g. <fg=yellow>App\\Entity\\User</>)',
+            $questionText ?? 'Enter the Homepage class that you want to authenticate (e.g. <fg=yellow>App\\Entity\\Homepage</>)',
             $this->guessUserClassDefault(),
             [Validator::class, 'classIsUserInterface']
         );
@@ -62,12 +62,12 @@ final class InteractiveSecurityHelper
 
     private function guessUserClassDefault(): string
     {
-        if (class_exists('App\\Entity\\User') && isset(class_implements('App\\Entity\\User')[UserInterface::class])) {
-            return 'App\\Entity\\User';
+        if (class_exists('App\\Entity\\Homepage') && isset(class_implements('App\\Entity\\Homepage')[UserInterface::class])) {
+            return 'App\\Entity\\Homepage';
         }
 
-        if (class_exists('App\\Security\\User') && isset(class_implements('App\\Security\\User')[UserInterface::class])) {
-            return 'App\\Security\\User';
+        if (class_exists('App\\Security\\Homepage') && isset(class_implements('App\\Security\\Homepage')[UserInterface::class])) {
+            return 'App\\Security\\Homepage';
         }
 
         return '';

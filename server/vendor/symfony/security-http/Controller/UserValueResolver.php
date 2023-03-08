@@ -60,7 +60,7 @@ final class UserValueResolver implements ArgumentValueResolverInterface, ValueRe
 
         if (null === $user = $this->tokenStorage->getToken()?->getUser()) {
             // if no user is present but a default value exists we use it to prevent the EntityValueResolver or others
-            // from attempting resolution of the User as the current logged in user was requested here
+            // from attempting resolution of the Homepage as the current logged in user was requested here
             if ($argument->hasDefaultValue()) {
                 return [$argument->getDefaultValue()];
             }

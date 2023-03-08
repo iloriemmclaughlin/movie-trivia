@@ -39,7 +39,7 @@ enum Level: int
     /**
      * Interesting events
      *
-     * Examples: User logs in, SQL logs.
+     * Examples: Homepage logs in, SQL logs.
      */
     case Info = 200;
 

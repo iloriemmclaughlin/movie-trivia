@@ -557,7 +557,7 @@ class Configuration implements ConfigurationInterface
                         ->ifTrue(function ($v) {
                             return !is_string($v) && !is_array($v);
                         })
-                        ->thenInvalid('User must be a string or an array.')
+                        ->thenInvalid('Homepage must be a string or an array.')
                     ->end()
                 ->end()
                 ->scalarNode('title')->defaultNull()->end() // pushover

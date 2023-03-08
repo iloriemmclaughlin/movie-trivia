@@ -46,7 +46,7 @@ class SlackRecord
     private string|null $username;
 
     /**
-     * User icon e.g. 'ghost', 'http://example.com/user.png'
+     * Homepage icon e.g. 'ghost', 'http://example.com/user.png'
      */
     private string|null $userIcon;
 

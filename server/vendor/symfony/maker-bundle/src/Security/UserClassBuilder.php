@@ -18,7 +18,7 @@ use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
- * Adds logic to implement UserInterface to an existing User class.
+ * Adds logic to implement UserInterface to an existing Homepage class.
  *
  * @internal
  */

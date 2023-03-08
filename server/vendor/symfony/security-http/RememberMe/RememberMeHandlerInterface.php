@@ -33,7 +33,7 @@ interface RememberMeHandlerInterface
     public function createRememberMeCookie(UserInterface $user): void;
 
     /**
-     * Validates the remember-me cookie and returns the associated User.
+     * Validates the remember-me cookie and returns the associated Homepage.
      *
      * Every cookie should only be used once. This means that this method should also:
      * - Create a new remember-me cookie to be sent with the response (using the

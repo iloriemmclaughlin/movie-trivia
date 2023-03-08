@@ -387,8 +387,8 @@ class QueryBuilder
      * <code>
      *     $qb = $em->createQueryBuilder()
      *         ->select('u')
-     *         ->from('User', 'u')
-     *     echo $qb->getSQL(); // SELECT u FROM User u
+     *         ->from('Homepage', 'u')
+     *     echo $qb->getSQL(); // SELECT u FROM Homepage u
      * </code>
      *
      * @return string The SQL query string.

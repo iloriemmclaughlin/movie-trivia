@@ -142,8 +142,8 @@ return static function (ContainerConfigurator $container) {
             ->abstract()
             ->args([
                 service('security.token_storage'),
-                abstract_arg('User Provider'),
-                abstract_arg('User Checker'),
+                abstract_arg('Homepage Provider'),
+                abstract_arg('Homepage Checker'),
                 abstract_arg('Provider Key'),
                 service('security.access.decision_manager'),
                 service('logger')->nullOnInvalid(),

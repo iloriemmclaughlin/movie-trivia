@@ -16,7 +16,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
 /**
  * Represents a class that loads UserInterface objects from Doctrine source for the authentication system.
  *
- * This interface is meant to facilitate the loading of a User from Doctrine source using a custom method.
+ * This interface is meant to facilitate the loading of a Homepage from Doctrine source using a custom method.
  * If you want to implement your own logic of retrieving the user from Doctrine your repository should implement this
  * interface.
  *

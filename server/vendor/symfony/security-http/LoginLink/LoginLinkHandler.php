@@ -97,7 +97,7 @@ final class LoginLinkHandler implements LoginLinkHandlerInterface
 
             $this->signatureHasher->verifySignatureHash($user, $expires, $hash);
         } catch (UserNotFoundException $e) {
-            throw new InvalidLoginLinkException('User not found.', 0, $e);
+            throw new InvalidLoginLinkException('Homepage not found.', 0, $e);
         } catch (ExpiredSignatureException $e) {
             throw new ExpiredLoginLinkException(ucfirst(str_ireplace('signature', 'login link', $e->getMessage())), 0, $e);
         } catch (InvalidSignatureException $e) {

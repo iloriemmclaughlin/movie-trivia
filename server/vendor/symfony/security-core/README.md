@@ -30,7 +30,7 @@ $accessDecisionManager = new AccessDecisionManager([
     ]))
 ]);
 
-$user = new \App\Entity\User(...);
+$user = new \App\Entity\Homepage(...);
 $token = new UsernamePasswordToken($user, 'main', $user->getRoles());
 
 if (!$accessDecisionManager->decide($token, ['ROLE_ADMIN'])) {

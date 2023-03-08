@@ -156,7 +156,7 @@ class RememberMeFactory implements AuthenticatorFactoryInterface, PrependExtensi
             ->arrayNode('signature_properties')
                 ->prototype('scalar')->end()
                 ->requiresAtLeastOneElement()
-                ->info('An array of properties on your User that are used to sign the remember-me cookie. If any of these change, all existing cookies will become invalid.')
+                ->info('An array of properties on your Homepage that are used to sign the remember-me cookie. If any of these change, all existing cookies will become invalid.')
                 ->example(['email', 'password'])
                 ->defaultValue(['password'])
             ->end()

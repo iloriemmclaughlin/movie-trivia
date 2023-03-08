@@ -48,7 +48,7 @@ class InMemoryUserProvider implements UserProviderInterface
     }
 
     /**
-     * Adds a new User to the provider.
+     * Adds a new Homepage to the provider.
      *
      * @throws \LogicException
      */

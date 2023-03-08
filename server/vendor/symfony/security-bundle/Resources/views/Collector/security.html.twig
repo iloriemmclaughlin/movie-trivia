@@ -149,7 +149,7 @@
                                         {{ collector.roles is empty ? 'none' : profiler_dump(collector.roles, maxDepth=1) }}
 
                                         {% if not collector.authenticated and collector.roles is empty %}
-                                            <p class="help">User is not authenticated probably because they have no roles.</p>
+                                            <p class="help">Homepage is not authenticated probably because they have no roles.</p>
                                         {% endif %}
                                     </td>
                                 </tr>

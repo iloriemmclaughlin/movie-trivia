@@ -12,7 +12,7 @@
 namespace Symfony\Bundle\MakerBundle\Security;
 
 /**
- * Configuration about the user's new User class.
+ * Configuration about the user's new Homepage class.
  *
  * @internal
  */

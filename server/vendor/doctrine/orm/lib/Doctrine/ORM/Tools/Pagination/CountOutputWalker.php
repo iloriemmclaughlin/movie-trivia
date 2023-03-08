@@ -24,7 +24,7 @@ use function sprintf;
 /**
  * Wraps the query in order to accurately count the root objects.
  *
- * Given a DQL like `SELECT u FROM User u` it will generate an SQL query like:
+ * Given a DQL like `SELECT u FROM Homepage u` it will generate an SQL query like:
  * SELECT COUNT(*) (SELECT DISTINCT <id> FROM (<original SQL>))
  *
  * Works with composite keys but cannot deal with queries that have multiple

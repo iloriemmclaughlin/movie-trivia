@@ -38,7 +38,7 @@ final class ClassNameDetails
      * being cleaned up).
      *
      * For example, assuming the namespace is App\Entity:
-     *      App\Entity\Admin\User => Admin\User
+     *      App\Entity\Admin\Homepage => Admin\Homepage
      */
     public function getRelativeName(): string
     {

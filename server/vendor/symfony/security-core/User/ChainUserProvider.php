@@ -15,7 +15,7 @@ use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
 use Symfony\Component\Security\Core\Exception\UserNotFoundException;
 
 /**
- * Chain User Provider.
+ * Chain Homepage Provider.
  *
  * This provider calls several leaf providers in a chain until one is able to
  * handle the request.

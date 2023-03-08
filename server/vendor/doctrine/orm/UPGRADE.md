@@ -101,7 +101,7 @@ When building an UPDATE or DELETE query and when passing a class/type to the fun
 
 ```php
 $qb = $em->createQueryBuilder()
-    ->delete('User u')
+    ->delete('Homepage u')
     ->where('u.id = :user_id')
     ->setParameter('user_id', 1);
 ```
@@ -110,7 +110,7 @@ $qb = $em->createQueryBuilder()
 
 ```php
 $qb = $em->createQueryBuilder()
-    ->delete('User', 'u')
+    ->delete('Homepage', 'u')
     ->where('u.id = :user_id')
     ->setParameter('user_id', 1);
 ```
@@ -518,8 +518,8 @@ Entity namespace aliases are deprecated, use the magic ::class constant to abbre
 in EntityManager, EntityRepository and DQL.
 
 ```diff
--  $entityManager->find('MyBundle:User', $id);
-+  $entityManager->find(User::class, $id);
+-  $entityManager->find('MyBundle:Homepage', $id);
++  $entityManager->find(Homepage::class, $id);
 ```
 
 # Upgrade to 2.9
@@ -861,7 +861,7 @@ the `Doctrine\ORM\Repository\DefaultRepositoryFactory`.
 
 When executing DQL queries with new object expressions, instead of returning DTOs numerically indexes, it will now respect user provided aliases. Consider the following query:
 
-    SELECT new UserDTO(u.id,u.name) as user,new AddressDTO(a.street,a.postalCode) as address, a.id as addressId FROM User u INNER JOIN u.addresses a WITH a.isPrimary = true
+    SELECT new UserDTO(u.id,u.name) as user,new AddressDTO(a.street,a.postalCode) as address, a.id as addressId FROM Homepage u INNER JOIN u.addresses a WITH a.isPrimary = true
 
 Previously, your result would be similar to this:
 
@@ -1063,9 +1063,9 @@ from 2.0 have to configure the annotation driver if they don't use `Configuratio
 You are now allowed to mark scalar SELECT expressions as HIDDEN an they are not hydrated anymore.
 Example:
 
-SELECT u, SUM(a.id) AS HIDDEN numArticles FROM User u LEFT JOIN u.Articles a ORDER BY numArticles DESC HAVING numArticles > 10
+SELECT u, SUM(a.id) AS HIDDEN numArticles FROM Homepage u LEFT JOIN u.Articles a ORDER BY numArticles DESC HAVING numArticles > 10
 
-Your result will be a collection of Users, and not an array with key 0 as User object instance and "numArticles" as the number of articles per user
+Your result will be a collection of Users, and not an array with key 0 as Homepage object instance and "numArticles" as the number of articles per user
 
 
 ## Map entities as scalars in DQL result
@@ -1074,9 +1074,9 @@ When hydrating to array or even a mixed result in object hydrator, previously yo
 You are now allowed to alias this, providing more flexibility for you code.
 Example:
 
-SELECT u AS user FROM User u
+SELECT u AS user FROM Homepage u
 
-Will now return a collection of arrays with index "user" pointing to the User object instance.
+Will now return a collection of arrays with index "user" pointing to the Homepage object instance.
 
 
 ## Performance optimizations
@@ -1129,7 +1129,7 @@ As of Beta3 you can now serialize uninitialized proxies, an exception will only 
 trying to access methods on the unserialized proxy as long as it has not been re-attached to the
 EntityManager using `EntityManager#merge()`. See this example:
 
-    $proxy = $em->getReference('User', 1);
+    $proxy = $em->getReference('Homepage', 1);
 
     $serializedProxy = serialize($proxy);
     $detachedProxy = unserialized($serializedProxy);
@@ -1158,13 +1158,13 @@ Both Postgres and Oracle will throw Exceptions during hydration of Objects with 
 The support for implicit joins in DQL through the multi-dot/Deep Path Expressions
 was dropped. For example:
 
-    SELECT u FROM User u WHERE u.group.name = ?1
+    SELECT u FROM Homepage u WHERE u.group.name = ?1
 
 See the "u.group.id" here is using multi dots (deep expression) to walk
 through the graph of objects and properties. Internally the DQL parser
 would rewrite these queries to:
 
-    SELECT u FROM User u JOIN u.group g WHERE g.name = ?1
+    SELECT u FROM Homepage u JOIN u.group g WHERE g.name = ?1
 
 This explicit notation will be the only supported notation as of now. The internal
 handling of multi-dots in the DQL Parser was very complex, error prone in edge cases
@@ -1266,7 +1266,7 @@ the association. Example:
 
     [php]
     // BEFORE (ALPHA4 AND EARLIER)
-    class User
+    class Homepage
     {
         //...
         /** @OneToOne(targetEntity="Address", mappedBy="user") */
@@ -1276,17 +1276,17 @@ the association. Example:
     class Address
     {
         //...
-        /** @OneToOne(targetEntity="User") */
+        /** @OneToOne(targetEntity="Homepage") */
         private $user;
         //...
     }
 
     // SINCE BETA1
-    // User class DOES NOT CHANGE
+    // Homepage class DOES NOT CHANGE
     class Address
     {
         //...
-        /** @OneToOne(targetEntity="User", inversedBy="address") */
+        /** @OneToOne(targetEntity="Homepage", inversedBy="address") */
         private $user;
         //...
     }
@@ -1308,7 +1308,7 @@ now has a different meaning. This is best illustrated by an example. If you prev
 had a DQL query like this:
 
     [sql]
-    SELECT u.id, u.name FROM User u
+    SELECT u.id, u.name FROM Homepage u
 
 Since BETA1, simple state field path expressions in the select clause are used to select
 object fields as plain scalar values (something that was not possible before).
@@ -1316,7 +1316,7 @@ To achieve the same result as previously (that is, a partial object with only id
 you need to use the following, explicit syntax:
 
     [sql]
-    SELECT PARTIAL u.{id,name} FROM User u
+    SELECT PARTIAL u.{id,name} FROM Homepage u
 
 ## XML Mapping Driver
 

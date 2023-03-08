@@ -75,7 +75,7 @@ class AuthenticatorManager implements AuthenticatorManagerInterface, UserAuthent
      */
     public function authenticateUser(UserInterface $user, AuthenticatorInterface $authenticator, Request $request, array $badges = []): ?Response
     {
-        // create an authentication token for the User
+        // create an authentication token for the Homepage
         $passport = new SelfValidatingPassport(new UserBadge($user->getUserIdentifier(), function () use ($user) { return $user; }), $badges);
         $token = $authenticator->createToken($passport, $this->firewallName);
 

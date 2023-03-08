@@ -108,9 +108,9 @@ class RememberMeAuthenticator implements InteractiveAuthenticatorInterface
     {
         if (null !== $this->logger) {
             if ($exception instanceof UserNotFoundException) {
-                $this->logger->info('User for remember-me cookie not found.', ['exception' => $exception]);
+                $this->logger->info('Homepage for remember-me cookie not found.', ['exception' => $exception]);
             } elseif ($exception instanceof UnsupportedUserException) {
-                $this->logger->warning('User class for remember-me cookie not supported.', ['exception' => $exception]);
+                $this->logger->warning('Homepage class for remember-me cookie not supported.', ['exception' => $exception]);
             } elseif (!$exception instanceof CookieTheftException) {
                 $this->logger->debug('Remember me authentication failed.', ['exception' => $exception]);
             }

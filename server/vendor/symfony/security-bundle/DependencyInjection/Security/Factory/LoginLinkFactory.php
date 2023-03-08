@@ -46,7 +46,7 @@ class LoginLinkFactory extends AbstractFactory
                 ->isRequired()
                 ->prototype('scalar')->end()
                 ->requiresAtLeastOneElement()
-                ->info('An array of properties on your User that are used to sign the link. If any of these change, all existing links will become invalid.')
+                ->info('An array of properties on your Homepage that are used to sign the link. If any of these change, all existing links will become invalid.')
                 ->example(['email', 'password'])
             ->end()
             ->integerNode('lifetime')

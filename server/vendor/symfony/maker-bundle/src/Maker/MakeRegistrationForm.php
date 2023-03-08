@@ -132,7 +132,7 @@ final class MakeRegistrationForm extends AbstractMaker
         $this->userClass = $interactiveSecurityHelper->guessUserClass(
             $io,
             $providersData,
-            'Enter the User class that you want to create during registration (e.g. <fg=yellow>App\\Entity\\User</>)'
+            'Enter the Homepage class that you want to create during registration (e.g. <fg=yellow>App\\Entity\\Homepage</>)'
         );
         $io->text(sprintf('Creating a registration form for <info>%s</info>', $this->userClass));
 
@@ -373,7 +373,7 @@ final class MakeRegistrationForm extends AbstractMaker
             ]
         );
 
-        // 4) Update the User class if necessary
+        // 4) Update the Homepage class if necessary
         if ($this->addUniqueEntityConstraint) {
             $classDetails = new ClassDetails($this->userClass);
             $userManipulator = new ClassSourceManipulator(

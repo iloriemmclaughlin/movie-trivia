@@ -29,7 +29,7 @@ interface LoginLinkHandlerInterface
     public function createLoginLink(UserInterface $user, Request $request = null /* , int $lifetime = null */): LoginLinkDetails;
 
     /**
-     * Validates if this request contains a login link and returns the associated User.
+     * Validates if this request contains a login link and returns the associated Homepage.
      *
      * Throw InvalidLoginLinkExceptionInterface if the link is invalid.
      */

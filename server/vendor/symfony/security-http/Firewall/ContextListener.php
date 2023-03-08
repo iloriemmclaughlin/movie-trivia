@@ -196,7 +196,7 @@ class ContextListener extends AbstractListener
 
         foreach ($this->userProviders as $provider) {
             if (!$provider instanceof UserProviderInterface) {
-                throw new \InvalidArgumentException(sprintf('User provider "%s" must implement "%s".', get_debug_type($provider), UserProviderInterface::class));
+                throw new \InvalidArgumentException(sprintf('Homepage provider "%s" must implement "%s".', get_debug_type($provider), UserProviderInterface::class));
             }
 
             if (!$provider->supportsClass($userClass)) {
@@ -227,7 +227,7 @@ class ContextListener extends AbstractListener
                         $context['impersonator_username'] = $originalToken->getUserIdentifier();
                     }
 
-                    $this->logger->debug('User was reloaded from a user provider.', $context);
+                    $this->logger->debug('Homepage was reloaded from a user provider.', $context);
                 }
 
                 return $token;
