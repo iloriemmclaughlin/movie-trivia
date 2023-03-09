@@ -19,7 +19,7 @@ class GameQuestion
 
     #[ORM\ManyToOne(inversedBy: 'gameQuestions')]
     #[ORM\JoinColumn(name: "game_id", referencedColumnName: "game_id", nullable: false)]
-    private ?game $game_id = null;
+    private ?Game $game_id = null;
 
     #[ORM\ManyToOne(inversedBy: 'gameQuestions')]
     #[ORM\JoinColumn(name: "question_id", referencedColumnName: "question_id", nullable: false)]
@@ -42,12 +42,12 @@ class GameQuestion
         return $this;
     }
 
-    public function getGameId(): ?game
+    public function getGameId(): ?Game
     {
         return $this->game_id;
     }
 
-    public function setGameId(?game $game_id): self
+    public function setGameId(?Game $game_id): self
     {
         $this->game_id = $game_id;
 

@@ -7,7 +7,7 @@
 /config/secrets/prod/prod.decrypt.private.php
 /public/bundles/
 /server/var/
-/vendor/
+/server/vendor/
 ###< symfony/framework-bundle ###
 
 ###> phpunit/phpunit ###

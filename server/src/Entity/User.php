@@ -13,7 +13,7 @@ use Doctrine\ORM\Mapping as ORM;
 class User
 {
     #[ORM\Id]
-    #[ORM\GeneratedValue]
+    #[ORM\GeneratedValue(strategy: 'SEQUENCE')]
     #[ORM\Column()]
     private ?int $user_id = null;
 
@@ -23,21 +23,24 @@ class User
     #[ORM\Column(type: Types::TEXT)]
     private ?string $last_name = null;
 
-    #[ORM\Column(type: Types::TEXT)]
+    #[ORM\Column(type: Types::TEXT, unique: true)]
     private ?string $email = null;
 
-    #[ORM\Column(type: Types::TEXT)]
+    #[ORM\Column(type: Types::TEXT, unique: true)]
     private ?string $username = null;
 
     #[ORM\Column(type: Types::TEXT)]
     private ?string $password = null;
 
-    #[ORM\ManyToOne(inversedBy: 'users')]
-    #[ORM\JoinColumn(name: "user_type_id", referencedColumnName: "user_type_id", nullable: false)]
-    private ?UserType $user_type_id = null;
+    #[ORM\Column(type: Types::TEXT, nullable: true)]
+    private ?string $background_color;
 
-    #[ORM\OneToOne(mappedBy: 'user_id', cascade: ['persist', 'remove'])]
-    private ?Settings $settings = null;
+    #[ORM\Column(type: Types::TEXT, nullable: true)]
+    private ?string $foreground_color;
+
+    #[ORM\ManyToOne(inversedBy: 'users')]
+    #[ORM\JoinColumn(name: "user_type_id", referencedColumnName: "user_type_id", nullable: false, options: ['default' => 2])]
+    private UserType $user_type;
 
     #[ORM\OneToOne(mappedBy: 'user_id', cascade: ['persist', 'remove'])]
     private ?Stats $stats = null;
@@ -115,31 +118,38 @@ class User
         return $this;
     }
 
-    public function getUserTypeId(): ?UserType
+    public function getBackgroundColor(): ?string
     {
-        return $this->user_type_id;
+        return $this->background_color;
     }
 
-    public function setUserTypeId(?UserType $user_type_id): self
+    public function setBackgroundColor(string $background_color): self
     {
-        $this->user_type_id = $user_type_id;
+        $this->background_color = $background_color;
 
         return $this;
     }
 
-    public function getSettings(): ?Settings
+    public function getForegroundColor(): ?string
     {
-        return $this->settings;
+        return $this->foreground_color;
     }
 
-    public function setSettings(Settings $settings): self
+    public function setForegroundColor(string $foreground_color): self
     {
-        // set the owning side of the relation if necessary
-        if ($settings->getUserId() !== $this) {
-            $settings->setUserId($this);
-        }
+        $this->foreground_color = $foreground_color;
 
-        $this->settings = $settings;
+        return $this;
+    }
+
+    public function getUserType(): ?UserType
+    {
+        return $this->user_type;
+    }
+
+    public function setUserType(?UserType $user_type): self
+    {
+        $this->user_type = $user_type;
 
         return $this;
     }
