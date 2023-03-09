@@ -2,12 +2,12 @@
 
 namespace App\Service;
 
+use App\Entity\Stats;
 use App\Entity\User;
 use App\Repository\UserRepository;
 use App\Repository\UserTypeRepository;
 use Doctrine\Persistence\ManagerRegistry;
-use PHPUnit\Util\Json;
-use Symfony\Component\HttpFoundation\JsonResponse;
+
 
 class UserService
 {
@@ -76,7 +76,6 @@ class UserService
         foreach($userGames as $game) {
             $userGamesArray[] = [
                 'game_id' => $game->getId(),
-                'user_id' => $game->getUserId()->getId(),
                 'score' => $game->getScore(),
                 'total_questions' => $game->getTotalQuestions(),
                 'date' => $game->getDate()
@@ -112,7 +111,7 @@ class UserService
         return $userSettings;
     }
 
-    public function returnNewUser($request): array
+    public function createNewUser($request): array
     {
         $userInput = json_decode($request->getContent(), true);
 
@@ -135,10 +134,25 @@ class UserService
             'password' => $newUser->getPassword()
         ];
 
+        $id = $newUser->getId();
+        $this->createUserStats($id);
+
         $this->managerRegistry->getManager()->persist($newUser);
         $this->managerRegistry->getManager()->flush();
 
         return $createdUser;
+    }
+
+    private function createUserStats($userId): void
+    {
+        $user = $this->userRepository->find($userId);
+        $newStats = $user->getStats();
+        $newStats->setGamesPlayed(0);
+        $newStats->setHighScore(0);
+
+        $this->managerRegistry->getManager()->persist($newStats);
+        $this->managerRegistry->getManager()->flush();
+
     }
 
     public function updateUser($request, $userId): array
