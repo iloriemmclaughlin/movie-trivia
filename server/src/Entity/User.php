@@ -13,7 +13,7 @@ use Doctrine\ORM\Mapping as ORM;
 class User
 {
     #[ORM\Id]
-    #[ORM\GeneratedValue]
+    #[ORM\GeneratedValue(strategy: 'SEQUENCE')]
     #[ORM\Column()]
     private ?int $user_id = null;
 
@@ -23,18 +23,18 @@ class User
     #[ORM\Column(type: Types::TEXT)]
     private ?string $last_name = null;
 
-    #[ORM\Column(type: Types::TEXT)]
+    #[ORM\Column(type: Types::TEXT, unique: true)]
     private ?string $email = null;
 
-    #[ORM\Column(type: Types::TEXT)]
+    #[ORM\Column(type: Types::TEXT, unique: true)]
     private ?string $username = null;
 
     #[ORM\Column(type: Types::TEXT)]
     private ?string $password = null;
 
     #[ORM\ManyToOne(inversedBy: 'users')]
-    #[ORM\JoinColumn(name: "user_type_id", referencedColumnName: "user_type_id", nullable: false)]
-    private ?UserType $user_type_id = null;
+    #[ORM\JoinColumn(name: "user_type_id", referencedColumnName: "user_type_id", nullable: false, options: ['default' => 2])]
+    private UserType $user_type;
 
     #[ORM\OneToOne(mappedBy: 'user_id', cascade: ['persist', 'remove'])]
     private ?Settings $settings = null;
@@ -115,14 +115,14 @@ class User
         return $this;
     }
 
-    public function getUserTypeId(): ?UserType
+    public function getUserType(): ?UserType
     {
-        return $this->user_type_id;
+        return $this->user_type;
     }
 
-    public function setUserTypeId(?UserType $user_type_id): self
+    public function setUserType(?UserType $user_type): self
     {
-        $this->user_type_id = $user_type_id;
+        $this->user_type = $user_type;
 
         return $this;
     }
