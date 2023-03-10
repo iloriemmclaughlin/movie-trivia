@@ -47,7 +47,7 @@ abstract class AbstractRememberMeHandler implements RememberMeHandlerInterface
     }
 
     /**
-     * Checks if the RememberMeDetails is a valid cookie to login the given Homepage.
+     * Checks if the RememberMeDetails is a valid cookie to login the given User.
      *
      * This method should also:
      * - Create a new remember-me cookie to be sent with the response (using {@see createCookie()});

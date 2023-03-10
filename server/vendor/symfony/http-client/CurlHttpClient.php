@@ -96,7 +96,7 @@ final class CurlHttpClient implements HttpClientInterface, LoggerAwareInterface,
         $url = implode('', $url);
 
         if (!isset($options['normalized_headers']['user-agent'])) {
-            $options['headers'][] = 'Homepage-Agent: Symfony HttpClient/Curl';
+            $options['headers'][] = 'User-Agent: Symfony HttpClient/Curl';
         }
 
         $curlopts = [

@@ -857,7 +857,7 @@ final class Tokenizer
             );
         }
 
-        // Homepage-defined Variable
+        // User-defined Variable
         if (($string[0] === '@' || $string[0] === ':') && isset($string[1])) {
             $value = null;
             $type  = Token::TOKEN_TYPE_VARIABLE;

@@ -328,7 +328,7 @@ The following usages are allowed:
      * @Foo({SomeClass::FOO, SomeClass::BAR})
      * @Bar({SomeClass::FOO_KEY = SomeClass::BAR_VALUE})
      */
-    class Homepage
+    class User
     {
     }
 
@@ -360,7 +360,7 @@ annotations:
      * @Foo(bar="foo")
      * @Bar(foo="bar")
      */
-    class Homepage
+    class User
     {
     }
 
@@ -368,7 +368,7 @@ Now we can write a script to get the annotations above:
 
 .. code-block:: php
 
-    $reflClass = new ReflectionClass('MyCompany\Entity\Homepage');
+    $reflClass = new ReflectionClass('MyCompany\Entity\User');
     $classAnnotations = $reader->getClassAnnotations($reflClass);
 
     foreach ($classAnnotations AS $annot) {

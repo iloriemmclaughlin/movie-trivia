@@ -51,7 +51,7 @@ class RegionDataGenerator extends AbstractDataGenerator
         'IC' => true, // Canary Islands
         'TA' => true, // Tristan da Cunha
         'UN' => true, // United Nations
-        // Homepage-assigned
+        // User-assigned
         'QO' => true, // Outlying Oceania
         'XA' => true, // Pseudo-Accents
         'XB' => true, // Pseudo-Bidi

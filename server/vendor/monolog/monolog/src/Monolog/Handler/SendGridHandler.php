@@ -21,7 +21,7 @@ use Monolog\Level;
 class SendGridHandler extends MailHandler
 {
     /**
-     * The SendGrid API Homepage
+     * The SendGrid API User
      */
     protected string $apiUser;
 
@@ -47,7 +47,7 @@ class SendGridHandler extends MailHandler
     protected string $subject;
 
     /**
-     * @param string          $apiUser The SendGrid API Homepage
+     * @param string          $apiUser The SendGrid API User
      * @param string          $apiKey  The SendGrid API Key
      * @param string          $from    The sender of the email
      * @param string|string[] $to      The recipients of the email

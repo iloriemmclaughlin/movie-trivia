@@ -28,16 +28,16 @@ class UserService
         UserTypeRepository $userTypeRepository,
         StatsRepository $statsRepository,
         UserTypeService $userTypeService,
-        GameService $gameService,
-        StatsService $statsService,
+//        GameService $gameService,
+//        StatsService $statsService,
         ManagerRegistry $managerRegistry)
     {
         $this->userRepository = $userRepository;
         $this->userTypeRepository = $userTypeRepository;
         $this->statsRepository = $statsRepository;
         $this->userTypeService = $userTypeService;
-        $this->gameService = $gameService;
-        $this->statsService = $statsService;
+//        $this->gameService = $gameService;
+//        $this->statsService = $statsService;
         $this->managerRegistry = $managerRegistry;
     }
 
@@ -60,44 +60,44 @@ class UserService
         return $this->transformToDto($user);
     }
 
-    public function getUserGames($userId)
-    {
-
-        $user = $this->userRepository->find($userId);
-        $userGames = $user->getGames();
-
-        $dto = [];
-
-        foreach($userGames as $game) {
-            $dto[] = $this->gameService->transformToDto($game);
-        }
-
-        return $dto;
+//    public function getUserGames($userId)
+//    {
 //
-////        $user = $this->userRepository->find($userId);
-////        $userGames = $user->getGames();
+//        $user = $this->userRepository->find($userId);
+//        $userGames = $user->getGames();
+//
+//        $dto = [];
+//
+//        foreach($userGames as $game) {
+//            $dto[] = $this->gameService->transformToDto($game);
+//        }
+//
+//        return $dto;
 ////
-////        $dto = $this->gameResponseDtoTransformer->transformFromObjects($userGames);
-////
-////        return $dto;
-    }
+//////        $user = $this->userRepository->find($userId);
+//////        $userGames = $user->getGames();
+//////
+//////        $dto = $this->gameResponseDtoTransformer->transformFromObjects($userGames);
+//////
+//////        return $dto;
+//    }
 
-    public function getUserStats($userId)
-    {
-        $user = $this->userRepository->find($userId);
-        $userStats = $user->getStats();
-
-        $dto = $this->statsService->transformToDto($userStats);
-
-        return $dto;
-
+//    public function getUserStats($userId)
+//    {
 //        $user = $this->userRepository->find($userId);
 //        $userStats = $user->getStats();
 //
-//        $dto = $this->statsResponseDtoTransformer->transformFromObject($userStats);
+//        $dto = $this->statsService->transformToDto($userStats);
 //
 //        return $dto;
-    }
+//
+////        $user = $this->userRepository->find($userId);
+////        $userStats = $user->getStats();
+////
+////        $dto = $this->statsResponseDtoTransformer->transformFromObject($userStats);
+////
+////        return $dto;
+//    }
 
     public function createUser(CreateUserDto $dto): ?UserDto
     {
@@ -164,7 +164,7 @@ class UserService
         $this->userRepository->save($user);
         $this->statsRepository->save($updatedStats);
 
-        return ('Stats have been successfully updated!');
+        return ('Leaderboard have been successfully updated!');
     }
 
     public function deleteUser(int $userId): string

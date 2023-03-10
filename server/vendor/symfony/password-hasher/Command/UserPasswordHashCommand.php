@@ -53,7 +53,7 @@ class UserPasswordHashCommand extends Command
     {
         $this
             ->addArgument('password', InputArgument::OPTIONAL, 'The plain password to hash.')
-            ->addArgument('user-class', InputArgument::OPTIONAL, 'The Homepage entity class path associated with the hasher used to hash the password.')
+            ->addArgument('user-class', InputArgument::OPTIONAL, 'The User entity class path associated with the hasher used to hash the password.')
             ->addOption('empty-salt', null, InputOption::VALUE_NONE, 'Do not generate a salt or let the hasher generate one.')
             ->setHelp(<<<EOF
 

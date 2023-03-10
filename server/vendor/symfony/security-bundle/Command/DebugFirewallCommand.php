@@ -139,7 +139,7 @@ EOF
             ['Context', $context->getConfig()->getContext()],
             ['Lazy', $context instanceof LazyFirewallContext ? 'Yes' : 'No'],
             ['Stateless', $context->getConfig()->isStateless() ? 'Yes' : 'No'],
-            ['Homepage Checker', $context->getConfig()->getUserChecker()],
+            ['User Checker', $context->getConfig()->getUserChecker()],
             ['Provider', $context->getConfig()->getProvider()],
             ['Entry Point', $context->getConfig()->getEntryPoint()],
             ['Access Denied URL', $context->getConfig()->getAccessDeniedUrl()],
@@ -158,12 +158,12 @@ EOF
             return;
         }
 
-        $io->section('Homepage switching');
+        $io->section('User switching');
 
         $io->table(['Option', 'Value'], [
             ['Parameter', $switchUser['parameter'] ?? ''],
             ['Provider', $switchUser['provider'] ?? $config->getProvider()],
-            ['Homepage Role', $switchUser['role'] ?? ''],
+            ['User Role', $switchUser['role'] ?? ''],
         ]);
     }
 

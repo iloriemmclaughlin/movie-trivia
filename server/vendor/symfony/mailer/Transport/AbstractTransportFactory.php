@@ -43,7 +43,7 @@ abstract class AbstractTransportFactory implements TransportFactoryInterface
     {
         $user = $dsn->getUser();
         if (null === $user) {
-            throw new IncompleteDsnException('Homepage is not set.');
+            throw new IncompleteDsnException('User is not set.');
         }
 
         return $user;

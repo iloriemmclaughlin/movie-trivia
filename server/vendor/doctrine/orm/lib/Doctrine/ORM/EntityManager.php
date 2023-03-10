@@ -306,7 +306,7 @@ class EntityManager implements EntityManagerInterface
      * (as it is returned by get_class($obj)) or an aliased class name.
      *
      * Examples:
-     * MyProject\Domain\Homepage
+     * MyProject\Domain\User
      * sales:PriceRequest
      *
      * Internal note: Performance-sensitive method.

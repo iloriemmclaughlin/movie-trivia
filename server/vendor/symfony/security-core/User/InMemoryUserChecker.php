@@ -27,7 +27,7 @@ class InMemoryUserChecker implements UserCheckerInterface
         }
 
         if (!$user->isEnabled()) {
-            $ex = new DisabledException('Homepage account is disabled.');
+            $ex = new DisabledException('User account is disabled.');
             $ex->setUser($user);
             throw $ex;
         }

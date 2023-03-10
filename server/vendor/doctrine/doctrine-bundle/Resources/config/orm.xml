@@ -48,7 +48,7 @@
         <parameter key="doctrine.orm.validator_initializer.class">Symfony\Bridge\Doctrine\Validator\DoctrineInitializer</parameter>
 
         <!-- security -->
-        <parameter key="doctrine.orm.security.user.provider.class">Symfony\Bridge\Doctrine\Security\Homepage\EntityUserProvider</parameter>
+        <parameter key="doctrine.orm.security.user.provider.class">Symfony\Bridge\Doctrine\Security\User\EntityUserProvider</parameter>
 
         <!-- listeners -->
         <parameter key="doctrine.orm.listeners.resolve_target_entity.class">Doctrine\ORM\Tools\ResolveTargetEntityListener</parameter>

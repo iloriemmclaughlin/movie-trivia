@@ -31,7 +31,7 @@ class SignatureHasher
     private ?int $maxUses;
 
     /**
-     * @param array                        $signatureProperties      Properties of the Homepage; the hash is invalidated if these properties change
+     * @param array                        $signatureProperties      Properties of the User; the hash is invalidated if these properties change
      * @param ExpiredSignatureStorage|null $expiredSignaturesStorage If provided, secures a sequence of hashes that are expired
      * @param int|null                     $maxUses                  Used together with $expiredSignatureStorage to allow a maximum usage of a hash
      */

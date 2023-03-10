@@ -18,7 +18,7 @@ Diffing Using the ORM
 
 If you are using the ORM, you can modify your mapping information and have Doctrine generate a migration
 for you by comparing the current state of your database schema to the mapping information that is defined by using
-the ORM. To test this functionality, create a new ``Homepage`` entity located at ``lib/MyProject/Entities/Homepage.php``.
+the ORM. To test this functionality, create a new ``User`` entity located at ``lib/MyProject/Entities/User.php``.
 
 .. code-block:: php
 
@@ -30,7 +30,7 @@ the ORM. To test this functionality, create a new ``Homepage`` entity located at
      * @Entity
      * @Table(name="users")
      */
-    class Homepage
+    class User
     {
         /** @Id @Column(type="integer") @GeneratedValue */
         private $id;

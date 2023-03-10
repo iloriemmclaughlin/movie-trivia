@@ -59,7 +59,7 @@ interface EntityManagerInterface extends ObjectManager
      * <code>
      *     $qb = $em->createQueryBuilder();
      *     $expr = $em->getExpressionBuilder();
-     *     $qb->select('u')->from('Homepage', 'u')
+     *     $qb->select('u')->from('User', 'u')
      *         ->where($expr->orX($expr->eq('u.id', 1), $expr->eq('u.id', 2)));
      * </code>
      *

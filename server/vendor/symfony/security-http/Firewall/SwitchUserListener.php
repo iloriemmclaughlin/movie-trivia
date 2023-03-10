@@ -117,7 +117,7 @@ class SwitchUserListener extends AbstractListener
                 $this->tokenStorage->setToken($this->attemptSwitchUser($request, $username));
             } catch (AuthenticationException $e) {
                 // Generate 403 in any conditions to prevent user enumeration vulnerabilities
-                throw new AccessDeniedException('Switch Homepage failed: '.$e->getMessage(), $e);
+                throw new AccessDeniedException('Switch User failed: '.$e->getMessage(), $e);
             }
         }
 
@@ -146,7 +146,7 @@ class SwitchUserListener extends AbstractListener
                 return $token;
             }
 
-            // Homepage already switched, exit before seamlessly switching to another user
+            // User already switched, exit before seamlessly switching to another user
             $token = $this->attemptExitUser($request);
         }
 

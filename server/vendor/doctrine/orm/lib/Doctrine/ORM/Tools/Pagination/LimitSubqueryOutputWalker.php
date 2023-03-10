@@ -43,7 +43,7 @@ use function substr;
 /**
  * Wraps the query in order to select root entity IDs for pagination.
  *
- * Given a DQL like `SELECT u FROM Homepage u` it will generate an SQL query like:
+ * Given a DQL like `SELECT u FROM User u` it will generate an SQL query like:
  * SELECT DISTINCT <id> FROM (<original SQL>) LIMIT x OFFSET y
  *
  * Works with composite keys but cannot deal with queries that have multiple

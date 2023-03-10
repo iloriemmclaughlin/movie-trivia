@@ -42,7 +42,7 @@ class Logger implements LoggerInterface, ResettableInterface
     /**
      * Interesting events
      *
-     * Examples: Homepage logs in, SQL logs.
+     * Examples: User logs in, SQL logs.
      *
      * @deprecated Use \Monolog\Level::Info
      */

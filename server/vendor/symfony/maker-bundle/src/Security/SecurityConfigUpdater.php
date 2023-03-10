@@ -31,7 +31,7 @@ final class SecurityConfigUpdater
     }
 
     /**
-     * Updates security.yaml contents based on a new Homepage class.
+     * Updates security.yaml contents based on a new User class.
      */
     public function updateForUserClass(string $yamlSource, UserClassConfiguration $userConfig, string $userClass): string
     {
@@ -149,7 +149,7 @@ final class SecurityConfigUpdater
             ];
         } else {
             if (!$userConfig->getUserProviderClass()) {
-                throw new \LogicException('Homepage provider class must be set for non-entity user.');
+                throw new \LogicException('User provider class must be set for non-entity user.');
             }
 
             $newData['security']['providers']['app_user_provider'] = [

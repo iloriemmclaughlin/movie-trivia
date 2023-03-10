@@ -40,7 +40,7 @@ class StatsRepository extends ServiceEntityRepository
     }
 
 //    /**
-//     * @return Stats[] Returns an array of Stats objects
+//     * @return Leaderboard[] Returns an array of Leaderboard objects
 //     */
 //    public function findByExampleField($value): array
 //    {
@@ -54,7 +54,7 @@ class StatsRepository extends ServiceEntityRepository
 //        ;
 //    }
 
-//    public function findOneBySomeField($value): ?Stats
+//    public function findOneBySomeField($value): ?Leaderboard
 //    {
 //        return $this->createQueryBuilder('s')
 //            ->andWhere('s.exampleField = :val')
