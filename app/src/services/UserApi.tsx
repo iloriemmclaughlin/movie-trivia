@@ -1,6 +1,6 @@
-import { User } from './DTOs';
+import { user, game } from './DTOs';
 
-export async function getUser(userId: number): Promise<User> {
+export async function getUser(userId: number): Promise<user> {
   return await fetch(`http://localhost:8000/api/users/${userId}`, {
     headers: {
       'Content-Type': 'application/json',
@@ -8,7 +8,43 @@ export async function getUser(userId: number): Promise<User> {
     method: 'GET',
   })
     .then(response => response.json())
-    .then((data: User) => {
+    .then((data: user) => {
+      console.log('Success:', data);
+      return data;
+    })
+    .catch(error => {
+      console.error('Error:', error);
+      throw error;
+    });
+}
+
+export async function getUserGames(userId: number): Promise<game[]> {
+  return await fetch(`http://localhost:8000/api/users/${userId}/games`, {
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    method: 'GET',
+  })
+    .then(response => response.json())
+    .then((data: game[]) => {
+      console.log('Success:', data);
+      return data;
+    })
+    .catch(error => {
+      console.error('Error:', error);
+      throw error;
+    });
+}
+
+export async function createUser(): Promise<user> {
+  return await fetch(`http://localhost:8000/api/users`, {
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    method: 'POST',
+  })
+    .then(response => response.json())
+    .then((data: user) => {
       console.log('Success:', data);
       return data;
     })

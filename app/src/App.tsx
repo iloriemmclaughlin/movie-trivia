@@ -9,11 +9,13 @@ import {
 } from '@tanstack/react-router';
 import Profile from './components/Profile';
 import Homepage from './components/Homepage';
+import NavBar from './components/UI/NavBar';
 
 const rootRoute = new RootRoute({
   component: () => {
     return (
       <>
+        <NavBar />
         <Outlet />
       </>
     );

@@ -4,6 +4,8 @@ namespace App\Service;
 
 use App\Dto\Incoming\CreateUserDto;
 use App\Dto\Outgoing\UserDto;
+use App\Dto\Outgoing\GameDto;
+use App\Entity\Game;
 use App\Entity\User;
 use App\Repository\StatsRepository;
 use App\Repository\UserRepository;
@@ -60,27 +62,27 @@ class UserService
         return $this->transformToDto($user);
     }
 
-//    public function getUserGames($userId)
-//    {
+    public function getUserGames($userId)
+    {
+
+        $user = $this->userRepository->find($userId);
+        $userGames = $user->getGames();
+
+        $dto = [];
+
+        foreach($userGames as $game) {
+            $dto[] = $this->transformGameDto($game);
+        }
+
+        return $dto;
 //
-//        $user = $this->userRepository->find($userId);
-//        $userGames = $user->getGames();
-//
-//        $dto = [];
-//
-//        foreach($userGames as $game) {
-//            $dto[] = $this->gameService->transformToDto($game);
-//        }
-//
-//        return $dto;
+////        $user = $this->userRepository->find($userId);
+////        $userGames = $user->getGames();
 ////
-//////        $user = $this->userRepository->find($userId);
-//////        $userGames = $user->getGames();
-//////
-//////        $dto = $this->gameResponseDtoTransformer->transformFromObjects($userGames);
-//////
-//////        return $dto;
-//    }
+////        $dto = $this->gameResponseDtoTransformer->transformFromObjects($userGames);
+////
+////        return $dto;
+    }
 
 //    public function getUserStats($userId)
 //    {
@@ -114,7 +116,7 @@ class UserService
         $user->setForegroundColor($dto->getForegroundColor());
         $this->userRepository->save($user, true);
 
-        $this->createUserStats($user->getId());
+        //$this->createUserStats($user->getId());
 
         return $this->transformToDto($user);
     }
@@ -123,8 +125,8 @@ class UserService
     {
         $user = $this->userRepository->find($userId);
         $newStats = $user->getStats();
-        $newStats->setGamesPlayed(0);
-        $newStats->setHighScore(0);
+        $newStats->setGamesPlayed(1);
+        $newStats->setHighScore(1);
 
         $this->statsRepository->save($newStats, true);
 
@@ -192,6 +194,20 @@ class UserService
             $user->getPassword(),
             $user->getBackgroundColor(),
             $user->getForegroundColor()
+        );
+    }
+
+    public function transformGameDto(Game $game): GameDto
+    {
+        $userId = $game->getUserId();
+        $user = $this->userRepository->find($userId);
+
+        return new GameDto(
+            $game->getId(),
+            $this->transformToDto($user),
+            $game->getScore(),
+            $game->getTotalQuestions(),
+            $game->getDate()
         );
     }
 

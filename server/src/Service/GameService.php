@@ -69,20 +69,20 @@ class GameService
 //        return $dto;
 //    }
 
-//    public function createNewGame(CreateGameDto $dto, $userId): ?GameDto
-//    {
-//        $user = $this->userRepository->findOneBy(array('user_id' => $userId));
-//
-//        $game = new Game();
-//        $game->setUserId($user);
-//        $game->setScore(0);
-//        $game->setTotalQuestions(0);
-//        $date = new DateTime();
-//        $game->setDate($date);
-//        $this->gameRepository->save($game, true);
-//
-//        return $this->transformToDto($game);
-//    }
+    public function createNewGame(CreateGameDto $dto, $userId): ?GameDto
+    {
+        $user = $this->userRepository->findOneBy(array('user_id' => $userId));
+
+        $game = new Game();
+        $game->setUserId($user);
+        $game->setScore(0);
+        $game->setTotalQuestions(0);
+        $date = new DateTime();
+        $game->setDate($date);
+        $this->gameRepository->save($game, true);
+
+        return $this->transformToDto($game);
+    }
 
     public function updateGame($request, $gameId): array
     {
