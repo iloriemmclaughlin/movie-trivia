@@ -14,22 +14,22 @@ const NavBar = () => {
 
   return (
     <Card>
-      <div className="justify-content: space-between h-24 w-full flex-1 items-center bg-red-200 px-6 py-6">
+      <div className="justify-content: space-between h-24 w-full flex-1 items-center bg-red-100 px-6 py-6">
         <img
           className="absolute inset-0 h-24 w-24"
           src={movieLogo}
           alt="the movie trivia logo"
         />
-        <div className="text-center font-sans text-lg font-bold">
-          Movie Trivia
+        <div className="text-center text-3xl font-bold">
+          M O V I E . T R I V I A
         </div>
         <div className="flex flex-row-reverse text-center">
           <Button onClick={toggleGames}>
-            {showGames && <Games userId={1} />}
+            {/*{showGames && <Games userId={1} />}*/}
             Games
           </Button>
           <Button onClick={toggleProfile}>
-            {showProfile && <Profile userId={1} />}
+            {/*{showProfile && <Profile userId={1} />}*/}
             Profile
           </Button>
         </div>

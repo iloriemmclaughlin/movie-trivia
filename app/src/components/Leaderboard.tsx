@@ -30,17 +30,17 @@ const Leaderboard = () => {
       <ul>
         {statsData.map((stat, index: number) => (
           <div className="grid grid-cols-3 pl-10 pr-10">
-            <div className="flex-1 bg-red-200 pt-10 pb-10 text-black">
+            <div className="flex-1 bg-red-100 pt-10 pb-10 text-black">
               <li key={index}>
-                <h2 className="text-center">{stat.user_id}</h2>
+                <h2 className="text-center">{stat.username}</h2>
               </li>
             </div>
-            <div className="flex-1 bg-red-200 pt-10 pb-10 text-black">
+            <div className="flex-1 bg-red-100 pt-10 pb-10 text-black">
               <li key={index}>
                 <h2 className="text-center">{stat.games_played}</h2>
               </li>
             </div>
-            <div className="flex-1 bg-red-200 pt-10 pb-10 text-black">
+            <div className="flex-1 bg-red-100 pt-10 pb-10 text-black">
               <li key={index}>
                 <h2 className="text-center">{stat.high_score}</h2>
               </li>

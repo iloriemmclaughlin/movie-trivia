@@ -23,8 +23,8 @@ final class Version20230227173547 extends AbstractMigration
         //$this->addSql('DROP SEQUENCE settings_settings_id_seq CASCADE');
         //$this->addSql('ALTER TABLE settings DROP CONSTRAINT fk_e545a0c5a76ed395');
         //$this->addSql('DROP TABLE settings');
-        $this->addSql('ALTER TABLE "user" ADD background_color TEXT DEFAULT NULL');
-        $this->addSql('ALTER TABLE "user" ADD foreground_color TEXT DEFAULT NULL');
+//        $this->addSql('ALTER TABLE "user" ADD background_color TEXT DEFAULT NULL');
+//        $this->addSql('ALTER TABLE "user" ADD foreground_color TEXT DEFAULT NULL');
     }
 
     public function down(Schema $schema): void

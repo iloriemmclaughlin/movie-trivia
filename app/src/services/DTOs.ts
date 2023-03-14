@@ -16,7 +16,7 @@ export interface user {
 }
 
 export interface stats {
-  user_id: number;
+  username: string;
   games_played: number;
   high_score: number;
 }

@@ -36,12 +36,13 @@ export async function getUserGames(userId: number): Promise<game[]> {
     });
 }
 
-export async function createUser(): Promise<user> {
+export async function createUser(user: user): Promise<user> {
   return await fetch(`http://localhost:8000/api/users`, {
     headers: {
       'Content-Type': 'application/json',
     },
     method: 'POST',
+    body: JSON.stringify(user),
   })
     .then(response => response.json())
     .then((data: user) => {

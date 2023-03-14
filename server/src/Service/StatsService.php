@@ -31,7 +31,7 @@ class StatsService
 
         foreach($stats as $stat) {
             $allStats[] = [
-                'user_id' => $stat->getUserId()->getId(),
+                'username' => $stat->getUserId()->getUsername(),
                 'games_played' => $stat->getGamesPlayed(),
                 'high_score' => $stat->getHighScore()
             ];
@@ -43,7 +43,7 @@ class StatsService
     public function transformToDto(Stats $stats): StatsDto
     {
         return new StatsDto(
-            $stats->$this->userService->transformToDto($stats->getUserId()),
+            $stats->$this->userService->transformToDto($stats->getUserId()->getUsername()),
             $stats->getGamesPlayed(),
             $stats->getHighScore()
         );

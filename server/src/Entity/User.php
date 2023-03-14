@@ -42,11 +42,11 @@ class User
     #[ORM\JoinColumn(name: "user_type_id", referencedColumnName: "user_type_id", nullable: false, options: ['default' => 2])]
     private UserType $user_type;
 
-    #[ORM\OneToOne(mappedBy: 'user_id', cascade: ['persist', 'remove'])]
-    private ?Stats $stats = null;
-
     #[ORM\OneToMany(mappedBy: 'user_id', targetEntity: Game::class, orphanRemoval: true)]
     private Collection $games;
+
+    #[ORM\OneToOne(mappedBy: 'user_id', cascade: ['persist', 'remove'])]
+    private ?Stats $stats = null;
 
     public function __construct()
     {
@@ -154,22 +154,6 @@ class User
         return $this;
     }
 
-    public function getStats(): ?Stats
-    {
-        return $this->stats;
-    }
-
-    public function setStats(Stats $stats): self
-    {
-        // set the owning side of the relation if necessary
-        if ($stats->getUserId() !== $this) {
-            $stats->setUserId($this);
-        }
-
-        $this->stats = $stats;
-
-        return $this;
-    }
 
     /**
      * @return Collection<int, Game>
@@ -197,6 +181,24 @@ class User
                 $game->setUserId(null);
             }
         }
+
+        return $this;
+    }
+
+
+    public function getStats(): ?Stats
+    {
+        return $this->stats;
+    }
+
+    public function setStats(Stats $stats): self
+    {
+        // set the owning side of the relation if necessary
+        if ($stats->getUserId() !== $this) {
+            $stats->setUserId($this);
+        }
+
+        $this->stats = $stats;
 
         return $this;
     }
