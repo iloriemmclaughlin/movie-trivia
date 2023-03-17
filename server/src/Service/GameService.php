@@ -4,11 +4,16 @@ namespace App\Service;
 
 use App\Dto\Incoming\CreateGameDto;
 use App\Dto\Outgoing\GameDto;
+use App\Dto\Incoming\CreateGameQuestionDto;
+use App\Dto\Outgoing\QuestionDto;
+use App\Dto\Outgoing\GameQuestionDto;
 use App\Dto\Response\Transformer\GameQuestionResponseDtoTransformer;
 use App\Dto\Response\Transformer\GameResponseDtoTransformer;
 use App\Dto\Response\Transformer\QuestionResponseDtoTransformer;
 use App\Entity\Game;
+use App\Entity\GameQuestion;
 use App\Entity\Question;
+use App\Repository\GameQuestionRepository;
 use App\Repository\GameRepository;
 use App\Repository\UserRepository;
 use App\Repository\QuestionRepository;
@@ -22,6 +27,7 @@ class GameService
     private UserRepository $userRepository;
     private UserService $userService;
     private QuestionRepository $questionRepository;
+    private GameQuestionRepository $gameQuestionRepository;
     private QuestionService $questionService;
     private ManagerRegistry $managerRegistry;
     private GameResponseDtoTransformer $gameResponseDtoTransformer;
@@ -33,6 +39,7 @@ class GameService
         UserRepository $userRepository,
         UserService $userService,
         QuestionRepository $questionRepository,
+        GameQuestionRepository $gameQuestionRepository,
         QuestionService $questionService,
         ManagerRegistry $managerRegistry,
         GameResponseDtoTransformer $gameResponseDtoTransformer,
@@ -43,6 +50,7 @@ class GameService
         $this->userRepository = $userRepository;
         $this->userService = $userService;
         $this->questionRepository = $questionRepository;
+        $this->gameQuestionRepository = $gameQuestionRepository;
         $this->questionService = $questionService;
         $this->managerRegistry = $managerRegistry;
         $this->gameResponseDtoTransformer = $gameResponseDtoTransformer;
@@ -115,6 +123,19 @@ class GameService
         return ('Game has been successfully deleted!');
     }
 
+    public function addGameQuestion(CreateGameQuestionDto $dto, $gameId, $questionId)
+    {
+        $gameQuestion = new GameQuestion();
+        $gameQuestion->setGameId($gameId);
+        $gameQuestion->setQuestionId($questionId);
+        $gameQuestion->setUserAnswer($dto->getUserResponse());
+
+        $this->gameQuestionRepository->save($gameQuestion);
+
+        return $this->transformGameQuestionDto($gameQuestion);
+
+    }
+
     public function transformToDto(Game $game): GameDto
     {
         return new GameDto(
@@ -126,22 +147,32 @@ class GameService
         );
     }
 
-    private function addQuestionToGame($gameId): void
+    public function transformGameQuestionDto(GameQuestion $gameQuestion): GameQuestionDto
     {
+        $gameId = $gameQuestion->getGameId();
         $game = $this->gameRepository->find($gameId);
+        $questionId = $gameQuestion->getQuestionId();
+        $question = $this->questionRepository->find($questionId);
 
-        // ADD QUESTION TO GAME FROM BELOW FUNCTION
-
+        return new GameQuestionDto(
+            $gameQuestion->getId(),
+            $this->transformToDto($game),
+            $this->questionService->transformToDto($question),
+            $gameQuestion->getUserAnswer()
+        );
     }
 
-//    private function getRandomQuestion(): Question
-//    {
-//        $questions = $this->questionService->returnAllQuestions();
-//
-//        $question = array_rand($questions);
-//
-//        return $question;
-//    }
+
+    private function getRandomQuestion()
+    {
+        $questions = $this->questionService->returnAllQuestions();
+        $question = $questions[array_rand($questions)];
+
+//        $text = $question->getQuestionText();
+
+        return $question;
+    }
+
 
 //    private function questionCheck($gameId, $userResponse): void //bool
 //    {

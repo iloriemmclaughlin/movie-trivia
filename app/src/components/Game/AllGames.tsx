@@ -3,7 +3,7 @@ import { useQuery } from '@tanstack/react-query';
 import { getUserGames } from '../../services/UserApi';
 import Card from '../UI/Card';
 
-const Games = (props: { userId: number }) => {
+const AllGames = (props: { userId: number }) => {
   const {
     isLoading,
     error,
@@ -56,4 +56,4 @@ const Games = (props: { userId: number }) => {
 
   return <div></div>;
 };
-export default Games;
+export default AllGames;

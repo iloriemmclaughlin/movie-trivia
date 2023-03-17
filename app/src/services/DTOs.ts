@@ -15,6 +15,16 @@ export interface user {
   foregroundColor: string;
 }
 
+export interface createUserParams {
+  username: string;
+  firstName: string;
+  lastName: string;
+  email: string;
+  password: string;
+  backgroundColor: string;
+  foregroundColor: string;
+}
+
 export interface stats {
   username: string;
   games_played: number;
@@ -30,8 +40,8 @@ export interface game {
 }
 
 export interface question {
-  question_id: number;
-  question_text: string;
-  question_answer: string;
-  question_type_id: number;
+  questionId: number;
+  questionText: string;
+  questionAnswer: string;
+  questionType: string;
 }

@@ -11,6 +11,8 @@ import Profile from './components/Profile';
 import Homepage from './components/Homepage';
 import NavBar from './components/UI/NavBar';
 import Login from './components/UI/Login';
+import NewGame from './components/Game/NewGame';
+import AddUser from './components/User/AddUser';
 
 const rootRoute = new RootRoute({
   component: () => {
@@ -44,12 +46,36 @@ const profileRoute = new Route({
   getParentRoute: () => rootRoute,
   path: '/profile',
   component: () => {
-    return <Profile userId={1} />;
+    // return <Profile />;
   },
   errorComponent: () => 'Could not find user.',
 });
 
-const routeTree = rootRoute.addChildren([indexRoute, loginRoute, profileRoute]);
+const newGameRoute = new Route({
+  getParentRoute: () => rootRoute,
+  path: '/newGame',
+  component: () => {
+    return <NewGame />;
+  },
+  errorComponent: () => 'Could not find user.',
+});
+
+const createUserRoute = new Route({
+  getParentRoute: () => rootRoute,
+  path: '/createUser',
+  component: () => {
+    return <AddUser />;
+  },
+  errorComponent: () => 'Could not find user.',
+});
+
+const routeTree = rootRoute.addChildren([
+  indexRoute,
+  loginRoute,
+  profileRoute,
+  newGameRoute,
+  createUserRoute,
+]);
 
 // Set up a Router instance
 const router = new Router({

@@ -9,10 +9,33 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class QuestionController extends AbstractController
 {
-    #[Route('/api/questions', methods: ['GET'])]
-    public function getAllQuestions(QuestionService $questionService): Response
+    private QuestionService $questionService;
+
+    /**
+     * @param QuestionService $questionService
+     */
+    public function __construct(QuestionService $questionService)
     {
-        return $this->json($questionService->returnAllQuestions());
+        $this->questionService = $questionService;
+    }
+
+
+    #[Route('/api/questions', methods: ['GET'])]
+    public function getAllQuestions(): Response
+    {
+        return $this->json($this->questionService->returnAllQuestions());
+    }
+
+    #[Route('/api/questions/random', methods: ['GET'])]
+    public function getRandomQuestion(): Response
+    {
+        return $this->json($this->questionService->getRandomQuestion());
+    }
+
+    #[Route('/api/questions/{questionId}', methods: ['GET'])]
+    public function getQuestionOptions($questionId): Response
+    {
+        return $this->json($this->questionService->getQuestionOptions($questionId));
     }
 
 }

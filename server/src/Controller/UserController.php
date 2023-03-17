@@ -64,7 +64,7 @@ class UserController extends ApiController
         return new JsonResponse();
     }
 
-    #[Route('/api/users/{userId}/settings', methods: ['PUT'])]
+    #[Route('/api/users/{userId}/settings', methods: ['PATCH'])]
     public function editUser(Request $request, int $userId): Response
     {
         return $this->json($this->userService->updateUser($request, $userId));

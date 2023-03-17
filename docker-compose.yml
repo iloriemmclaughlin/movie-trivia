@@ -13,8 +13,8 @@ services:
     volumes:
       - "./server:/application"
     environment:
+      PHP_IDE_CONFIG: "serverName=movie-trivia-server"
       XDEBUG_CONFIG: "remote_host=host.docker.internal"
-      PHP_IDE_CONFIG: "serverName=MovieTrivia"
       LOG_LEVEL: 'debug'
       APP_ENV: 'dev'
       DATABASE_URL: 'postgresql://postgres:testingpass@postgres:5432/db?serverVersion=13&charset=utf8'

@@ -3,7 +3,7 @@ import Button from '../components/UI/Button';
 import User from './User/User';
 import Leaderboard from './Leaderboard';
 import Profile from './Profile';
-import Games from './Game/Games';
+import AllGames from './Game/AllGames';
 
 const Homepage = () => {
   const users = [

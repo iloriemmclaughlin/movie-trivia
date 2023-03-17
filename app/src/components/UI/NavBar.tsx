@@ -3,7 +3,7 @@ import Card from './Card';
 import Button from './Button';
 import Profile from '../Profile';
 import movieLogo from '../../assets/movielogo.jpg';
-import Games from '../Game/Games';
+import AllGames from '../Game/AllGames';
 
 const NavBar = () => {
   const [showProfile, setShowProfile] = useState(false);
@@ -25,7 +25,7 @@ const NavBar = () => {
         </div>
         <div className="flex flex-row-reverse text-center">
           <Button onClick={toggleGames}>
-            {/*{showGames && <Games userId={1} />}*/}
+            {/*{showGames && <AllGames userId={1} />}*/}
             Games
           </Button>
           <Button onClick={toggleProfile}>
