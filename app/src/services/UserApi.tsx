@@ -81,7 +81,7 @@ export async function updateUser(
     headers: {
       'Content-Type': 'application/json',
     },
-    method: 'PATCH',
+    method: 'PUT',
     body: JSON.stringify(params),
   })
     .then(response => response.json())
