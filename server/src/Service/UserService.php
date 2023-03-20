@@ -125,8 +125,8 @@ class UserService
     {
         $user = $this->userRepository->find($userId);
         $newStats = $user->getStats();
-        $newStats->setGamesPlayed(1);
-        $newStats->setHighScore(1);
+        $newStats->setGamesPlayed(0);
+        $newStats->setHighScore(0);
 
         $this->statsRepository->save($newStats, true);
 

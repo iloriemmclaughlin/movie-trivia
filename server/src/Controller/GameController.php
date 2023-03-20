@@ -62,5 +62,10 @@ class GameController extends ApiController
         return $this->json($this->gameService->addGameQuestion($dto, $gameId, $questionId));
     }
 
+    #[Route('/api/games/{gameId}/{questionId}', methods: ['PUT'])]
+    public function checkAnswer(int $gameId, int $questionId): Response
+    {
+        return $this->json($this->gameService->checkAnswer($gameId, $questionId));
+    }
 
 }

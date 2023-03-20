@@ -13,6 +13,7 @@ import NavBar from './components/UI/NavBar';
 import Login from './components/UI/Login';
 import NewGame from './components/Game/NewGame';
 import AddUser from './components/User/AddUser';
+import TestGame from './components/Game/TestGame';
 
 const rootRoute = new RootRoute({
   component: () => {
@@ -31,6 +32,15 @@ const indexRoute = new Route({
   component: () => {
     return <Homepage />;
   },
+});
+
+const testGameRoute = new Route({
+  getParentRoute: () => rootRoute,
+  path: '/test',
+  component: () => {
+    return <TestGame />;
+  },
+  errorComponent: () => 'Could not load test page.',
 });
 
 const loginRoute = new Route({
@@ -75,6 +85,7 @@ const routeTree = rootRoute.addChildren([
   profileRoute,
   newGameRoute,
   createUserRoute,
+  testGameRoute,
 ]);
 
 // Set up a Router instance

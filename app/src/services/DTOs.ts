@@ -44,4 +44,11 @@ export interface question {
   questionText: string;
   questionAnswer: string;
   questionType: string;
+  questionOptions: Array<string>;
 }
+
+// export interface questionOption {
+//   questionOptionId: number;
+//   questionId: number;
+//   questionOption: string;
+// }

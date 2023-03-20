@@ -20,6 +20,8 @@ use App\Repository\QuestionRepository;
 use App\Service\QuestionService;
 use Doctrine\Persistence\ManagerRegistry;
 use DateTime;
+use Symfony\Component\HttpFoundation\Request;
+use phpDocumentor\Reflection\Types\Boolean;
 
 class GameService
 {
@@ -92,7 +94,7 @@ class GameService
         return $this->transformToDto($game);
     }
 
-    public function updateGame($request, $gameId): array
+    public function updateGame(Request $request, int $gameId): ?GameDto
     {
         $userInput = json_decode($request->getContent(), true);
 
@@ -101,12 +103,9 @@ class GameService
         $game->setScore($userInput['score']);
         $game->setTotalQuestions($userInput['total_questions']);
 
-        $updatedGame = [
-            'score' => $game->getScore(),
-            'total_questions' => $game->getTotalQuestions(),
-        ];
+        $this->gameRepository->save($game);
 
-        return $updatedGame;
+        return $this->transformToDto($game);
     }
 
     public function deleteGame($gameId): string
@@ -168,15 +167,24 @@ class GameService
         $questions = $this->questionService->returnAllQuestions();
         $question = $questions[array_rand($questions)];
 
-//        $text = $question->getQuestionText();
+        $text = $question->getQuestionText();
 
         return $question;
     }
 
 
-//    private function questionCheck($gameId, $userResponse): void //bool
-//    {
-//
-//    }
+    public function checkAnswer($gameId, $questionId): Boolean
+    {
+        $question = $this->questionRepository->find($questionId);
+        $answer = $question->getQuestionAnswer();
+        $gameQuestion = $this->gameQuestionRepository->find($gameId);
+        $userResponse = $gameQuestion->getUserAnswer();
+
+        if ($answer === $userResponse) {
+            return true;
+        } else {
+            return false;
+        }
+    }
 
 }

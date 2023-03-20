@@ -8,20 +8,26 @@ class QuestionDto
     private string $questionType;
     private string $questionText;
     private string $questionAnswer;
-
-    /**
-     * @param int $questionId
-     * @param string $questionType
-     * @param string $questionText
-     * @param string $questionAnswer
-     */
-    public function __construct(int $questionId, string $questionType, string $questionText, string $questionAnswer)
-    {
-        $this->questionId = $questionId;
-        $this->questionType = $questionType;
-        $this->questionText = $questionText;
-        $this->questionAnswer = $questionAnswer;
-    }
+    private int $questionOptionId;
+    private array $questionOption;
+//
+//    /**
+//     * @param int $questionId
+//     * @param string $questionType
+//     * @param string $questionText
+//     * @param string $questionAnswer
+//     * @param int $questionOptionId
+//     * @param string[] $questionOption
+//     */
+//    public function __construct(int $questionId, string $questionType, string $questionText, string $questionAnswer, int $questionOptionId, array $questionOption)
+//    {
+//        $this->questionId = $questionId;
+//        $this->questionType = $questionType;
+//        $this->questionText = $questionText;
+//        $this->questionAnswer = $questionAnswer;
+//        $this->questionOptionId = $questionOptionId;
+//        $this->questionOption = $questionOption;
+//    }
 
     /**
      * @return int
@@ -55,7 +61,69 @@ class QuestionDto
         return $this->questionAnswer;
     }
 
+    /**
+     * @return int
+     */
+    public function getQuestionOptionId(): int
+    {
+        return $this->questionOptionId;
+    }
 
+    /**
+     * @return array
+     */
+    public function getQuestionOption(): array
+    {
+        return $this->questionOption;
+    }
+
+    /**
+     * @param int $questionId
+     */
+    public function setQuestionId(int $questionId): void
+    {
+        $this->questionId = $questionId;
+    }
+
+    /**
+     * @param string $questionType
+     */
+    public function setQuestionType(string $questionType): void
+    {
+        $this->questionType = $questionType;
+    }
+
+    /**
+     * @param string $questionText
+     */
+    public function setQuestionText(string $questionText): void
+    {
+        $this->questionText = $questionText;
+    }
+
+    /**
+     * @param string $questionAnswer
+     */
+    public function setQuestionAnswer(string $questionAnswer): void
+    {
+        $this->questionAnswer = $questionAnswer;
+    }
+
+    /**
+     * @param int $questionOptionId
+     */
+    public function setQuestionOptionId(int $questionOptionId): void
+    {
+        $this->questionOptionId = $questionOptionId;
+    }
+
+    /**
+     * @param array $questionOption
+     */
+    public function setQuestionOption(array $questionOption): void
+    {
+        $this->questionOption = $questionOption;
+    }
 
 
 }

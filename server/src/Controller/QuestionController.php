@@ -26,10 +26,16 @@ class QuestionController extends AbstractController
         return $this->json($this->questionService->returnAllQuestions());
     }
 
-    #[Route('/api/questions/random', methods: ['GET'])]
-    public function getRandomQuestion(): Response
+    #[Route('/api/questions/options', methods: ['GET'])]
+    public function getAllQuestionOptions(): Response
     {
-        return $this->json($this->questionService->getRandomQuestion());
+        return $this->json($this->questionService->getAllQuestionOptions());
+    }
+
+    #[Route('/api/questions/all', methods: ['GET'])]
+    public function getQuestions(): Response
+    {
+        return $this->json($this->questionService->getAllQuestions());
     }
 
     #[Route('/api/questions/{questionId}', methods: ['GET'])]

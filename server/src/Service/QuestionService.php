@@ -2,7 +2,9 @@
 
 namespace App\Service;
 
+use App\Dto\Outgoing\QuestionOptionDto;
 use App\Entity\Question;
+use App\Entity\QuestionOption;
 use App\Repository\QuestionOptionRepository;
 use App\Repository\QuestionRepository;
 use Doctrine\Persistence\ManagerRegistry;
@@ -39,18 +41,61 @@ class QuestionService
             $question->getId(),
             $question->getQuestionTypeId()->getQuestionType(),
             $question->getQuestionText(),
-            $question->getQuestionAnswer()
+            $question->getQuestionAnswer(),
         );
     }
 
     public function getRandomQuestion()
     {
-        $questions = $this->returnAllQuestions();
-        $question = $questions[array_rand($questions)];
+        $questions = $this->questionRepository->find(1);
+        $options = $this->questionOptionRepository->findBy(['question_id' => $questions->getId()]);
 
-        $text = $question->getQuestionText();
+        $dto = new QuestionDto();
 
-        return $text;
+        $dto->setQuestionId($questions->getId());
+        $dto->setQuestionType($questions->getQuestionTypeId()->getQuestionType());
+        $dto->setQuestionText($questions->getQuestionText());
+        $dto->setQuestionAnswer($questions->getQuestionAnswer());
+
+        $array = [];
+
+        foreach($options as $option) {
+            $array[] = $option->getOption();
+        }
+
+        $dto->setQuestionOption($array);
+
+        return $dto;
+    }
+
+    public function getAllQuestions()
+    {
+        $questions = $this->questionRepository->findAll();
+
+        $dtos = [];
+
+        foreach ($questions as $question) {
+            $options = $this->questionOptionRepository->findBy(['question_id' => $question->getId()]);
+
+            $dto = new QuestionDto();
+
+            $dto->setQuestionId($question->getId());
+            $dto->setQuestionType($question->getQuestionTypeId()->getQuestionType());
+            $dto->setQuestionText($question->getQuestionText());
+            $dto->setQuestionAnswer($question->getQuestionAnswer());
+
+            $array = [];
+
+            foreach($options as $option) {
+                $array[] = $option->getOption();
+            }
+
+            $dto->setQuestionOption($array);
+
+            $dtos[] = $dto;
+        }
+
+        return $dtos;
     }
 
     public function getQuestionOptions($questionId)
@@ -66,6 +111,28 @@ class QuestionService
 
 
         return $options;
+    }
+
+    public function getAllQuestionOptions()
+    {
+        $questionOptions = $this->questionOptionRepository->findAll();
+        $dto = [];
+
+        foreach($questionOptions as $option) {
+            $dto[] = $this->transformQuestionOptionDto($option);
+        }
+
+        return $dto;
+    }
+
+    public function transformQuestionOptionDto(QuestionOption $questionOption): QuestionOptionDto
+    {
+        return new QuestionOptionDto(
+            $questionOption->getId(),
+            $questionOption->getQuestionId()->getId(),
+            $questionOption->getOption(),
+        );
+
     }
 
 
