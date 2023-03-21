@@ -49,7 +49,7 @@ const loginRoute = new Route({
   component: () => {
     return <Login />;
   },
-  errorComponent: () => 'Could not find user.',
+  errorComponent: () => 'Could not load login page.',
 });
 
 const profileRoute = new Route({
@@ -67,7 +67,7 @@ const newGameRoute = new Route({
   component: () => {
     return <NewGame />;
   },
-  errorComponent: () => 'Could not find user.',
+  errorComponent: () => 'Cannot load page New Game.',
 });
 
 const createUserRoute = new Route({

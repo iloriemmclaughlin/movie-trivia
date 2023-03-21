@@ -60,7 +60,11 @@ const TestGame = () => {
           <h2>{question}</h2>
           <ul>
             {choices.map((answer, index) => (
-              <li onClick={() => onAnswerSelected(answer, index)} key={answer}>
+              <li
+                className="my-4 rounded-lg bg-red-100"
+                onClick={() => onAnswerSelected(answer, index)}
+                key={answer}
+              >
                 {answer}
               </li>
             ))}

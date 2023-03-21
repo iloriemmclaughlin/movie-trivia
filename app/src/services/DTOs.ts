@@ -44,7 +44,7 @@ export interface question {
   questionText: string;
   questionAnswer: string;
   questionType: string;
-  questionOptions: Array<string>;
+  questionOption: Array<string>;
 }
 
 // export interface questionOption {
