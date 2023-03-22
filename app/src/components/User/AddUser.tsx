@@ -1,5 +1,4 @@
 import React, { useEffect } from 'react';
-import { create } from 'zustand';
 import { createUser, getAllUsers } from '../../services/UserApi';
 import useInput from '../../hooks/use-input';
 import { useQuery, useMutation } from '@tanstack/react-query';

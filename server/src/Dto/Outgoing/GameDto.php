@@ -2,24 +2,22 @@
 
 namespace App\Dto\Outgoing;
 
-use DateTime;
-
 class GameDto
 {
     private int $gameId;
     private UserDto $user;
     private int $totalQuestions;
     private int $score;
-    private DateTime $date;
+    private string $date;
 
     /**
      * @param int $gameId
      * @param UserDto $user
      * @param int $totalQuestions
      * @param int $score
-     * @param DateTime $date
+     * @param string $date
      */
-    public function __construct(int $gameId, UserDto $user, int $totalQuestions, int $score, DateTime $date)
+    public function __construct(int $gameId, UserDto $user, int $totalQuestions, int $score, string $date)
     {
         $this->gameId = $gameId;
         $this->user = $user;
@@ -61,9 +59,9 @@ class GameDto
     }
 
     /**
-     * @return DateTime
+     * @return string
      */
-    public function getDate(): DateTime
+    public function getDate(): string
     {
         return $this->date;
     }

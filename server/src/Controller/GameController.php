@@ -43,7 +43,7 @@ class GameController extends ApiController
         return $this->json($this->gameService->createNewGame($dto, $userId));
     }
 
-    #[Route('/api/games/{gameId}', methods: ['PUT'])]
+    #[Route('/api/games/{gameId}/update', methods: ['PUT'])]
     public function updateGame(Request $request, int $gameId): Response
     {
         return $this->json($this->gameService->updateGame($request, $gameId));

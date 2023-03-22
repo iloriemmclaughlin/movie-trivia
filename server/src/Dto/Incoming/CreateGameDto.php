@@ -2,14 +2,12 @@
 
 namespace App\Dto\Incoming;
 
-use DateTime;
-
 class CreateGameDto
 {
     private int $userId;
     private int $totalQuestions;
     private int $score;
-    private DateTime $date;
+    private string $date;
 
     /**
      * @return int
@@ -60,17 +58,17 @@ class CreateGameDto
     }
 
     /**
-     * @return DateTime
+     * @return string
      */
-    public function getDate(): DateTime
+    public function getDate(): string
     {
         return $this->date;
     }
 
     /**
-     * @param DateTime $date
+     * @param string $date
      */
-    public function setDate(DateTime $date): void
+    public function setDate(string $date): void
     {
         $this->date = $date;
     }

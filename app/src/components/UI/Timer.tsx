@@ -2,9 +2,9 @@ import React, { useState, useEffect } from 'react';
 import Card from './Card';
 
 const Timer = props => {
-  const { initMinute = 2, initSeconds = 0 } = props;
-  const [minutes, setMinutes] = React.useState(initMinute);
-  const [seconds, setSeconds] = React.useState(initSeconds);
+  const { initMinute = 0, initSeconds = 30 } = props;
+  const [minutes, setMinutes] = useState(initMinute);
+  const [seconds, setSeconds] = useState(initSeconds);
 
   useEffect(() => {
     let myInterval = setInterval(() => {
@@ -14,6 +14,7 @@ const Timer = props => {
       if (seconds === 0) {
         if (minutes === 0) {
           clearInterval(myInterval);
+          props.onTimeExpired();
         } else {
           setMinutes(minutes - 1);
           setSeconds(59);

@@ -22,8 +22,8 @@ class Game
     #[ORM\Column(type: Types::INTEGER, options: ['default' => 0])]
     private ?int $score = null;
 
-    #[ORM\Column(type: Types::DATE_MUTABLE)]
-    private ?\DateTime $date = null;
+    #[ORM\Column(type: Types::STRING)]
+    private ?string $date = null;
 
     #[ORM\ManyToOne(inversedBy: 'games')]
     #[ORM\JoinColumn(name: "user_id", referencedColumnName: "user_id", nullable: false)]
@@ -66,12 +66,12 @@ class Game
         return $this;
     }
 
-    public function getDate(): ?\DateTime
+    public function getDate(): ?string
     {
         return $this->date;
     }
 
-    public function setDate(\DateTime $date): self
+    public function setDate(string $date): self
     {
         $this->date = $date;
 

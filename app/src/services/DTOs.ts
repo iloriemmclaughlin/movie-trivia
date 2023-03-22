@@ -35,7 +35,7 @@ export interface game {
   game_id: number;
   total_questions: number;
   score: number;
-  date: Date;
+  date: string;
   user_id: number;
 }
 
@@ -47,8 +47,15 @@ export interface question {
   questionOption: Array<string>;
 }
 
-// export interface questionOption {
-//   questionOptionId: number;
-//   questionId: number;
-//   questionOption: string;
-// }
+export interface newGameParams {
+  userId: number;
+  totalQuestions: number;
+  score: number;
+  date: string;
+}
+
+export interface updateGameParams {
+  gameId: number;
+  totalQuestions: number;
+  score: number;
+}

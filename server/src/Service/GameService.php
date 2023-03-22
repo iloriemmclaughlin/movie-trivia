@@ -85,10 +85,9 @@ class GameService
 
         $game = new Game();
         $game->setUserId($user);
-        $game->setScore(0);
-        $game->setTotalQuestions(0);
-        $date = new DateTime();
-        $game->setDate($date);
+        $game->setScore($dto->getScore());
+        $game->setTotalQuestions($dto->getTotalQuestions());
+        $game->setDate($dto->getDate());
         $this->gameRepository->save($game, true);
 
         return $this->transformToDto($game);
@@ -101,7 +100,7 @@ class GameService
         $game = $this->gameRepository->find($gameId);
 
         $game->setScore($userInput['score']);
-        $game->setTotalQuestions($userInput['total_questions']);
+        $game->setTotalQuestions($userInput['totalQuestions']);
 
         $this->gameRepository->save($game);
 
@@ -159,17 +158,6 @@ class GameService
             $this->questionService->transformToDto($question),
             $gameQuestion->getUserAnswer()
         );
-    }
-
-
-    private function getRandomQuestion()
-    {
-        $questions = $this->questionService->returnAllQuestions();
-        $question = $questions[array_rand($questions)];
-
-        $text = $question->getQuestionText();
-
-        return $question;
     }
 
 
