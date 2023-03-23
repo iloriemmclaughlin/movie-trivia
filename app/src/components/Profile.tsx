@@ -17,6 +17,64 @@ function Profile() {
     enabled: false,
   });
 
+  useEffect(() => {
+    refetch();
+  }, []);
+
+  const {
+    value: uFirstName,
+    isValid: uFirstNameValid,
+    hasError: uFirstNameError,
+    valueChangeHandler: uFirstNameChangeHandler,
+    inputBlurHandler: uFirstNameBlurHandler,
+    reset: uFirstNameReset,
+  } = useInput((value: string) => value.trim() !== '', userData?.firstName);
+
+  const { value: uLastName } = useInput(
+    (value: string) => value.trim() !== '',
+    userData?.lastName,
+  );
+
+  const { value: uEmail } = useInput(
+    (value: string) => value.trim() !== '',
+    userData?.email,
+  );
+
+  const { value: uUsername } = useInput(
+    (value: string) => value.trim() !== '',
+    userData?.username,
+  );
+
+  const { value: uPassword } = useInput(
+    (value: string) => value.trim() !== '',
+    userData?.password,
+  );
+
+  const { value: uBgColor } = useInput(
+    (value: string) => value.trim() !== '',
+    userData?.backgroundColor,
+  );
+
+  const { value: uFgColor } = useInput(
+    (value: string) => value.trim() !== '',
+    userData?.foregroundColor,
+  );
+
+  const userId = 1;
+
+  const update: any = useMutation({
+    mutationFn: () =>
+      updateUser(userId, {
+        firstName: uFirstName,
+        lastName: uLastName,
+        email: uEmail,
+        username: uUsername,
+        password: uPassword,
+        backgroundColor: uBgColor,
+        foregroundColor: uFgColor,
+      }),
+  });
+
   if (isLoading) return <div>Loading...</div>;
 
   if (error) return <div>An error has occurred.</div>;
@@ -33,65 +91,7 @@ function Profile() {
     foregroundColor,
   } = userData;
 
-  const {
-    value: uFirstName,
-    isValid: uFirstNameValid,
-    hasError: uFirstNameError,
-    valueChangeHandler: uFirstNameChangeHandler,
-    inputBlurHandler: uFirstNameBlurHandler,
-    reset: uFirstNameReset,
-  } = useInput((value: string) => value.trim() !== '', firstName);
-
-  const { value: uLastName } = useInput(
-    (value: string) => value.trim() !== '',
-    lastName,
-  );
-
-  const { value: uEmail } = useInput(
-    (value: string) => value.trim() !== '',
-    email,
-  );
-
-  const { value: uUsername } = useInput(
-    (value: string) => value.trim() !== '',
-    username,
-  );
-
-  const { value: uPassword } = useInput(
-    (value: string) => value.trim() !== '',
-    password,
-  );
-
-  const { value: uBgColor } = useInput(
-    (value: string) => value.trim() !== '',
-    backgroundColor,
-  );
-
-  const { value: uFgColor } = useInput(
-    (value: string) => value.trim() !== '',
-    foregroundColor,
-  );
-
-  useEffect(() => {
-    refetch();
-  }, []);
-
   if (userData) {
-    const userId = 1;
-
-    const update: any = useMutation({
-      mutationFn: () =>
-        updateUser(userId, {
-          firstName: uFirstName,
-          lastName: uLastName,
-          email: uEmail,
-          username: uUsername,
-          password: uPassword,
-          backgroundColor: uBgColor,
-          foregroundColor: uFgColor,
-        }),
-    });
-
     let formIsValid = false;
 
     if (uFirstNameValid) {

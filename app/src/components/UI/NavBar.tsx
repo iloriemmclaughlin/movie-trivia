@@ -1,16 +1,14 @@
 import React, { useState } from 'react';
 import Card from './Card';
-import Button from './Button';
-import Profile from '../Profile';
+import { Bars3Icon } from '@heroicons/react/20/solid';
 import movieLogo from '../../assets/movielogo.jpg';
-import AllGames from '../Game/AllGames';
+import MenuItems from './MenuItems';
 
 const NavBar = () => {
-  const [showProfile, setShowProfile] = useState(false);
-  const toggleProfile = () => setShowProfile(wasClicked => !wasClicked);
-
-  const [showGames, setShowGames] = useState(false);
-  const toggleGames = () => setShowGames(wasClicked => !wasClicked);
+  const [showMenuItems, setShowMenuItems] = useState(false);
+  const toggleMenu = () => {
+    setShowMenuItems(!showMenuItems);
+  };
 
   return (
     <Card>
@@ -20,18 +18,25 @@ const NavBar = () => {
           src={movieLogo}
           alt="the movie trivia logo"
         />
-        <div className="text-center text-3xl font-bold">
+        <div className="pb-2 text-center text-3xl font-bold">
           M O V I E . T R I V I A
         </div>
-        <div className="flex flex-row-reverse text-center">
-          <Button onClick={toggleGames}>
-            {/*{showGames && <AllGames userId={1} />}*/}
-            Games
-          </Button>
-          <Button onClick={toggleProfile}>
-            {/*{showProfile && <Profile userId={1} />}*/}
-            Profile
-          </Button>
+        <div className="float-right text-xl text-black" onClick={toggleMenu}>
+          <button>MENU</button>
+        </div>
+        <div className="text-center">
+          {showMenuItems ? (
+            <MenuItems
+              items={[
+                { route: '/', name: 'Home' },
+                { route: '/games', name: 'Games' },
+                { route: '/profile', name: 'Profile' },
+                { route: '/admin', name: 'Admin' },
+              ]}
+            />
+          ) : (
+            ''
+          )}
         </div>
       </div>
     </Card>

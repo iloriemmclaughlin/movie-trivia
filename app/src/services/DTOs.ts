@@ -32,11 +32,10 @@ export interface stats {
 }
 
 export interface game {
-  game_id: number;
-  total_questions: number;
+  gameId: number;
+  totalQuestions: number;
   score: number;
   date: string;
-  user_id: number;
 }
 
 export interface question {

@@ -2,15 +2,13 @@ import React, { useState } from 'react';
 import Button from '../components/UI/Button';
 import User from './User/User';
 import Leaderboard from './Leaderboard';
-import Profile from './Profile';
-import AllGames from './Game/AllGames';
+import { Link } from '@tanstack/react-router';
 
 const Homepage = () => {
-  const users = [
-    { id: 1, username: 'imclaughlin', gamesPlayed: 10, highScore: 25 },
-    { id: 2, username: 'jsmith', gamesPlayed: 5, highScore: 16 },
-    { id: 3, username: 'trobbins', gamesPlayed: 8, highScore: 12 },
-  ];
+  const newGameHandler = () => {
+    console.log('clicked');
+    return window.location.assign('/newGame');
+  };
 
   return (
     <div>
@@ -37,18 +35,13 @@ const Homepage = () => {
             </div>
           </div>
           <Leaderboard />
-          {/*<User*/}
-          {/*  username={users[0].username}*/}
-          {/*  gamesPlayed={users[0].gamesPlayed}*/}
-          {/*  highScore={users[0].highScore}*/}
-          {/*/>*/}
           <div className="text-center">
-            <button className="rounded-full bg-red-100 py-1 px-3 font-bold text-black hover:bg-red-300">
+            <button
+              onClick={newGameHandler}
+              className="rounded-full bg-red-100 py-1 px-3 font-bold text-black hover:bg-red-300"
+            >
               New Game
             </button>
-            {/*<Button type="submit">*/}
-            {/*  New Game*/}
-            {/*</Button>*/}
           </div>
         </div>
       </body>

@@ -99,8 +99,8 @@ class GameService
 
         $game = $this->gameRepository->find($gameId);
 
-        $game->setScore($userInput['score']);
         $game->setTotalQuestions($userInput['totalQuestions']);
+        $game->setScore($userInput['score']);
 
         $this->gameRepository->save($game);
 

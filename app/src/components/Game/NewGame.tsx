@@ -16,10 +16,17 @@ function NewGame() {
     correctAnswers: 0,
     wrongAnswers: 0,
   });
-  const totalQuestions = result.correctAnswers + result.wrongAnswers;
+  const [finalScore, setFinalScore] = useState(0);
+  const [totalQuestions, setTotalQuestions] = useState(0);
   const [timeExpired, setTimeExpired] = useState(false);
   const onTimeExpired = () => {
     setTimeExpired(true);
+    setFinalScore(result.score);
+    setTotalQuestions(result.correctAnswers + result.wrongAnswers);
+  };
+
+  const finishGameHandler = () => {
+    return window.location.assign('/');
   };
 
   const userId = 1;
@@ -35,7 +42,7 @@ function NewGame() {
       }),
   });
 
-  const gameId = 4;
+  const gameId = 1;
 
   const {
     isLoading,
@@ -48,27 +55,22 @@ function NewGame() {
     enabled: false,
   });
 
-  useEffect(() => {
-    refetch();
-    // addNewGame.mutate();
-  }, []);
-
   const newGameUpdate: any = useMutation({
     mutationFn: () =>
       updateGame({
         gameId: gameId,
         totalQuestions: totalQuestions,
-        score: result.score,
+        score: finalScore,
       }),
   });
 
   useEffect(() => {
     refetch();
-    if (test) {
-      addNewGame.mutate();
-      newGameUpdate.mutate();
+    if (timeExpired) {
+      // addNewGame.mutate();
+      // newGameUpdate.mutate();
     }
-  }, []);
+  }, [timeExpired]);
 
   if (isLoading) return <div className="text-center">GET READY TO PLAY!!!</div>;
 
@@ -107,20 +109,14 @@ function NewGame() {
     setSelectedAnswerIndex(index);
     if (answer === allQuestions[activeQuestion].questionAnswer) {
       setSelectedAnswer(true);
-      console.log('right');
     } else {
       setSelectedAnswer(false);
-      console.log('wrong');
     }
   };
 
   const questionNum = number => (number > 100 ? number : `${number}`);
 
   if (allQuestions) {
-    // const shuffle = array => {
-    //   array.sort(() => Math.random() - 0.5);
-    // };
-
     // shuffle(allQuestions);
 
     const array = allQuestions[activeQuestion].questionOption;
@@ -133,7 +129,7 @@ function NewGame() {
 
     return (
       <Card>
-        <Timer initMinute={0} initSeconds={30} onTimeExpired={onTimeExpired} />
+        <Timer onTimeExpired={onTimeExpired} />
         <body className="flex aspect-auto items-center justify-center bg-red-300">
           {!timeExpired ? (
             <div className="w-full max-w-xl">
@@ -153,7 +149,7 @@ function NewGame() {
                     <li
                       className={
                         selectedAnswerIndex === index
-                          ? 'my-4 rounded-lg bg-blue-300'
+                          ? 'my-4 rounded-lg border-4 border-black bg-red-300'
                           : 'my-4 rounded-lg bg-red-300'
                       }
                       onClick={() => onAnswerSelected(answer, index)}
@@ -164,6 +160,12 @@ function NewGame() {
                   ))}
                 </ul>
               </div>
+              <button
+                onClick={finishGameHandler}
+                className="float-left my-3 rounded-full bg-red-100 py-1 px-3 font-bold text-black hover:bg-red-300"
+              >
+                I GIVE UP!
+              </button>
               <button
                 onClick={onClickNext}
                 disabled={selectedAnswerIndex === null}
@@ -187,6 +189,12 @@ function NewGame() {
               <p>
                 Total Wrong: <span>{result.wrongAnswers}</span>
               </p>
+              <button
+                onClick={finishGameHandler}
+                className="rounded-full bg-red-100 py-1 px-3 font-bold text-black hover:bg-red-300"
+              >
+                Finish
+              </button>
             </div>
           )}
         </body>

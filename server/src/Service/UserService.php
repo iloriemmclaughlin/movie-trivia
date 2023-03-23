@@ -7,6 +7,7 @@ use App\Dto\Outgoing\UserDto;
 use App\Dto\Outgoing\GameDto;
 use App\Entity\Game;
 use App\Entity\User;
+use App\Repository\GameRepository;
 use App\Repository\StatsRepository;
 use App\Repository\UserRepository;
 use App\Repository\UserTypeRepository;
@@ -19,6 +20,7 @@ class UserService
     private UserRepository $userRepository;
     private UserTypeRepository $userTypeRepository;
     private StatsRepository $statsRepository;
+    private GameRepository $gameRepository;
     private UserTypeService $userTypeService;
     private GameService $gameService;
     private StatsService $statsService;
@@ -29,6 +31,7 @@ class UserService
         UserRepository $userRepository,
         UserTypeRepository $userTypeRepository,
         StatsRepository $statsRepository,
+        GameRepository $gameRepository,
         UserTypeService $userTypeService,
 //        GameService $gameService,
 //        StatsService $statsService,
@@ -37,6 +40,7 @@ class UserService
         $this->userRepository = $userRepository;
         $this->userTypeRepository = $userTypeRepository;
         $this->statsRepository = $statsRepository;
+        $this->gameRepository = $gameRepository;
         $this->userTypeService = $userTypeService;
 //        $this->gameService = $gameService;
 //        $this->statsService = $statsService;
@@ -64,24 +68,23 @@ class UserService
 
     public function getUserGames($userId)
     {
-
         $user = $this->userRepository->find($userId);
-        $userGames = $user->getGames();
+        $games = $this->gameRepository->findBy(['user_id' => $user->getId()]);
 
         $dto = [];
 
-        foreach($userGames as $game) {
-            $dto[] = $this->transformGameDto($game);
+        foreach($games as $game) {
+//            $dto[] = $this->transformGameDto($game);
+            $dto[] = [
+                'gameId' => $game->getId(),
+                'totalQuestions' => $game->getTotalQuestions(),
+                'score' => $game->getScore(),
+                'date' => $game->getDate(),
+            ];
+
         }
 
         return $dto;
-//
-////        $user = $this->userRepository->find($userId);
-////        $userGames = $user->getGames();
-////
-////        $dto = $this->gameResponseDtoTransformer->transformFromObjects($userGames);
-////
-////        return $dto;
     }
 
 //    public function getUserStats($userId)
