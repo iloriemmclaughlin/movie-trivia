@@ -71,6 +71,7 @@ class QuestionService
     public function getAllQuestions()
     {
         $questions = $this->questionRepository->findAll();
+        shuffle($questions);
 
         $dtos = [];
 
@@ -84,13 +85,16 @@ class QuestionService
             $dto->setQuestionText($question->getQuestionText());
             $dto->setQuestionAnswer($question->getQuestionAnswer());
 
-            $array = [];
+            $optionArray = [];
+            $optionArray[] = $question->getQuestionAnswer();
 
             foreach($options as $option) {
-                $array[] = $option->getOption();
+                $optionArray[] = $option->getOption();
             }
 
-            $dto->setQuestionOption($array);
+            shuffle($optionArray);
+
+            $dto->setQuestionOption($optionArray);
 
             $dtos[] = $dto;
         }

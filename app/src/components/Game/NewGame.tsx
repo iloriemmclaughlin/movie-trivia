@@ -3,7 +3,7 @@ import Card from '../UI/Card';
 import Timer from '../UI/Timer';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { getQuestions } from '../../services/QuestionApi';
-import { createGame, updateGame } from '../../services/GameApi';
+import { createUpdateGame } from '../../services/GameApi';
 
 function NewGame() {
   const [activeQuestion, setActiveQuestion] = useState(0);
@@ -16,33 +16,18 @@ function NewGame() {
     correctAnswers: 0,
     wrongAnswers: 0,
   });
-  const [finalScore, setFinalScore] = useState(0);
-  const [totalQuestions, setTotalQuestions] = useState(0);
   const [timeExpired, setTimeExpired] = useState(false);
   const onTimeExpired = () => {
     setTimeExpired(true);
-    setFinalScore(result.score);
-    setTotalQuestions(result.correctAnswers + result.wrongAnswers);
   };
 
   const finishGameHandler = () => {
     return window.location.assign('/');
   };
 
-  const userId = 1;
-  const date = new Date().toLocaleDateString();
-
-  const addNewGame: any = useMutation({
-    mutationFn: () =>
-      createGame({
-        userId: userId,
-        totalQuestions: 0,
-        score: 0,
-        date: date,
-      }),
-  });
-
-  const gameId = 1;
+  const playAgainHandler = () => {
+    return window.location.assign('/newGame');
+  };
 
   const {
     isLoading,
@@ -55,20 +40,23 @@ function NewGame() {
     enabled: false,
   });
 
-  const newGameUpdate: any = useMutation({
+  const userId = 1;
+  const date = new Date().toLocaleDateString();
+
+  const addNewGame: any = useMutation({
     mutationFn: () =>
-      updateGame({
-        gameId: gameId,
-        totalQuestions: totalQuestions,
-        score: finalScore,
+      createUpdateGame({
+        userId: userId,
+        date: date,
+        totalQuestions: result.correctAnswers + result.wrongAnswers,
+        score: result.score,
       }),
   });
 
   useEffect(() => {
     refetch();
     if (timeExpired) {
-      // addNewGame.mutate();
-      // newGameUpdate.mutate();
+      addNewGame.mutate();
     }
   }, [timeExpired]);
 
@@ -117,16 +105,6 @@ function NewGame() {
   const questionNum = number => (number > 100 ? number : `${number}`);
 
   if (allQuestions) {
-    // shuffle(allQuestions);
-
-    const array = allQuestions[activeQuestion].questionOption;
-    const answer = allQuestions[activeQuestion].questionAnswer;
-    const totalOptions = array.concat(answer);
-
-    // shuffle(totalOptions);
-    const randomNum = Math.floor(Math.random() * allQuestions.length);
-    const randomQ = allQuestions[randomNum];
-
     return (
       <Card>
         <Timer onTimeExpired={onTimeExpired} />
@@ -145,19 +123,21 @@ function NewGame() {
                   </h2>
                 </div>
                 <ul>
-                  {totalOptions.map((answer, index) => (
-                    <li
-                      className={
-                        selectedAnswerIndex === index
-                          ? 'my-4 rounded-lg border-4 border-black bg-red-300'
-                          : 'my-4 rounded-lg bg-red-300'
-                      }
-                      onClick={() => onAnswerSelected(answer, index)}
-                      key={answer}
-                    >
-                      {answer}
-                    </li>
-                  ))}
+                  {allQuestions[activeQuestion].questionOption.map(
+                    (answer, index) => (
+                      <li
+                        className={
+                          selectedAnswerIndex === index
+                            ? 'my-4 rounded-lg border-4 border-black bg-red-300'
+                            : 'my-4 rounded-lg bg-red-300'
+                        }
+                        onClick={() => onAnswerSelected(answer, index)}
+                        key={answer}
+                      >
+                        {answer}
+                      </li>
+                    ),
+                  )}
                 </ul>
               </div>
               <button
@@ -178,7 +158,8 @@ function NewGame() {
             <div>
               <h3>Results</h3>
               <p>
-                Total Questions: <span>{totalQuestions}</span>
+                Total Questions:{' '}
+                <span>{result.correctAnswers + result.wrongAnswers}</span>
               </p>
               <p>
                 Total Score: <span>{result.score}</span>
@@ -191,9 +172,15 @@ function NewGame() {
               </p>
               <button
                 onClick={finishGameHandler}
-                className="rounded-full bg-red-100 py-1 px-3 font-bold text-black hover:bg-red-300"
+                className="float-left rounded-full bg-red-100 py-1 px-3 font-bold text-black hover:bg-red-300"
               >
                 Finish
+              </button>
+              <button
+                onClick={playAgainHandler}
+                className="float-right rounded-full bg-red-100 py-1 px-3 font-bold text-black hover:bg-red-300"
+              >
+                Play Again
               </button>
             </div>
           )}

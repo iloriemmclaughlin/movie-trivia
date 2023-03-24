@@ -36,17 +36,12 @@ class GameController extends ApiController
         return $this->json($this->gameService->returnGameQuestions($gameId));
     }
 
-    #[Route('/api/games/{userId}', methods: ['POST'])]
-    public function createNewGame(Request $request, $userId): Response
+
+    #[Route('/api/games/{userId}/createGame', methods: ['POST'])]
+    public function createUpdateGame(Request $request, $userId): Response
     {
         $dto = $this->getValidatedDto($request, CreateGameDto::class);
-        return $this->json($this->gameService->createNewGame($dto, $userId));
-    }
-
-    #[Route('/api/games/{gameId}/update', methods: ['PUT'])]
-    public function updateGame(Request $request, int $gameId): Response
-    {
-        return $this->json($this->gameService->updateGame($request, $gameId));
+        return $this->json($this->gameService->createUpdateGame($dto, $userId, $request));
     }
 
     #[Route('/api/games/{gameId}', methods: ['DELETE'])]

@@ -46,15 +46,9 @@ export interface question {
   questionOption: Array<string>;
 }
 
-export interface newGameParams {
+export interface createUpdateParams {
   userId: number;
-  totalQuestions: number;
-  score: number;
   date: string;
-}
-
-export interface updateGameParams {
-  gameId: number;
   totalQuestions: number;
   score: number;
 }

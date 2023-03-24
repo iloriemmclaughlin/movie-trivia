@@ -1,4 +1,4 @@
-import { game, newGameParams, updateGameParams } from './DTOs';
+import { createUpdateParams, game } from './DTOs';
 
 export async function getAllGames(): Promise<game[]> {
   return await fetch(`http://localhost:8000/api/games/`, {
@@ -18,33 +18,16 @@ export async function getAllGames(): Promise<game[]> {
     });
 }
 
-export async function createGame(params: newGameParams): Promise<game> {
-  return await fetch(`http://localhost:8000/api/games/${params.userId}`, {
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    method: 'POST',
-    body: JSON.stringify(params),
-  })
-    .then(response => response.json())
-    .then((data: game) => {
-      console.log('Success', data);
-      return data;
-    })
-    .catch(error => {
-      console.error('Error', error);
-      throw error;
-    });
-}
-
-export async function updateGame(params: updateGameParams): Promise<game> {
+export async function createUpdateGame(
+  params: createUpdateParams,
+): Promise<game> {
   return await fetch(
-    `http://localhost:8000/api/games/${params.gameId}/update`,
+    `http://localhost:8000/api/games/${params.userId}/createGame`,
     {
       headers: {
         'Content-Type': 'application/json',
       },
-      method: 'PUT',
+      method: 'POST',
       body: JSON.stringify(params),
     },
   )

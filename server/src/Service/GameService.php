@@ -18,6 +18,7 @@ use App\Repository\GameRepository;
 use App\Repository\UserRepository;
 use App\Repository\QuestionRepository;
 use App\Service\QuestionService;
+use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Persistence\ManagerRegistry;
 use DateTime;
 use Symfony\Component\HttpFoundation\Request;
@@ -33,6 +34,7 @@ class GameService
     private QuestionService $questionService;
     private ManagerRegistry $managerRegistry;
     private GameResponseDtoTransformer $gameResponseDtoTransformer;
+    private EntityManagerInterface $entityManager;
     private QuestionResponseDtoTransformer $questionResponseDtoTransformer;
     private GameQuestionResponseDtoTransformer $gameQuestionResponseDtoTransformer;
 
@@ -44,6 +46,7 @@ class GameService
         GameQuestionRepository $gameQuestionRepository,
         QuestionService $questionService,
         ManagerRegistry $managerRegistry,
+        EntityManagerInterface $entityManager,
         GameResponseDtoTransformer $gameResponseDtoTransformer,
         QuestionResponseDtoTransformer $questionResponseDtoTransformer,
         GameQuestionResponseDtoTransformer $gameQuestionResponseDtoTransformer)
@@ -54,6 +57,7 @@ class GameService
         $this->questionRepository = $questionRepository;
         $this->gameQuestionRepository = $gameQuestionRepository;
         $this->questionService = $questionService;
+        $this->entityManager = $entityManager;
         $this->managerRegistry = $managerRegistry;
         $this->gameResponseDtoTransformer = $gameResponseDtoTransformer;
         $this->questionResponseDtoTransformer = $questionResponseDtoTransformer;
@@ -79,30 +83,26 @@ class GameService
 //        return $dto;
 //    }
 
-    public function createNewGame(CreateGameDto $dto, $userId): ?GameDto
+    public function createUpdateGame(CreateGameDto $dto, $userId, Request $request): ?GameDto
     {
         $user = $this->userRepository->findOneBy(array('user_id' => $userId));
 
         $game = new Game();
         $game->setUserId($user);
-        $game->setScore($dto->getScore());
-        $game->setTotalQuestions($dto->getTotalQuestions());
+        $game->setTotalQuestions(0);
+        $game->setScore(0);
         $game->setDate($dto->getDate());
-        $this->gameRepository->save($game, true);
 
-        return $this->transformToDto($game);
-    }
+        $this->entityManager->persist($game);
+        $this->entityManager->flush($game);
 
-    public function updateGame(Request $request, int $gameId): ?GameDto
-    {
         $userInput = json_decode($request->getContent(), true);
-
-        $game = $this->gameRepository->find($gameId);
 
         $game->setTotalQuestions($userInput['totalQuestions']);
         $game->setScore($userInput['score']);
 
-        $this->gameRepository->save($game);
+        $this->entityManager->persist($game);
+        $this->entityManager->flush($game);
 
         return $this->transformToDto($game);
     }
