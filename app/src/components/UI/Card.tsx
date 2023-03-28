@@ -1,7 +1,16 @@
-import React from 'react';
+import React, { PropsWithChildren } from 'react';
 
-const Card = props => {
-  return <div>{props.children}</div>;
+interface CardProps {
+  backgroundColor?: string | null | undefined;
+}
+
+const Card = (props: PropsWithChildren<CardProps>) => {
+  const colors: { [s: string]: string } = {};
+  if (props.backgroundColor) {
+    colors['background'] = props.backgroundColor;
+  }
+
+  return <div style={colors}>{props.children}</div>;
 };
 
 export default Card;

@@ -48,6 +48,9 @@ class User
     #[ORM\OneToOne(mappedBy: 'user_id', cascade: ['persist', 'remove'])]
     private ?Stats $stats = null;
 
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $auth0 = null;
+
     public function __construct()
     {
         $this->games = new ArrayCollection();
@@ -199,6 +202,18 @@ class User
         }
 
         $this->stats = $stats;
+
+        return $this;
+    }
+
+    public function getAuth0(): ?string
+    {
+        return $this->auth0;
+    }
+
+    public function setAuth0(?string $auth0): self
+    {
+        $this->auth0 = $auth0;
 
         return $this;
     }

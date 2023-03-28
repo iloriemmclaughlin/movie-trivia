@@ -14,6 +14,7 @@ class UserDto
     private string $password;
     private string $backgroundColor;
     private string $foregroundColor;
+    private string $auth0;
 
     /**
      * @param int $userId
@@ -25,8 +26,9 @@ class UserDto
      * @param string $password
      * @param string $backgroundColor
      * @param string $foregroundColor
+     * @param string $auth0
      */
-    public function __construct(int $userId, UserTypeDto $userType, string $firstName, string $lastName, string $email, string $username, string $password, string $backgroundColor, string $foregroundColor)
+    public function __construct(int $userId, UserTypeDto $userType, string $firstName, string $lastName, string $email, string $username, string $password, string $backgroundColor, string $foregroundColor, string $auth0)
     {
         $this->userId = $userId;
         $this->userType = $userType;
@@ -37,6 +39,7 @@ class UserDto
         $this->password = $password;
         $this->backgroundColor = $backgroundColor;
         $this->foregroundColor = $foregroundColor;
+        $this->auth0 = $auth0;
     }
 
     /**
@@ -111,5 +114,14 @@ class UserDto
         return $this->foregroundColor;
     }
 
+    /**
+     * @return string
+     */
+    public function getAuth0(): string
+    {
+        return $this->auth0;
+    }
+
+    
 
 }

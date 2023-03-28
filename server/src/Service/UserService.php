@@ -11,8 +11,10 @@ use App\Repository\GameRepository;
 use App\Repository\StatsRepository;
 use App\Repository\UserRepository;
 use App\Repository\UserTypeRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Doctrine\Persistence\ManagerRegistry;
+use function PHPUnit\Framework\isNull;
 
 
 class UserService
@@ -22,6 +24,7 @@ class UserService
     private StatsRepository $statsRepository;
     private GameRepository $gameRepository;
     private UserTypeService $userTypeService;
+    private EntityManagerInterface $entityManager;
     private GameService $gameService;
     private StatsService $statsService;
     private ManagerRegistry $managerRegistry;
@@ -33,6 +36,7 @@ class UserService
         StatsRepository $statsRepository,
         GameRepository $gameRepository,
         UserTypeService $userTypeService,
+        EntityManagerInterface $entityManager,
 //        GameService $gameService,
 //        StatsService $statsService,
         ManagerRegistry $managerRegistry)
@@ -42,6 +46,7 @@ class UserService
         $this->statsRepository = $statsRepository;
         $this->gameRepository = $gameRepository;
         $this->userTypeService = $userTypeService;
+        $this->entityManager = $entityManager;
 //        $this->gameService = $gameService;
 //        $this->statsService = $statsService;
         $this->managerRegistry = $managerRegistry;
@@ -119,7 +124,6 @@ class UserService
         $user->setForegroundColor($dto->getForegroundColor());
         $this->userRepository->save($user, true);
 
-        //$this->createUserStats($user->getId());
 
         return $this->transformToDto($user);
     }
@@ -135,11 +139,11 @@ class UserService
 
     }
 
-    public function updateUser(Request $request, int $userId): ?UserDto
+    public function updateUser(Request $request, string $auth0): ?UserDto
     {
         $userInput = json_decode($request->getContent(), true);
 
-        $user = $this->userRepository->find($userId);
+        $user = $this->userRepository->find($auth0);
 
         $user->setFirstName($userInput['firstName']);
         $user->setLastName($userInput['lastName']);
@@ -149,7 +153,8 @@ class UserService
         $user->setBackgroundColor($userInput['backgroundColor']);
         $user->setForegroundColor($userInput['foregroundColor']);
 
-        $this->userRepository->save($user);
+        $this->entityManager->persist($user);
+        $this->entityManager->flush($user);
 
         return $this->transformToDto($user);
     }
@@ -196,7 +201,8 @@ class UserService
             $user->getUsername(),
             $user->getPassword(),
             $user->getBackgroundColor(),
-            $user->getForegroundColor()
+            $user->getForegroundColor(),
+            $user->getAuth0(),
         );
     }
 
@@ -212,6 +218,70 @@ class UserService
             $game->getTotalQuestions(),
             $game->getDate()
         );
+    }
+
+    public function createUpdateUser(CreateUserDto $dto, $auth0, Request $request): UserDto
+    {
+        $user = $this->userRepository->findOneBy(['auth0' => $auth0]);
+        $userInput = json_decode($request->getContent(), true);
+
+        if ($user === null) {
+            $user = $this->createUser($dto);
+        } else {
+            if ($userInput['firstName'] === '') {
+                $user->setFirstName($user->getFirstName());
+            } else {
+                $user->setFirstName($userInput['firstName']);
+            }
+
+            if ($userInput['lastName'] === '') {
+                $user->setLastName($user->getLastName());
+            } else {
+                $user->setLastName($userInput['lastName']);
+            }
+
+            if ($userInput['email'] === '') {
+                $user->setEmail($user->getEmail());
+            } else {
+                $user->setEmail($userInput['email']);
+            }
+
+            if ($userInput['username'] === '') {
+                $user->setUsername($user->getUsername());
+            } else {
+                $user->setUsername($userInput['username']);
+            }
+
+            if ($userInput['password'] === '') {
+                $user->setPassword($user->getPassword());
+            } else {
+                $user->setPassword($userInput['password']);
+            }
+
+            if ($userInput['backgroundColor'] === '') {
+                $user->setBackgroundColor($user->getBackgroundColor());
+            } else {
+                $user->setBackgroundColor($userInput['backgroundColor']);
+            }
+
+            if ($userInput['foregroundColor'] === '') {
+                $user->setForegroundColor($user->getForegroundColor());
+            } else {
+                $user->setForegroundColor($userInput['foregroundColor']);
+            }
+
+            $this->entityManager->persist($user);
+            $this->entityManager->flush($user);
+        }
+
+        return $user;
+    }
+
+    public function getUserByAuth0(string $auth0): UserDto
+    {
+        $user = $this->userRepository->findOneBy(['auth0' => $auth0]);
+
+        return $this->transformToDto($user);
     }
 
 }

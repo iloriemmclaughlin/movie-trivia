@@ -4,8 +4,12 @@ import Timer from '../UI/Timer';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { getQuestions } from '../../services/QuestionApi';
 import { createUpdateGame } from '../../services/GameApi';
+import { getUserByAuth } from '../../services/UserApi';
+import { useAuth0 } from '@auth0/auth0-react';
 
 function NewGame() {
+  const { isAuthenticated, user } = useAuth0();
+
   const [activeQuestion, setActiveQuestion] = useState(0);
   const [selectedAnswer, setSelectedAnswer] = useState('');
   const [selectedAnswerIndex, setSelectedAnswerIndex] = useState(null);
@@ -40,7 +44,14 @@ function NewGame() {
     enabled: false,
   });
 
-  const userId = 1;
+  const { data: userData, refetch: refetchUser } = useQuery({
+    queryKey: [`user`],
+    //@ts-ignore
+    queryFn: () => getUserByAuth(user.sub),
+    enabled: false,
+  });
+
+  const userId = userData?.userId;
   const date = new Date().toLocaleDateString();
 
   const addNewGame: any = useMutation({
@@ -55,10 +66,13 @@ function NewGame() {
 
   useEffect(() => {
     refetch();
+    if (isAuthenticated && user) {
+      refetchUser();
+    }
     if (timeExpired) {
       addNewGame.mutate();
     }
-  }, [timeExpired]);
+  }, [refetchUser, user, timeExpired]);
 
   if (isLoading) return <div className="text-center">GET READY TO PLAY!!!</div>;
 

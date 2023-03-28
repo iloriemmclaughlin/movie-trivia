@@ -13,6 +13,7 @@ class CreateUserDto
     private string $password;
     private string $backgroundColor;
     private string $foregroundColor;
+    private string $auth0;
 
     /**
      * @return int
@@ -140,6 +141,22 @@ class CreateUserDto
     public function setForegroundColor(string $foregroundColor): void
     {
         $this->foregroundColor = $foregroundColor;
+    }
+
+    /**
+     * @return string
+     */
+    public function getAuth0(): string
+    {
+        return $this->auth0;
+    }
+
+    /**
+     * @param string $auth0
+     */
+    public function setAuth0(string $auth0): void
+    {
+        $this->auth0 = $auth0;
     }
 
 

@@ -49,11 +49,17 @@ class UserController extends ApiController
         return $this->json($this->userService->getUserStats($userId));
     }
 
-    #[Route('/api/users', methods: ['POST'])]
-    public function createNewUser(Request $request): Response
+    #[Route('/api/users/{auth0}/user', methods: ['GET'])]
+    public function getUserByAuth(string $auth0): Response
+    {
+        return $this->json($this->userService->getUserByAuth0($auth0));
+    }
+
+    #[Route('/api/users/{auth0}/createUpdate', methods: ['POST'])]
+    public function createUpdateUser(Request $request, string $auth0): Response
     {
         $dto = $this->getValidatedDto($request, CreateUserDto::class);
-        return $this->json($this->userService->createUser($dto));
+        return $this->json($this->userService->createUpdateUser($dto, $auth0, $request));
     }
 
     #[Route('/api/users/{userId}/games', methods: ['PUT'])]
@@ -64,10 +70,10 @@ class UserController extends ApiController
         return new JsonResponse();
     }
 
-    #[Route('/api/users/{userId}/settings', methods: ['PATCH'])]
-    public function editUser(Request $request, int $userId): Response
+    #[Route('/api/users/{auth0}/settings', methods: ['PUT'])]
+    public function editUser(Request $request, string $auth0): Response
     {
-        return $this->json($this->userService->updateUser($request, $userId));
+        return $this->json($this->userService->updateUser($request, $auth0));
     }
 
     #[Route('/api/users/{userId}/stats', methods: ['PUT'])]

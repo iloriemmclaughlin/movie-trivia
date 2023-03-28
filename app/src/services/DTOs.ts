@@ -13,9 +13,20 @@ export interface user {
   password: string;
   backgroundColor: string;
   foregroundColor: string;
+  auth0: string;
 }
 
 export interface createUserParams {
+  username: string;
+  firstName: string;
+  lastName: string;
+  email: string;
+  password: string;
+  backgroundColor: string;
+  foregroundColor: string;
+}
+
+export interface updateUserParams {
   username: string;
   firstName: string;
   lastName: string;

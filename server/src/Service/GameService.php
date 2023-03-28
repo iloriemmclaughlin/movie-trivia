@@ -3,16 +3,19 @@
 namespace App\Service;
 
 use App\Dto\Incoming\CreateGameDto;
+use App\Dto\Incoming\CreateStatsDto;
 use App\Dto\Outgoing\GameDto;
 use App\Dto\Incoming\CreateGameQuestionDto;
 use App\Dto\Outgoing\QuestionDto;
 use App\Dto\Outgoing\GameQuestionDto;
+use App\Dto\Outgoing\StatsDto;
 use App\Dto\Response\Transformer\GameQuestionResponseDtoTransformer;
 use App\Dto\Response\Transformer\GameResponseDtoTransformer;
 use App\Dto\Response\Transformer\QuestionResponseDtoTransformer;
 use App\Entity\Game;
 use App\Entity\GameQuestion;
 use App\Entity\Question;
+use App\Entity\Stats;
 use App\Repository\GameQuestionRepository;
 use App\Repository\GameRepository;
 use App\Repository\UserRepository;
@@ -104,7 +107,43 @@ class GameService
         $this->entityManager->persist($game);
         $this->entityManager->flush($game);
 
+        $this->createUpdateStats($request, $userId);
+
         return $this->transformToDto($game);
+    }
+
+    private function createUpdateStats(Request $request, $userId): ?Stats
+    {
+        $user = $this->userRepository->findOneBy(array('user_id' => $userId));
+        $userInput = json_decode($request->getContent(), true);
+
+        $userStats = $user->getStats();
+        $stats = new Stats();
+
+        if (is_null($userStats)) {
+            $stats->setUserId($user);
+            $stats->setGamesPlayed(1);
+            $stats->setHighScore($userInput['score']);
+
+            $this->entityManager->persist($stats);
+            $this->entityManager->flush($stats);
+
+        } else if ($userStats->getHighScore() < $userInput['score']) {
+            $stats = $userStats;
+            $currentGames = $user->getStats()->getGamesPlayed();
+
+            $stats->setHighScore($userInput['score']);
+            $stats->setGamesPlayed($currentGames + 1);
+        } else {
+            $stats = $userStats;
+            $currentGames = $user->getStats()->getGamesPlayed();
+            $stats->setGamesPlayed($currentGames + 1);
+        }
+
+        $this->entityManager->persist($stats);
+        $this->entityManager->flush($stats);
+
+        return $stats;
     }
 
     public function deleteGame($gameId): string
@@ -157,6 +196,15 @@ class GameService
             $this->transformToDto($game),
             $this->questionService->transformToDto($question),
             $gameQuestion->getUserAnswer()
+        );
+    }
+
+    private function transformStatsDto(Stats $stats): StatsDto
+    {
+        return new StatsDto(
+            $this->userService->transformToDto($stats->getUserId()),
+            $stats->getGamesPlayed(),
+            $stats->getHighScore()
         );
     }
 

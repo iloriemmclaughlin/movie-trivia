@@ -1,6 +1,6 @@
 import { Route } from '@tanstack/react-router';
 import rootRoute from './rootRoute';
-import Login from '../components/UI/Login';
+import Login from '../components/Login/Login';
 
 const loginRoute = new Route({
   getParentRoute: () => rootRoute,

@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Dto\Incoming\CreateGameDto;
 use App\Dto\Incoming\CreateGameQuestionDto;
+use App\Dto\Incoming\CreateStatsDto;
 use App\Service\GameService;
 use App\Serialization\SerializationService;
 use Symfony\Component\HttpFoundation\Response;
@@ -43,6 +44,13 @@ class GameController extends ApiController
         $dto = $this->getValidatedDto($request, CreateGameDto::class);
         return $this->json($this->gameService->createUpdateGame($dto, $userId, $request));
     }
+
+//    #[Route('/api/games/stats/{userId}', methods: ['POST'])]
+//    public function createUpdateStats(Request $request, $userId): Response
+//    {
+//        $dto = $this->getValidatedDto($request, CreateStatsDto::class);
+//        return $this->json($this->gameService->createUpdateStats($dto, $userId, $request));
+//    }
 
     #[Route('/api/games/{gameId}', methods: ['DELETE'])]
     public function removeGame(int $gameId): Response

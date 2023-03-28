@@ -1,4 +1,4 @@
-import { user, game, createUserParams } from './DTOs';
+import { user, game, createUserParams, updateUserParams } from './DTOs';
 
 export async function getAllUsers(): Promise<user[]> {
   return await fetch(`http://localhost:8000/api/users`, {
@@ -18,8 +18,9 @@ export async function getAllUsers(): Promise<user[]> {
     });
 }
 
-export async function getUser(userId: number): Promise<user> {
-  return await fetch(`http://localhost:8000/api/users/${userId}`, {
+export async function getUserByAuth(auth0: string): Promise<user> {
+  console.log(`http://localhost:8000/api/users/${auth0}/user`);
+  return await fetch(`http://localhost:8000/api/users/${auth0}/user`, {
     headers: {
       'Content-Type': 'application/json',
     },
@@ -54,8 +55,11 @@ export async function getUserGames(userId: number): Promise<game[]> {
     });
 }
 
-export async function createUser(params: createUserParams): Promise<user> {
-  return await fetch(`http://localhost:8000/api/users`, {
+export async function createUpdateUser(
+  auth0: string,
+  params: createUserParams,
+): Promise<user> {
+  return await fetch(`http://localhost:8000/api/users/${auth0}/createUpdate`, {
     headers: {
       'Content-Type': 'application/json',
     },
@@ -74,10 +78,10 @@ export async function createUser(params: createUserParams): Promise<user> {
 }
 
 export async function updateUser(
-  userId: number,
-  params: createUserParams,
+  auth0: string,
+  params: updateUserParams,
 ): Promise<user> {
-  return await fetch(`http://localhost:8000/api/users/${userId}/settings`, {
+  return await fetch(`http://localhost:8000/api/users/${auth0}/settings`, {
     headers: {
       'Content-Type': 'application/json',
     },

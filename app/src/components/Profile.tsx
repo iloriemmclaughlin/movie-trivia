@@ -1,79 +1,50 @@
 import { useMutation, useQuery } from '@tanstack/react-query';
-import { getUser, updateUser } from '../services/UserApi';
+import { getUserByAuth, updateUser } from '../services/UserApi';
 import Card from './UI/Card';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import useInput from '../hooks/use-input';
 import user from './User/User';
+import { useAuth0 } from '@auth0/auth0-react';
+import ColorPicker from './UI/ColorPicker';
+import { SketchPicker } from 'react-color';
 
 function Profile() {
+  const { isAuthenticated, user } = useAuth0();
+  const [chosenColor, setChosenColor] = useState('#fff');
+
   const {
     isLoading,
     error,
     data: userData,
-    refetch,
+    refetch: refetchUser,
   } = useQuery({
     queryKey: [`user`],
-    queryFn: () => getUser(1),
+    //@ts-ignore
+    queryFn: () => getUserByAuth(user.sub),
     enabled: false,
   });
 
   useEffect(() => {
-    refetch();
-  }, []);
+    if (isAuthenticated && user) {
+      refetchUser();
+    }
+  }, [refetchUser, user]);
 
-  const {
-    value: uFirstName,
-    isValid: uFirstNameValid,
-    hasError: uFirstNameError,
-    valueChangeHandler: uFirstNameChangeHandler,
-    inputBlurHandler: uFirstNameBlurHandler,
-    reset: uFirstNameReset,
-  } = useInput((value: string) => value.trim() !== '', userData?.firstName);
-
-  const { value: uLastName } = useInput(
-    (value: string) => value.trim() !== '',
-    userData?.lastName,
-  );
-
-  const { value: uEmail } = useInput(
-    (value: string) => value.trim() !== '',
-    userData?.email,
-  );
-
-  const { value: uUsername } = useInput(
-    (value: string) => value.trim() !== '',
-    userData?.username,
-  );
-
-  const { value: uPassword } = useInput(
-    (value: string) => value.trim() !== '',
-    userData?.password,
-  );
-
-  const { value: uBgColor } = useInput(
-    (value: string) => value.trim() !== '',
-    userData?.backgroundColor,
-  );
-
-  const { value: uFgColor } = useInput(
-    (value: string) => value.trim() !== '',
-    userData?.foregroundColor,
-  );
-
-  const userId = 1;
-
-  const update: any = useMutation({
-    mutationFn: () =>
-      updateUser(userId, {
-        firstName: uFirstName,
-        lastName: uLastName,
-        email: uEmail,
-        username: uUsername,
-        password: uPassword,
-        backgroundColor: uBgColor,
-        foregroundColor: uFgColor,
-      }),
-  });
+  // // @ts-ignore
+  // const userAuth = userData.auth0;
+  //
+  // const update: any = useMutation({
+  //   mutationFn: () =>
+  //     updateUser(userAuth, {
+  //       firstName: uFirstName,
+  //       lastName: uLastName,
+  //       email: uEmail,
+  //       username: uUsername,
+  //       password: uPassword,
+  //       backgroundColor: uBgColor,
+  //       foregroundColor: uFgColor,
+  //     }),
+  // });
 
   if (isLoading) return <div>Loading...</div>;
 
@@ -92,25 +63,25 @@ function Profile() {
   } = userData;
 
   if (userData) {
-    let formIsValid = false;
-
-    if (uFirstNameValid) {
-      formIsValid = true;
-    }
-
-    const submitHandler = event => {
-      event.preventDefault();
-
-      if (!formIsValid) {
-        return;
-      }
-
-      uFirstNameReset();
-    };
+    // let formIsValid = false;
+    //
+    // if (uFirstNameValid) {
+    //   formIsValid = true;
+    // }
+    //
+    // const submitHandler = event => {
+    //   event.preventDefault();
+    //
+    //   if (!formIsValid) {
+    //     return;
+    //   }
+    //
+    //   uFirstNameReset();
+    // };
 
     return (
       <Card>
-        <body className="flex items-center justify-center bg-red-300">
+        <body className="flex items-center justify-center">
           <form className="w-full max-w-xl">
             <div className="mb-6 md:flex md:items-center">
               <div className="md:w-1/3">
@@ -125,9 +96,7 @@ function Profile() {
                 type="text"
                 id="uFirstName"
                 className="x block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 placeholder-black focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-black dark:text-black dark:focus:border-blue-500 dark:focus:ring-blue-500"
-                onChange={uFirstNameChangeHandler}
-                onBlur={uFirstNameBlurHandler}
-                value={uFirstName}
+                placeholder={firstName}
               />
             </div>
             <div className="mb-6 md:flex md:items-center">
@@ -144,7 +113,6 @@ function Profile() {
                 id="lastName"
                 className="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 placeholder-black focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:focus:border-blue-500 dark:focus:ring-blue-500"
                 placeholder={lastName}
-                value={uLastName || lastName}
                 required
               />
             </div>
@@ -162,7 +130,6 @@ function Profile() {
                 id="email"
                 className="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 placeholder-black focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:focus:border-blue-500 dark:focus:ring-blue-500"
                 placeholder={email}
-                value={uEmail || email}
                 required
               />
             </div>
@@ -180,7 +147,6 @@ function Profile() {
                 id="username"
                 className="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 placeholder-black focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:focus:border-blue-500 dark:focus:ring-blue-500"
                 placeholder={username}
-                value={uUsername || username}
                 required
               />
             </div>
@@ -198,7 +164,6 @@ function Profile() {
                 id="password"
                 className="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 placeholder-black focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:focus:border-blue-500 dark:focus:ring-blue-500"
                 placeholder={password}
-                value={uPassword || password}
                 required
               />
             </div>
@@ -210,15 +175,15 @@ function Profile() {
                 >
                   Background Color
                 </label>
+                {/*<ColorPicker />*/}
               </div>
-              <input
-                type="text"
-                id="bgColor"
-                className="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 placeholder-black focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:focus:border-blue-500 dark:focus:ring-blue-500"
-                placeholder={backgroundColor}
-                value={uBgColor || backgroundColor}
-                required
-              />
+              {/*<input*/}
+              {/*  type="text"*/}
+              {/*  id="bgColor"*/}
+              {/*  className="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 placeholder-black focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:focus:border-blue-500 dark:focus:ring-blue-500"*/}
+              {/*  placeholder={backgroundColor}*/}
+              {/*  required*/}
+              {/*/>*/}
             </div>
             <div className="mb-6 md:flex md:items-center">
               <div className="md:w-1/3">
@@ -234,17 +199,16 @@ function Profile() {
                 id="fgColor"
                 className="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 placeholder-black focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:focus:border-blue-500 dark:focus:ring-blue-500"
                 placeholder={foregroundColor}
-                value={uFgColor || foregroundColor}
                 required
               />
             </div>
             <button
               type="submit"
               className="float-right w-full rounded-full bg-red-100 px-5 py-2.5 text-center text-sm font-medium text-black hover:bg-white focus:outline-none focus:ring-4 focus:ring-white dark:bg-white dark:hover:bg-white dark:focus:ring-white sm:w-auto"
-              onClick={e => {
-                submitHandler(e);
-                update.mutate();
-              }}
+              // onClick={e => {
+              //   submitHandler(e);
+              //   update.mutate();
+              // }}
             >
               Save Changes
             </button>

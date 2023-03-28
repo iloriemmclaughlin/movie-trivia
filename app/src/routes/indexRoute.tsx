@@ -1,11 +1,12 @@
 import { Route } from '@tanstack/react-router';
 import rootRoute from './rootRoute';
 import Homepage from '../components/Homepage';
+import Login from '../components/Login/Login';
 
 const indexRoute = new Route({
   getParentRoute: () => rootRoute,
-  path: '/',
-  component: Homepage,
+  path: '/login',
+  component: Login,
   errorComponent: () => 'Unable to load index',
 });
 
