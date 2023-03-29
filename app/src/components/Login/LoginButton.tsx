@@ -6,10 +6,10 @@ const LoginButton = () => {
 
   return (
     <button
-      className="btn btn-primary mx-5 my-5 bg-red-300 px-4"
+      className="btn btn-primary mx-5 my-5 rounded-full bg-blue-300 px-4"
       onClick={() => loginWithRedirect()}
     >
-      Log In
+      LOGIN
     </button>
   );
 };

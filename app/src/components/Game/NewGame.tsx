@@ -117,20 +117,31 @@ function NewGame() {
   };
 
   const questionNum = number => (number > 100 ? number : `${number}`);
+  const styleB = { backgroundColor: userData?.backgroundColor };
+  const styleF = { backgroundColor: userData?.foregroundColor };
 
   if (allQuestions) {
     return (
       <Card>
         <Timer onTimeExpired={onTimeExpired} />
-        <body className="flex aspect-auto items-center justify-center bg-red-300">
+        <body
+          style={styleB}
+          className="flex aspect-auto items-center justify-center"
+        >
           {!timeExpired ? (
             <div className="w-full max-w-xl">
-              <div className="flex-3 my-3 rounded-full bg-red-100 pt-4 pb-4 text-black">
+              <div
+                style={styleF}
+                className="flex-3 my-3 rounded-full pt-4 pb-4 text-black"
+              >
                 <h2 className="text-center text-3xl font-bold">
                   QUESTION #{questionNum(activeQuestion + 1)}
                 </h2>
               </div>
-              <div className="my-2 flex-1 rounded-lg bg-red-100 pt-20 pb-20 pr-20 pl-20 text-black">
+              <div
+                style={styleF}
+                className="my-2 flex-1 rounded-lg pt-20 pb-20 pr-20 pl-20 text-black"
+              >
                 <div className="text-center">
                   <h2 className="text-md mb-10 block">
                     {allQuestions[activeQuestion].questionText}
@@ -140,10 +151,11 @@ function NewGame() {
                   {allQuestions[activeQuestion].questionOption.map(
                     (answer, index) => (
                       <li
+                        style={styleB}
                         className={
                           selectedAnswerIndex === index
-                            ? 'my-4 rounded-lg border-4 border-black bg-red-300'
-                            : 'my-4 rounded-lg bg-red-300'
+                            ? 'my-4 rounded-lg border-4 border-black'
+                            : 'my-4 rounded-lg'
                         }
                         onClick={() => onAnswerSelected(answer, index)}
                         key={answer}
@@ -156,14 +168,16 @@ function NewGame() {
               </div>
               <button
                 onClick={finishGameHandler}
-                className="float-left my-3 rounded-full bg-red-100 py-1 px-3 font-bold text-black hover:bg-red-300"
+                style={styleF}
+                className="float-left my-3 rounded-full py-1 px-3 font-bold text-black hover:bg-red-300"
               >
                 I GIVE UP!
               </button>
               <button
                 onClick={onClickNext}
                 disabled={selectedAnswerIndex === null}
-                className="float-right my-3 rounded-full bg-red-100 py-1 px-3 font-bold text-black hover:bg-red-300"
+                style={styleF}
+                className="float-right my-3 rounded-full py-1 px-3 font-bold text-black hover:bg-red-300"
               >
                 Next Question
               </button>
@@ -186,13 +200,15 @@ function NewGame() {
               </p>
               <button
                 onClick={finishGameHandler}
-                className="float-left rounded-full bg-red-100 py-1 px-3 font-bold text-black hover:bg-red-300"
+                style={styleF}
+                className="float-left rounded-full border-4 py-1 px-3 font-bold text-black hover:border-black"
               >
                 Finish
               </button>
               <button
                 onClick={playAgainHandler}
-                className="float-right rounded-full bg-red-100 py-1 px-3 font-bold text-black hover:bg-red-300"
+                style={styleF}
+                className="float-right rounded-full border-4 py-1 px-3 font-bold text-black hover:border-black"
               >
                 Play Again
               </button>

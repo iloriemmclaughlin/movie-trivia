@@ -120,8 +120,8 @@ class UserService
         $user->setEmail($dto->getEmail());
         $user->setUsername($dto->getUsername());
         $user->setPassword($dto->getPassword());
-        $user->setBackgroundColor($dto->getBackgroundColor());
-        $user->setForegroundColor($dto->getForegroundColor());
+        $user->setBackgroundColor('#7dd3fc');
+        $user->setForegroundColor('#e0f2fe');
         $this->userRepository->save($user, true);
 
 

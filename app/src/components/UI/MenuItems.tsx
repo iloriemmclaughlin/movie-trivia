@@ -12,7 +12,7 @@ const MenuItems = (props: PropsWithChildren<MenuItemProps>): JSX.Element => {
         // @ts-ignore
         <Link
           key={item.name}
-          className="p-5"
+          className="p-5 text-center"
           to={item.route}
           activeProps={{ className: 'font-bold underline' }}
           activeOptions={{ exact: false }}

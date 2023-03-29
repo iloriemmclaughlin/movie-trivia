@@ -9,12 +9,11 @@ const LogoutButton = () => {
   return (
     <Card>
       <button
-        className="btn btn-primary mx-5 my-5 px-4"
         onClick={() =>
           logout({ logoutParams: { returnTo: window.location.origin } })
         }
       >
-        Log Out
+        LOGOUT
       </button>
     </Card>
   );

@@ -2,10 +2,13 @@ import React, { useEffect, useState } from 'react';
 import { stats } from '../services/DTOs';
 import Card from './UI/Card';
 import { useQuery } from '@tanstack/react-query';
-import { getUser } from '../services/UserApi';
+import { getUser, getUserByAuth } from '../services/UserApi';
 import { getAllStats } from '../services/StatsApi';
+import { useAuth0 } from '@auth0/auth0-react';
 
 const Leaderboard = () => {
+  const { isAuthenticated, user } = useAuth0();
+
   const {
     isLoading,
     error,
@@ -17,9 +20,19 @@ const Leaderboard = () => {
     enabled: false,
   });
 
+  const { data: userData, refetch: refetchUser } = useQuery({
+    queryKey: [`user`],
+    //@ts-ignore
+    queryFn: () => getUserByAuth(user.sub),
+    enabled: false,
+  });
+
   useEffect(() => {
     refetch();
-  }, []);
+    if (isAuthenticated && user) {
+      refetchUser();
+    }
+  }, [refetchUser, user]);
 
   if (isLoading) return <div>Loading...</div>;
 
@@ -30,17 +43,26 @@ const Leaderboard = () => {
       <ul>
         {statsData.map((stat, index: number) => (
           <div className="grid grid-cols-3 pl-10 pr-10">
-            <div className="flex-1 bg-white pt-10 pb-10 text-black">
+            <div
+              style={{ backgroundColor: userData?.foregroundColor }}
+              className="flex-1 bg-white pt-10 pb-10 text-black"
+            >
               <li key={index}>
                 <h2 className="text-center">{stat.username}</h2>
               </li>
             </div>
-            <div className="flex-1 bg-white pt-10 pb-10 text-black">
+            <div
+              style={{ backgroundColor: userData?.foregroundColor }}
+              className="flex-1 bg-white pt-10 pb-10 text-black"
+            >
               <li key={index}>
                 <h2 className="text-center">{stat.games_played}</h2>
               </li>
             </div>
-            <div className="flex-1 bg-white pt-10 pb-10 text-black">
+            <div
+              style={{ backgroundColor: userData?.foregroundColor }}
+              className="flex-1 bg-white pt-10 pb-10 text-black"
+            >
               <li key={index}>
                 <h2 className="text-center">{stat.high_score}</h2>
               </li>

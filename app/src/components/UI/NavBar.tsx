@@ -9,6 +9,8 @@ import { useAuth0 } from '@auth0/auth0-react';
 
 const NavBar = props => {
   const { isAuthenticated, user } = useAuth0();
+  const [styleB, setStyleB] = useState({ backgroundColor: '#7dd3fc' });
+  const [styleF, setStyleF] = useState({ backgroundColor: '#e0f2fe' });
 
   const [showMenuItems, setShowMenuItems] = useState(false);
   const toggleMenu = () => {
@@ -33,9 +35,17 @@ const NavBar = props => {
     }
   }, [refetchUser, user]);
 
+  // if (userData) {
+  //   setStyleB({backgroundColor: userData?.backgroundColor});
+  //   setStyleF({backgroundColor: userData.foregroundColor});
+  // }
+
   return (
-    <Card backgroundColor={userData?.foregroundColor}>
-      <div className="justify-content: space-between h-24 w-full flex-1 items-center px-6 py-6">
+    <Card>
+      <div
+        style={{ backgroundColor: userData?.foregroundColor }}
+        className="justify-content: space-between h-24 w-full flex-1 items-center px-6 py-6"
+      >
         <img
           className="absolute inset-0 h-24 w-24"
           src={movieLogo}
@@ -45,7 +55,8 @@ const NavBar = props => {
           M O V I E . T R I V I A
         </div>
         <div className="float-right text-xl text-black" onClick={toggleMenu}>
-          <button>MENU</button>
+          <button className="float-right">MENU</button>
+          <LogoutButton />
         </div>
         <div className="text-center">
           {showMenuItems ? (
@@ -58,7 +69,6 @@ const NavBar = props => {
                   // { route: '/admin', name: 'Admin' },
                 ]}
               />
-              <LogoutButton />
             </>
           ) : (
             ''

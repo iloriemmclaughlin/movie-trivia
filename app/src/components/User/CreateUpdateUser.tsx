@@ -141,9 +141,12 @@ function CreateUpdateUser() {
     fgColorReset();
   };
 
+  const styleB = { backgroundColor: userData?.backgroundColor };
+  const styleF = { backgroundColor: userData?.foregroundColor };
+
   return (
-    <Card backgroundColor={userData?.backgroundColor}>
-      <body className="flex items-center justify-center">
+    <Card>
+      <body style={styleB} className="flex items-center justify-center">
         <form className="w-full max-w-xl">
           <div className="mt-6 mb-6 md:flex md:items-center">
             <div className="md:w-1/3">
@@ -280,7 +283,8 @@ function CreateUpdateUser() {
           </div>
           <button
             type="submit"
-            className="float-right mb-6 rounded-full bg-white px-5 py-2.5 text-center text-sm"
+            style={styleF}
+            className="float-right mb-6 rounded-full px-5 py-2.5 text-center text-sm"
             onClick={e => {
               submitHandler(e);
               addUpdateUser.mutate();

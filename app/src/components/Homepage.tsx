@@ -35,26 +35,32 @@ const Homepage = () => {
   }, [refetchUser, user]);
 
   return (
-    <Card
-      backgroundColor={userData?.backgroundColor}
-      textColor={userData?.backgroundColor}
-    >
-      <body>
+    <Card>
+      <body style={{ backgroundColor: userData?.backgroundColor }}>
         <div className="grid grid-cols-1 gap-x-8 gap-y-4 pt-10 pb-2 pl-10 pr-10">
-          <div className="flex-1 rounded-full bg-white pt-4 pb-4 text-black">
+          <div
+            style={{ backgroundColor: userData?.foregroundColor }}
+            className="flex-1 rounded-full bg-white pt-4 pb-4 text-black"
+          >
             <h2 className="text-center text-3xl font-bold">LEADERBOARD</h2>
           </div>
           <div className="grid grid-cols-3 pl-10 pr-10">
-            <div id="user" className="flex-1 bg-white pt-10 pb-10 text-black">
+            <div
+              style={{ backgroundColor: userData?.foregroundColor }}
+              id="user"
+              className="flex-1 bg-white pt-10 pb-10 text-black"
+            >
               <h2 className="text-center text-2xl">USER</h2>
             </div>
             <div
+              style={{ backgroundColor: userData?.foregroundColor }}
               id="gamesPlayed"
               className="flex-1 bg-white pt-10 pb-10 text-black"
             >
               <h2 className="text-center text-2xl">GAMES PLAYED</h2>
             </div>
             <div
+              style={{ backgroundColor: userData?.foregroundColor }}
               id="highScore"
               className="flex-1 bg-white pt-10 pb-10 text-black"
             >
@@ -65,7 +71,8 @@ const Homepage = () => {
           <div className="text-center">
             <button
               onClick={newGameHandler}
-              className="rounded-full bg-white py-1 px-3 font-bold text-black hover:border-black"
+              style={{ backgroundColor: userData?.foregroundColor }}
+              className="rounded-full border-black bg-white py-1 px-3 font-bold text-black hover:border-2"
             >
               New Game
             </button>

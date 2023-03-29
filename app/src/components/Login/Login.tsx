@@ -1,7 +1,6 @@
 import React from 'react';
 import Card from '../UI/Card';
 import LoginButton from './LoginButton';
-import LogoutButton from './LogoutButton';
 import { Auth0Provider, useAuth0 } from '@auth0/auth0-react';
 
 const Login = () => {
@@ -12,7 +11,10 @@ const Login = () => {
   // @ts-ignore
   return (
     <Card>
-      <LoginButton />
+      <div className="text-center">
+        <h1 className="text-xl">LOGIN TO PLAY!</h1>
+        <LoginButton />
+      </div>
     </Card>
 
     // <Card>
