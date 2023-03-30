@@ -43,12 +43,6 @@ class UserController extends ApiController
         return $this->json($this->userService->getUserGames($userId));
     }
 
-    #[Route('/api/users/{userId}/stats', methods: ['GET'])]
-    public function getUserStats(int $userId): Response
-    {
-        return $this->json($this->userService->getUserStats($userId));
-    }
-
     #[Route('/api/users/{auth0}/user', methods: ['GET'])]
     public function getUserByAuth(string $auth0): Response
     {
@@ -60,14 +54,6 @@ class UserController extends ApiController
     {
         $dto = $this->getValidatedDto($request, CreateUserDto::class);
         return $this->json($this->userService->createUpdateUser($dto, $auth0, $request));
-    }
-
-    #[Route('/api/users/{userId}/games', methods: ['PUT'])]
-    public function updateUserGame(Request $request, int $userId): Response
-    {
-    // FIGURE OUT LATER?
-
-        return new JsonResponse();
     }
 
     #[Route('/api/users/{auth0}/settings', methods: ['PUT'])]
@@ -82,7 +68,7 @@ class UserController extends ApiController
         return $this->json($this->userService->updateUserStats($request, $userId));
     }
 
-    #[Route('/api/users/{userId}', name: 'delete_user', methods: ['DELETE'])]
+    #[Route('/api/users/{userId}', methods: ['DELETE'])]
     public function deleteUser(int $userId): Response
     {
         return $this->json($this->userService->deleteUser($userId));

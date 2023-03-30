@@ -7,6 +7,7 @@ import { useAuth0 } from '@auth0/auth0-react';
 import Card from './UI/Card';
 import { useQuery } from '@tanstack/react-query';
 import { getUserByAuth } from '../services/UserApi';
+import LoginButton from './Login/LoginButton';
 
 const Homepage = () => {
   const { isAuthenticated, user } = useAuth0();
@@ -34,33 +35,47 @@ const Homepage = () => {
     }
   }, [refetchUser, user]);
 
+  if (!isAuthenticated) {
+    return (
+      <Card>
+        <div className="text-center">
+          <h1 className="text-xl">LOGIN TO PLAY!</h1>
+          <LoginButton />
+        </div>
+      </Card>
+    );
+  }
+
+  const styleB = { backgroundColor: userData?.backgroundColor };
+  const styleF = { backgroundColor: userData?.foregroundColor };
+
   return (
     <Card>
-      <body style={{ backgroundColor: userData?.backgroundColor }}>
+      <body style={styleB}>
         <div className="grid grid-cols-1 gap-x-8 gap-y-4 pt-10 pb-2 pl-10 pr-10">
           <div
-            style={{ backgroundColor: userData?.foregroundColor }}
+            style={styleF}
             className="flex-1 rounded-full bg-white pt-4 pb-4 text-black"
           >
             <h2 className="text-center text-3xl font-bold">LEADERBOARD</h2>
           </div>
           <div className="grid grid-cols-3 pl-10 pr-10">
             <div
-              style={{ backgroundColor: userData?.foregroundColor }}
+              style={styleF}
               id="user"
               className="flex-1 bg-white pt-10 pb-10 text-black"
             >
               <h2 className="text-center text-2xl">USER</h2>
             </div>
             <div
-              style={{ backgroundColor: userData?.foregroundColor }}
+              style={styleF}
               id="gamesPlayed"
               className="flex-1 bg-white pt-10 pb-10 text-black"
             >
               <h2 className="text-center text-2xl">GAMES PLAYED</h2>
             </div>
             <div
-              style={{ backgroundColor: userData?.foregroundColor }}
+              style={styleF}
               id="highScore"
               className="flex-1 bg-white pt-10 pb-10 text-black"
             >
@@ -71,7 +86,7 @@ const Homepage = () => {
           <div className="text-center">
             <button
               onClick={newGameHandler}
-              style={{ backgroundColor: userData?.foregroundColor }}
+              style={styleF}
               className="rounded-full border-black bg-white py-1 px-3 font-bold text-black hover:border-2"
             >
               New Game

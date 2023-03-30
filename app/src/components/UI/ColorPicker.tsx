@@ -4,6 +4,11 @@ import reactCSS from 'reactcss';
 import Card from './Card';
 
 const ColorPicker = props => {
+  const handleClick = e => {
+    const value = e.target.value;
+    console.log('the value:', value);
+  };
+
   return (
     <ChromePicker
       color={props.value || false}

@@ -19,7 +19,6 @@ export async function getAllUsers(): Promise<user[]> {
 }
 
 export async function getUserByAuth(auth0: string): Promise<user> {
-  console.log(`http://localhost:8000/api/users/${auth0}/user`);
   return await fetch(`http://localhost:8000/api/users/${auth0}/user`, {
     headers: {
       'Content-Type': 'application/json',
@@ -77,16 +76,12 @@ export async function createUpdateUser(
     });
 }
 
-export async function updateUser(
-  auth0: string,
-  params: updateUserParams,
-): Promise<user> {
-  return await fetch(`http://localhost:8000/api/users/${auth0}/settings`, {
+export async function deleteUser(userId: number): Promise<user> {
+  return await fetch(`http://localhost:8000/api/users/${userId}`, {
     headers: {
       'Content-Type': 'application/json',
     },
-    method: 'PUT',
-    body: JSON.stringify(params),
+    method: 'DELETE',
   })
     .then(response => response.json())
     .then((data: user) => {

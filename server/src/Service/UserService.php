@@ -92,22 +92,6 @@ class UserService
         return $dto;
     }
 
-//    public function getUserStats($userId)
-//    {
-//        $user = $this->userRepository->find($userId);
-//        $userStats = $user->getStats();
-//
-//        $dto = $this->statsService->transformToDto($userStats);
-//
-//        return $dto;
-//
-////        $user = $this->userRepository->find($userId);
-////        $userStats = $user->getStats();
-////
-////        $dto = $this->statsResponseDtoTransformer->transformFromObject($userStats);
-////
-////        return $dto;
-//    }
 
     public function createUser(CreateUserDto $dto): ?UserDto
     {
