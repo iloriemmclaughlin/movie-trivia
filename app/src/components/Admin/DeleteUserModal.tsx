@@ -1,8 +1,20 @@
 import React, { useEffect, useState } from 'react';
 import Card from '../UI/Card';
 
-const DeleteUserModal = props => {
+// @ts-ignore
+const DeleteUserModal = (props: { deleteUserCall: Function }) => {
   const [showModal, setShowModal] = useState(false);
+  const [value, setValue] = useState('');
+
+  const onClickCancelHandler = () => {
+    setShowModal(false);
+  };
+
+  const onClickDeleteHandler = () => {
+    setShowModal(false);
+    props.deleteUserCall();
+  };
+
   return (
     <Card>
       <button
@@ -25,9 +37,7 @@ const DeleteUserModal = props => {
                     className="float-right ml-auto border-0 bg-transparent p-1 text-3xl font-semibold leading-none text-black opacity-5 outline-none focus:outline-none"
                     onClick={() => setShowModal(false)}
                   >
-                    <span className="block h-6 w-6 bg-transparent text-2xl text-black opacity-5 outline-none focus:outline-none">
-                      ×
-                    </span>
+                    <span className="block h-6 w-6 bg-transparent text-2xl text-black opacity-5 outline-none focus:outline-none"></span>
                   </button>
                 </div>
                 {/*body*/}
@@ -41,14 +51,14 @@ const DeleteUserModal = props => {
                   <button
                     className="background-transparent mr-1 mb-1 px-6 py-2 text-sm font-bold uppercase text-red-500 outline-none transition-all duration-150 ease-linear focus:outline-none"
                     type="button"
-                    onClick={() => setShowModal(false)}
+                    onClick={onClickCancelHandler}
                   >
                     Cancel
                   </button>
                   <button
                     className="mr-1 mb-1 rounded bg-emerald-500 px-6 py-3 text-sm font-bold uppercase text-white shadow outline-none transition-all duration-150 ease-linear hover:shadow-lg focus:outline-none active:bg-emerald-600"
                     type="button"
-                    onClick={() => setShowModal(false)}
+                    onClick={onClickDeleteHandler}
                   >
                     Delete
                   </button>

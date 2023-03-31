@@ -42,6 +42,7 @@ const TestPage = () => {
                   <button
                     className="background-transparent mr-1 mb-1 px-6 py-2 text-sm font-bold uppercase text-red-500 outline-none transition-all duration-150 ease-linear focus:outline-none"
                     type="button"
+                    value="cancel"
                     onClick={() => setShowModal(false)}
                   >
                     Cancel
@@ -49,6 +50,7 @@ const TestPage = () => {
                   <button
                     className="mr-1 mb-1 rounded bg-emerald-500 px-6 py-3 text-sm font-bold uppercase text-white shadow outline-none transition-all duration-150 ease-linear hover:shadow-lg focus:outline-none active:bg-emerald-600"
                     type="button"
+                    value="delete"
                     onClick={() => setShowModal(false)}
                   >
                     Delete
