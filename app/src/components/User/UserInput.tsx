@@ -1,6 +1,7 @@
 import React from 'react';
 import useInput from '../../hooks/use-input';
 
+// @ts-ignore
 const UserInput = props => {
   const {
     value: updatedValue,

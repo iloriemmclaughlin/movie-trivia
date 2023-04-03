@@ -1,7 +1,6 @@
 import React from 'react';
 import { useAuth0 } from '@auth0/auth0-react';
 import Card from '../UI/Card';
-import LoginProfile from './LoginProfile';
 
 const LogoutButton = () => {
   const { logout } = useAuth0();

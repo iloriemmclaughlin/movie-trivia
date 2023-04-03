@@ -125,6 +125,7 @@ function CreateUpdateUser() {
     formIsValid = true;
   }
 
+  // @ts-ignore
   const submitHandler = event => {
     event.preventDefault();
 

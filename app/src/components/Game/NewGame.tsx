@@ -57,6 +57,7 @@ function NewGame() {
   const addNewGame: any = useMutation({
     mutationFn: () =>
       createUpdateGame({
+        // @ts-ignore
         userId: userId,
         date: date,
         totalQuestions: result.correctAnswers + result.wrongAnswers,
@@ -107,15 +108,19 @@ function NewGame() {
     }
   };
 
+  // @ts-ignore
   const onAnswerSelected = (answer, index) => {
     setSelectedAnswerIndex(index);
     if (answer === allQuestions[activeQuestion].questionAnswer) {
+      // @ts-ignore
       setSelectedAnswer(true);
     } else {
+      // @ts-ignore
       setSelectedAnswer(false);
     }
   };
 
+  // @ts-ignore
   const questionNum = number => (number > 100 ? number : `${number}`);
   const styleB = { backgroundColor: userData?.backgroundColor };
   const styleF = { backgroundColor: userData?.foregroundColor };

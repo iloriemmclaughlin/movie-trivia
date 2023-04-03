@@ -1,11 +1,14 @@
 import React, { useState, useEffect } from 'react';
-import { SketchPicker, ChromePicker } from 'react-color';
+import { SketchPicker, ChromePicker, ColorResult } from 'react-color';
 import reactCSS from 'reactcss';
 import Card from './Card';
 
-const ColorPicker = props => {
-  const handleClick = e => {
-    const value = e.target.value;
+const ColorPicker = (props: {
+  value: any;
+  onChange: (arg0: ColorResult) => void;
+}) => {
+  const handleClick = (event: { target: { value: any } }) => {
+    const value = event.target.value;
     console.log('the value:', value);
   };
 

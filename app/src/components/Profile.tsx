@@ -1,8 +1,7 @@
 import { useMutation, useQuery } from '@tanstack/react-query';
-import { getUserByAuth, updateUser } from '../services/UserApi';
+import { getUserByAuth } from '../services/UserApi';
 import Card from './UI/Card';
 import { useEffect, useState } from 'react';
-import useInput from '../hooks/use-input';
 import user from './User/User';
 import { useAuth0 } from '@auth0/auth0-react';
 import ColorPicker from './UI/ColorPicker';

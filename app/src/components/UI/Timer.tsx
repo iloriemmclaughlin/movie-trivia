@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import Card from './Card';
 
+// @ts-ignore
 const Timer = props => {
   const { initMinute = 0, initSeconds = 30 } = props;
   const [minutes, setMinutes] = useState(initMinute);

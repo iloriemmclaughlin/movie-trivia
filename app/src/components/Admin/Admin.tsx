@@ -4,8 +4,10 @@ import { useMutation, useQuery } from '@tanstack/react-query';
 import { getQuestions } from '../../services/QuestionApi';
 import { deleteUser, getAllUsers, getUserByAuth } from '../../services/UserApi';
 import DeleteUserModal from './DeleteUserModal';
+import { useAuth0 } from '@auth0/auth0-react';
 
-const Admin = props => {
+const Admin = () => {
+  const { isAuthenticated, user } = useAuth0();
   const [clicked, setClicked] = useState(false);
   const [selectedUser, setSelectedUser] = useState(0);
 
@@ -44,7 +46,8 @@ const Admin = props => {
     return <div className="text-center">OPE. UNABLE TO LOAD USERS.</div>;
   }
 
-  const onClickDelete = info => {
+  // @ts-ignore
+  const onClickDelete = (info: user) => {
     setSelectedUser(info.userId);
     setClicked(true);
     console.log('userId:' + info.userId);

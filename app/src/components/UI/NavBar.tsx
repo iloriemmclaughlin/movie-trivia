@@ -7,7 +7,7 @@ import { useQuery } from '@tanstack/react-query';
 import { getUserByAuth } from '../../services/UserApi';
 import { useAuth0 } from '@auth0/auth0-react';
 
-const NavBar = props => {
+const NavBar = () => {
   const { isAuthenticated, user } = useAuth0();
   const [styleB, setStyleB] = useState({ backgroundColor: '#7dd3fc' });
   const [styleF, setStyleF] = useState({ backgroundColor: '#e0f2fe' });
@@ -39,6 +39,7 @@ const NavBar = props => {
   }, [refetchUser, user]);
 
   const userTypeId = userData?.userType.userTypeId;
+  console.log(userTypeId);
   const itemsUser = [
     { route: '/', name: 'Home' },
     { route: '/games', name: 'Games' },

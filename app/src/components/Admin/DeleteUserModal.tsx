@@ -1,8 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import Card from '../UI/Card';
+import { useQuery } from '@tanstack/react-query';
+import { getUserByAuth } from '../../services/UserApi';
+import { user } from '../../services/DTOs';
+import { useAuth0 } from '@auth0/auth0-react';
 
 // @ts-ignore
 const DeleteUserModal = (props: { deleteUserCall: Function }) => {
+  const { isAuthenticated, user } = useAuth0();
   const [showModal, setShowModal] = useState(false);
   const [value, setValue] = useState('');
 
@@ -15,10 +20,21 @@ const DeleteUserModal = (props: { deleteUserCall: Function }) => {
     props.deleteUserCall();
   };
 
+  const { data: userData, refetch: refetchUser } = useQuery({
+    queryKey: [`user`],
+    //@ts-ignore
+    queryFn: () => getUserByAuth(user.sub),
+    enabled: false,
+  });
+
+  const bgColor = { backgroundColor: userData?.backgroundColor };
+  const fgColor = { backgroundColor: userData?.foregroundColor };
+
   return (
     <Card>
       <button
-        className="mr-1 mb-1 rounded bg-pink-500 px-6 py-3 text-sm font-bold uppercase text-white shadow outline-none transition-all duration-150 ease-linear hover:shadow-lg focus:outline-none active:bg-pink-600"
+        style={fgColor}
+        className="mr-1 mb-1 rounded px-6 py-3 text-sm font-bold uppercase text-black shadow outline-none transition-all duration-150 ease-linear hover:shadow-lg focus:outline-none"
         type="button"
         onClick={() => setShowModal(true)}
       >

@@ -23,6 +23,7 @@ const UserGames = () => {
     refetch,
   } = useQuery({
     queryKey: [`games`],
+    // @ts-ignore
     queryFn: () => getUserGames(userId),
     enabled: false,
   });

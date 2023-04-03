@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { stats } from '../services/DTOs';
 import Card from './UI/Card';
 import { useQuery } from '@tanstack/react-query';
-import { getUser, getUserByAuth } from '../services/UserApi';
+import { getUserByAuth } from '../services/UserApi';
 import { getAllStats } from '../services/StatsApi';
 import { useAuth0 } from '@auth0/auth0-react';
 
@@ -38,13 +38,16 @@ const Leaderboard = () => {
 
   if (error) return <div>An error has occurred.</div>;
 
+  const bgColor = { backgroundColor: userData?.backgroundColor };
+  const fgColor = { backgroundColor: userData?.foregroundColor };
+
   if (statsData) {
     return (
       <ul>
         {statsData.map((stat, index: number) => (
           <div className="grid grid-cols-3 pl-10 pr-10">
             <div
-              style={{ backgroundColor: userData?.foregroundColor }}
+              style={fgColor}
               className="flex-1 bg-white pt-10 pb-10 text-black"
             >
               <li key={index}>
@@ -52,7 +55,7 @@ const Leaderboard = () => {
               </li>
             </div>
             <div
-              style={{ backgroundColor: userData?.foregroundColor }}
+              style={fgColor}
               className="flex-1 bg-white pt-10 pb-10 text-black"
             >
               <li key={index}>
@@ -60,7 +63,7 @@ const Leaderboard = () => {
               </li>
             </div>
             <div
-              style={{ backgroundColor: userData?.foregroundColor }}
+              style={fgColor}
               className="flex-1 bg-white pt-10 pb-10 text-black"
             >
               <li key={index}>

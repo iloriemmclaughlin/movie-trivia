@@ -1,5 +1,6 @@
 import React from 'react';
 
+// @ts-ignore
 const User = props => {
   return (
     <div className="grid grid-cols-3 pl-10 pr-10">
