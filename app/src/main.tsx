@@ -10,7 +10,7 @@ ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
       domain="dev-2djp1pcfa0rgsnov.us.auth0.com"
       clientId="Wuje0PTi67JmeWyxHlq6wuOWBgrdS4tT"
       authorizationParams={{
-        redirect_uri: window.location.origin,
+        redirect_uri: 'http://localhost:5173/profile',
         audience: 'https://dev-2djp1pcfa0rgsnov.us.auth0.com/api/v2/',
         scope: 'read:current_user update:current_user_metadata',
       }}

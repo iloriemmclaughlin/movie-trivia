@@ -9,8 +9,6 @@ import { useAuth0 } from '@auth0/auth0-react';
 
 const NavBar = () => {
   const { isAuthenticated, user } = useAuth0();
-  const [styleB, setStyleB] = useState({ backgroundColor: '#7dd3fc' });
-  const [styleF, setStyleF] = useState({ backgroundColor: '#e0f2fe' });
   const [loginPage, setLoginPage] = useState(true);
 
   const [showMenuItems, setShowMenuItems] = useState(false);
@@ -31,15 +29,34 @@ const NavBar = () => {
     enabled: false,
   });
 
+  const userTypeId = userData?.userType.userTypeId;
+  const [bgColor, setBgColor] = useState('#7dd3fc');
+  const [fgColor, setFgColor] = useState('#e0f2fe');
+  const [items, setItems] = useState([
+    { route: '/', name: 'Home' },
+    { route: '/games', name: 'Games' },
+    { route: '/profile', name: 'Profile' },
+  ]);
+
   useEffect(() => {
     if (isAuthenticated && user) {
       refetchUser();
       setLoginPage(false);
     }
+    if (userData) {
+      setBgColor(userData.backgroundColor);
+      setFgColor(userData.foregroundColor);
+      if (userTypeId === 1) {
+        setItems([
+          { route: '/', name: 'Home' },
+          { route: '/games', name: 'Games' },
+          { route: '/profile', name: 'Profile' },
+          { route: '/admin', name: 'Admin' },
+        ]);
+      }
+    }
   }, [refetchUser, user]);
 
-  const userTypeId = userData?.userType.userTypeId;
-  console.log(userTypeId);
   const itemsUser = [
     { route: '/', name: 'Home' },
     { route: '/games', name: 'Games' },
@@ -68,7 +85,7 @@ const NavBar = () => {
   return (
     <Card>
       <div
-        style={styleF}
+        style={{ backgroundColor: fgColor }}
         // style={{ backgroundColor: userData?.foregroundColor }}
         className="justify-content: space-between h-24 w-full flex-1 items-center px-6 py-6"
       >
@@ -95,14 +112,7 @@ const NavBar = () => {
         <div className="text-center">
           {showMenuItems ? (
             <>
-              <MenuItems
-                items={[
-                  { route: '/', name: 'Home' },
-                  { route: '/games', name: 'Games' },
-                  { route: '/profile', name: 'Profile' },
-                  { route: '/admin', name: 'Admin' },
-                ]}
-              />
+              <MenuItems items={items} />
             </>
           ) : (
             ''

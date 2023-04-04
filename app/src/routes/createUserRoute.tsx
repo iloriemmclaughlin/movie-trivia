@@ -1,11 +1,11 @@
 import { Route } from '@tanstack/react-router';
 import rootRoute from './rootRoute';
-import CreateUpdateUser from '../components/User/CreateUpdateUser';
+import Profile from '../components/User/Profile';
 
 const createUserRoute = new Route({
   getParentRoute: () => rootRoute,
   path: '/createUser',
-  component: CreateUpdateUser,
+  component: Profile,
 });
 
 export default createUserRoute;

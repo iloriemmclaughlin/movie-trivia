@@ -4,9 +4,19 @@ import useInput from '../../hooks/use-input';
 import { useQuery, useMutation } from '@tanstack/react-query';
 import Card from '../UI/Card';
 import { useAuth0 } from '@auth0/auth0-react';
+import ColorPicker from '../UI/ColorPicker';
+import { ChromePicker, SketchPicker } from 'react-color';
 
-function CreateUpdateUser() {
+function Profile() {
   const { isAuthenticated, user } = useAuth0();
+  const [showBgColorPicker, setShowBgColorPicker] = useState(false);
+  const [showFgColorPicker, setShowFgColorPicker] = useState(false);
+  const bgClickHandler = () => {
+    setShowBgColorPicker(!showBgColorPicker);
+  };
+  const fgClickHandler = () => {
+    setShowFgColorPicker(!showFgColorPicker);
+  };
 
   const {
     value: firstName,
@@ -54,7 +64,6 @@ function CreateUpdateUser() {
   } = useInput((value: string) => value.trim() !== '');
 
   const {
-    value: bgColor,
     isValid: bgColorValid,
     hasError: bgColorError,
     valueChangeHandler: bgColorChangeHandler,
@@ -63,7 +72,6 @@ function CreateUpdateUser() {
   } = useInput((value: string) => value.trim() !== '');
 
   const {
-    value: fgColor,
     isValid: fgColorValid,
     hasError: fgColorError,
     valueChangeHandler: fgColorChangeHandler,
@@ -87,6 +95,9 @@ function CreateUpdateUser() {
     enabled: false,
   });
 
+  const [bgColor, setBgColor] = useState('#7dd3fc');
+  const [fgColor, setFgColor] = useState('#e0f2fe');
+
   const addUpdateUser: any = useMutation({
     mutationFn: () =>
       //@ts-ignore
@@ -104,6 +115,10 @@ function CreateUpdateUser() {
   useEffect(() => {
     if (isAuthenticated && user) {
       refetchUser();
+    }
+    if (userData) {
+      setBgColor(userData.backgroundColor);
+      setFgColor(userData.foregroundColor);
     }
   }, [refetchUser, user]);
 
@@ -142,12 +157,18 @@ function CreateUpdateUser() {
     fgColorReset();
   };
 
-  const styleB = { backgroundColor: userData?.backgroundColor };
-  const styleF = { backgroundColor: userData?.foregroundColor };
+  // const styleB = { backgroundColor: userData?.backgroundColor };
+  // if (userData) {
+  //   setColor({ backgroundColor: userData?.backgroundColor });
+  // }
+  // const styleF = { backgroundColor: userData?.foregroundColor };
 
   return (
     <Card>
-      <body style={styleB} className="flex items-center justify-center">
+      <body
+        style={{ backgroundColor: bgColor }}
+        className="flex items-center justify-center"
+      >
         <form className="w-full max-w-xl">
           <div className="mt-6 mb-6 md:flex md:items-center">
             <div className="md:w-1/3">
@@ -161,6 +182,7 @@ function CreateUpdateUser() {
             <input
               type="text"
               id="firstName"
+              className="x block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 placeholder-black focus:ring-blue-500"
               placeholder={userData?.firstName}
               onChange={firstNameChangeHandler}
               onBlur={firstNameBlurHandler}
@@ -180,6 +202,7 @@ function CreateUpdateUser() {
             <input
               type="text"
               id="lastName"
+              className="x block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 placeholder-black focus:ring-blue-500"
               placeholder={userData?.lastName}
               onChange={lastNameChangeHandler}
               onBlur={lastNameBlurHandler}
@@ -199,6 +222,7 @@ function CreateUpdateUser() {
             <input
               type="text"
               id="email"
+              className="x block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 placeholder-black focus:ring-blue-500"
               placeholder={userData?.email}
               onChange={emailChangeHandler}
               onBlur={emailBlurHandler}
@@ -218,6 +242,7 @@ function CreateUpdateUser() {
             <input
               type="text"
               id="username"
+              className="x block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 placeholder-black focus:ring-blue-500"
               placeholder={userData?.username}
               onChange={usernameChangeHandler}
               onBlur={usernameBlurHandler}
@@ -237,6 +262,7 @@ function CreateUpdateUser() {
             <input
               type="text"
               id="password"
+              className="x block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 placeholder-black focus:ring-blue-500"
               placeholder={userData?.password}
               onChange={passwordChangeHandler}
               onBlur={passwordBlurHandler}
@@ -245,46 +271,71 @@ function CreateUpdateUser() {
             {/*{passwordError && <p>Password cannot be empty.</p>}*/}
           </div>
           <div className="mb-6 md:flex md:items-center">
-            <div className="md:w-1/3">
+            <div className="md:w-1/2">
               <label
                 htmlFor="bgColor"
                 className="mb-2 block text-sm font-medium text-gray-900 dark:text-white"
               >
-                Background Color
+                Background Color ({userData?.backgroundColor})
               </label>
             </div>
             <input
               type="text"
               id="bgColor"
+              className="x block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 placeholder-black focus:ring-blue-500"
               placeholder={userData?.backgroundColor}
               onChange={bgColorChangeHandler}
               onBlur={bgColorBlurHandler}
               value={bgColor}
             />
             {/*{bgColorError && <p>Background Color cannot be empty.</p>}*/}
+            <div className="ml-6">
+              <ChromePicker
+                className="flex"
+                color={bgColor}
+                onChange={e => setBgColor(e.hex)}
+              />
+              {/*<button onClick={bgClickHandler}>Choose Color</button>*/}
+              {/*{showBgColorPicker ? (*/}
+              {/*  <SketchPicker*/}
+              {/*    color={bgColor}*/}
+              {/*    onChangeComplete={e => setBgColor(e.hex)}*/}
+              {/*  />*/}
+              {/*) : (*/}
+              {/*  ''*/}
+              {/*)}*/}
+            </div>
           </div>
           <div className="mb-6 md:flex md:items-center">
-            <div className="md:w-1/3">
+            <div className="md:w-1/2">
               <label
                 htmlFor="fgColor"
                 className="mb-2 block text-sm font-medium text-gray-900 dark:text-white"
               >
-                Foreground Color
+                Foreground Color ({userData?.foregroundColor})
               </label>
             </div>
             <input
               type="text"
               id="fgColor"
+              className="x block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 placeholder-black focus:ring-blue-500"
               placeholder={userData?.foregroundColor}
               onChange={fgColorChangeHandler}
               onBlur={fgColorBlurHandler}
               value={fgColor}
             />
             {/*{fgColorError && <p>Foreground Color cannot be empty.</p>}*/}
+            <div className="ml-6">
+              <ChromePicker
+                className="flex"
+                color={fgColor}
+                onChange={e => setFgColor(e.hex)}
+              />
+            </div>
           </div>
           <button
             type="submit"
-            style={styleF}
+            style={{ backgroundColor: fgColor }}
             className="float-right mb-6 rounded-full px-5 py-2.5 text-center text-sm"
             onClick={e => {
               submitHandler(e);
@@ -300,4 +351,4 @@ function CreateUpdateUser() {
   );
 }
 
-export default CreateUpdateUser;
+export default Profile;

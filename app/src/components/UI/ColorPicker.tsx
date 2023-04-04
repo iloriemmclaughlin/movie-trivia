@@ -1,28 +1,38 @@
 import React, { useState, useEffect } from 'react';
-import { SketchPicker, ChromePicker, ColorResult } from 'react-color';
+import {
+  SketchPicker,
+  ChromePicker,
+  ColorResult,
+  BlockPicker,
+} from 'react-color';
 import reactCSS from 'reactcss';
 import Card from './Card';
 
-const ColorPicker = (props: {
-  value: any;
-  onChange: (arg0: ColorResult) => void;
-}) => {
-  const handleClick = (event: { target: { value: any } }) => {
-    const value = event.target.value;
-    console.log('the value:', value);
+const ColorPicker = () => {
+  const [color, setColor] = useState({ backgroundColor: '#fff' });
+
+  const handleChange = (color, event) => {
+    setColor(color.hex);
   };
 
-  return (
-    <ChromePicker
-      color={props.value || false}
-      // @ts-ignore
-      value={props.value}
-      onChange={color => {
-        props.onChange(color);
-      }}
-    />
-  );
+  return <SketchPicker color={color} onChangeComplete={handleChange} />;
 
+  // const handleClick = (event: { target: { value: any } }) => {
+  //   const value = event.target.value;
+  //   console.log('the value:', value);
+  // };
+  //
+  // return (
+  //   <ChromePicker
+  //     color={props.value || false}
+  //     // @ts-ignore
+  //     value={props.value}
+  //     onClick={handleClick}
+  //     onChange={color => {
+  //       props.onChange(color);
+  //     }}
+  //   />
+  // );
   // const { chosenColor = '#ffe4e6' } = props;
   // const [background, setBackground] = useState(chosenColor);
   // const [foreground, setForeground] = useState('#ffffff');
