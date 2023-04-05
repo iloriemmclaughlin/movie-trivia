@@ -93,23 +93,29 @@ class UserService
     }
 
 
-    public function createUser(CreateUserDto $dto): ?UserDto
+    public function createUser(CreateUserDto $dto, $auth0): ?UserDto
     {
-        $userType = $this->userTypeRepository->findOneBy(array('user_type_id' => 2));
+        $user = $this->userRepository->findOneBy(['auth0' => $auth0]);
+        if ($user === null) {
+            $userType = $this->userTypeRepository->findOneBy(array('user_type_id' => 2));
 
-        $user = new User();
-        $user->setUserType($userType);
-        $user->setFirstName($dto->getFirstName());
-        $user->setLastName($dto->getLastName());
-        $user->setEmail($dto->getEmail());
-        $user->setUsername($dto->getUsername());
-        $user->setPassword($dto->getPassword());
-        $user->setBackgroundColor('#7dd3fc');
-        $user->setForegroundColor('#e0f2fe');
-        $this->userRepository->save($user, true);
+            $user = new User();
+            $user->setUserType($userType);
+            $user->setFirstName($dto->getFirstName());
+            $user->setLastName($dto->getLastName());
+            $user->setEmail($dto->getEmail());
+            $user->setUsername($dto->getUsername());
+            $user->setPassword($dto->getPassword());
+            $user->setBackgroundColor('#7dd3fc');
+            $user->setForegroundColor('#e0f2fe');
+            $user->setAuth0($dto->getAuth0());
+            $this->userRepository->save($user, true);
 
+            return $this->transformToDto($user);
+        }
 
         return $this->transformToDto($user);
+
     }
 
     private function createUserStats($userId): void
@@ -209,9 +215,6 @@ class UserService
         $user = $this->userRepository->findOneBy(['auth0' => $auth0]);
         $userInput = json_decode($request->getContent(), true);
 
-        if ($user === null) {
-            $user = $this->createUser($dto);
-        } else {
             if ($userInput['firstName'] === '') {
                 $user->setFirstName($user->getFirstName());
             } else {
@@ -256,9 +259,9 @@ class UserService
 
             $this->entityManager->persist($user);
             $this->entityManager->flush($user);
-        }
 
-        return $user;
+
+        return $this->transformToDto($user);
     }
 
     public function getUserByAuth0(string $auth0): UserDto

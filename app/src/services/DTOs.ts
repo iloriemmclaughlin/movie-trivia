@@ -16,6 +16,15 @@ export interface user {
   auth0: string;
 }
 
+export interface newUser {
+  username: string;
+  firstName: string;
+  lastName: string;
+  email: string;
+  password: string;
+  auth0: string;
+}
+
 export interface createUserParams {
   username: string;
   firstName: string;

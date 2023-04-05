@@ -49,6 +49,13 @@ class UserController extends ApiController
         return $this->json($this->userService->getUserByAuth0($auth0));
     }
 
+    #[Route('/api/users/createNew/{auth0}', methods: ['POST'])]
+    public function createNewUser(Request $request, string $auth0): Response
+    {
+        $dto = $this->getValidatedDto($request, CreateUserDto::class);
+        return $this->json($this->userService->createUser($dto, $auth0));
+    }
+
     #[Route('/api/users/{auth0}/createUpdate', methods: ['POST'])]
     public function createUpdateUser(Request $request, string $auth0): Response
     {

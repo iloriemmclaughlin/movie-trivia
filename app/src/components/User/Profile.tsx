@@ -1,11 +1,14 @@
 import React, { useEffect, useState } from 'react';
-import { createUpdateUser, getUserByAuth } from '../../services/UserApi';
+import {
+  createNewUser,
+  createUpdateUser,
+  getUserByAuth,
+} from '../../services/UserApi';
 import useInput from '../../hooks/use-input';
 import { useQuery, useMutation } from '@tanstack/react-query';
 import Card from '../UI/Card';
 import { useAuth0 } from '@auth0/auth0-react';
-import ColorPicker from '../UI/ColorPicker';
-import { ChromePicker, SketchPicker } from 'react-color';
+import { ChromePicker } from 'react-color';
 
 function Profile() {
   const { isAuthenticated, user } = useAuth0();
@@ -98,6 +101,19 @@ function Profile() {
   const [bgColor, setBgColor] = useState('#7dd3fc');
   const [fgColor, setFgColor] = useState('#e0f2fe');
 
+  const newUser: any = useMutation({
+    mutationFn: () =>
+      createNewUser({
+        firstName: '',
+        lastName: '',
+        email: '',
+        username: '',
+        password: '',
+        // @ts-ignore
+        auth0: user.sub,
+      }),
+  });
+
   const addUpdateUser: any = useMutation({
     mutationFn: () =>
       //@ts-ignore
@@ -114,7 +130,7 @@ function Profile() {
 
   useEffect(() => {
     if (isAuthenticated && user) {
-      refetchUser();
+      newUser.mutate();
     }
     if (userData) {
       setBgColor(userData.backgroundColor);
@@ -343,7 +359,18 @@ function Profile() {
               saveChangesHandler();
             }}
           >
-            Save Profile
+            Save Changes
+          </button>
+          <button
+            type="submit"
+            style={{ backgroundColor: fgColor }}
+            className="float-left mb-6 rounded-full px-5 py-2.5 text-center text-sm"
+            onClick={e => {
+              submitHandler(e);
+              saveChangesHandler();
+            }}
+          >
+            Looks Good!
           </button>
         </form>
       </body>

@@ -1,4 +1,10 @@
-import { user, game, createUserParams, updateUserParams } from './DTOs';
+import {
+  user,
+  game,
+  createUserParams,
+  updateUserParams,
+  newUser,
+} from './DTOs';
 
 export async function getAllUsers(): Promise<user[]> {
   return await fetch(`http://localhost:8000/api/users`, {
@@ -65,6 +71,28 @@ export async function createUpdateUser(
     method: 'POST',
     body: JSON.stringify(params),
   })
+    .then(response => response.json())
+    .then((data: user) => {
+      console.log('Success:', data);
+      return data;
+    })
+    .catch(error => {
+      console.error('Error:', error);
+      throw error;
+    });
+}
+
+export async function createNewUser(params: newUser): Promise<user> {
+  return await fetch(
+    `http://localhost:8000/api/users/createNew/${params.auth0}`,
+    {
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      method: 'POST',
+      body: JSON.stringify(params),
+    },
+  )
     .then(response => response.json())
     .then((data: user) => {
       console.log('Success:', data);

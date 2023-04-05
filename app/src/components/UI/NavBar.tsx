@@ -31,11 +31,12 @@ const NavBar = () => {
 
   const userTypeId = userData?.userType.userTypeId;
   const [bgColor, setBgColor] = useState('#7dd3fc');
-  const [fgColor, setFgColor] = useState('#e0f2fe');
+  const [fgColor, setFgColor] = useState('#f3f4f6');
   const [items, setItems] = useState([
     { route: '/', name: 'Home' },
     { route: '/games', name: 'Games' },
     { route: '/profile', name: 'Profile' },
+    { route: '/admin', name: 'Admin' },
   ]);
 
   useEffect(() => {
@@ -44,30 +45,31 @@ const NavBar = () => {
       setLoginPage(false);
     }
     if (userData) {
-      setBgColor(userData.backgroundColor);
-      setFgColor(userData.foregroundColor);
-      if (userTypeId === 1) {
-        setItems([
-          { route: '/', name: 'Home' },
-          { route: '/games', name: 'Games' },
-          { route: '/profile', name: 'Profile' },
-          { route: '/admin', name: 'Admin' },
-        ]);
-      }
+      // console.log(userTypeId);
+      // setBgColor(userData.backgroundColor);
+      // setFgColor(userData.foregroundColor);
+      // if (userTypeId === 1) {
+      //   setItems([
+      //     { route: '/', name: 'Home' },
+      //     { route: '/games', name: 'Games' },
+      //     { route: '/profile', name: 'Profile' },
+      //     { route: '/admin', name: 'Admin' },
+      //   ]);
+      // }
     }
   }, [refetchUser, user]);
 
-  const itemsUser = [
-    { route: '/', name: 'Home' },
-    { route: '/games', name: 'Games' },
-    { route: '/profile', name: 'Profile' },
-  ];
-  const itemsAdmin = [
-    { route: '/', name: 'Home' },
-    { route: '/games', name: 'Games' },
-    { route: '/profile', name: 'Profile' },
-    { route: '/admin', name: 'Admin' },
-  ];
+  // const itemsUser = [
+  //   { route: '/', name: 'Home' },
+  //   { route: '/games', name: 'Games' },
+  //   { route: '/profile', name: 'Profile' },
+  // ];
+  // const itemsAdmin = [
+  //   { route: '/', name: 'Home' },
+  //   { route: '/games', name: 'Games' },
+  //   { route: '/profile', name: 'Profile' },
+  //   { route: '/admin', name: 'Admin' },
+  // ];
 
   // if (userTypeId === 1) {
   //   setAdminItems(true);
@@ -109,7 +111,7 @@ const NavBar = () => {
             MENU
           </button>
         </div>
-        <div className="text-center">
+        <div className="ml-20">
           {showMenuItems ? (
             <>
               <MenuItems items={items} />

@@ -12,6 +12,7 @@ const Homepage = () => {
   const backgroundColor = useUserStore(state => state.backgroundColor);
   const foregroundColor = useUserStore(state => state.foregroundColor);
   const [bgColorValid, setBgColorValid] = useState(true);
+  const [fgColorValid, setFgColorValid] = useState(true);
 
   const newGameHandler = () => {
     console.log('clicked');
@@ -51,7 +52,9 @@ const Homepage = () => {
   const bgColor = {
     backgroundColor: bgColorValid ? userData?.backgroundColor : backgroundColor,
   };
-  const fgColor = { backgroundColor: userData?.foregroundColor };
+  const fgColor = {
+    backgroundColor: fgColorValid ? userData?.foregroundColor : foregroundColor,
+  };
 
   return (
     <Card>
@@ -62,6 +65,7 @@ const Homepage = () => {
         //     ? userData?.backgroundColor
         //     : backgroundColor,
         // }}
+        className="w-auto"
       >
         <div className="grid grid-cols-1 gap-x-8 gap-y-4 pt-10 pb-2 pl-10 pr-10">
           <div
