@@ -19,7 +19,12 @@ const Homepage = () => {
     return window.location.assign('/newGame');
   };
 
-  const { data: userData, refetch: refetchUser } = useQuery({
+  const {
+    isLoading,
+    error,
+    data: userData,
+    refetch: refetchUser,
+  } = useQuery({
     queryKey: [`user`],
     //@ts-ignore
     queryFn: () => getUserByAuth(user.sub),
@@ -31,6 +36,10 @@ const Homepage = () => {
       refetchUser();
     }
   }, [user]);
+
+  if (isLoading) return <div className="text-center">E.T. PHONE HOME...</div>;
+
+  if (error) return <div>CANNOT COMPUTE.</div>;
 
   if (!isAuthenticated) {
     return (

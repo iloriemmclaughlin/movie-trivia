@@ -138,7 +138,8 @@ function Profile() {
     }
   }, [refetchUser, user]);
 
-  if (isLoading) return <div>Loading...</div>;
+  if (isLoading)
+    return <div className="text-center">Loading your profile!</div>;
 
   if (error) return <div>An error has occurred.</div>;
 
@@ -359,18 +360,7 @@ function Profile() {
               saveChangesHandler();
             }}
           >
-            Save Changes
-          </button>
-          <button
-            type="submit"
-            style={{ backgroundColor: fgColor }}
-            className="float-left mb-6 rounded-full px-5 py-2.5 text-center text-sm"
-            onClick={e => {
-              submitHandler(e);
-              saveChangesHandler();
-            }}
-          >
-            Looks Good!
+            Save Profile
           </button>
         </form>
       </body>
