@@ -129,25 +129,25 @@ class UserService
 
     }
 
-    public function updateUser(Request $request, string $auth0): ?UserDto
-    {
-        $userInput = json_decode($request->getContent(), true);
-
-        $user = $this->userRepository->find($auth0);
-
-        $user->setFirstName($userInput['firstName']);
-        $user->setLastName($userInput['lastName']);
-        $user->setEmail($userInput['email']);
-        $user->setUsername($userInput['username']);
-        $user->setPassword($userInput['password']);
-        $user->setBackgroundColor($userInput['backgroundColor']);
-        $user->setForegroundColor($userInput['foregroundColor']);
-
-        $this->entityManager->persist($user);
-        $this->entityManager->flush($user);
-
-        return $this->transformToDto($user);
-    }
+//    public function updateUser(Request $request, string $auth0): ?UserDto
+//    {
+//        $userInput = json_decode($request->getContent(), true);
+//
+//        $user = $this->userRepository->find($auth0);
+//
+//        $user->setFirstName($userInput['firstName']);
+//        $user->setLastName($userInput['lastName']);
+//        $user->setEmail($userInput['email']);
+//        $user->setUsername($userInput['username']);
+//        $user->setPassword($userInput['password']);
+//        $user->setBackgroundColor($userInput['backgroundColor']);
+//        $user->setForegroundColor($userInput['foregroundColor']);
+//
+//        $this->entityManager->persist($user);
+//        $this->entityManager->flush($user);
+//
+//        return $this->transformToDto($user);
+//    }
 
     public function updateUserStats(Request $request, int $userId): string
     {
@@ -210,7 +210,7 @@ class UserService
         );
     }
 
-    public function createUpdateUser(CreateUserDto $dto, $auth0, Request $request): UserDto
+    public function updateUser($auth0, Request $request): UserDto
     {
         $user = $this->userRepository->findOneBy(['auth0' => $auth0]);
         $userInput = json_decode($request->getContent(), true);
@@ -239,11 +239,6 @@ class UserService
                 $user->setUsername($userInput['username']);
             }
 
-            if ($userInput['password'] === '') {
-                $user->setPassword($user->getPassword());
-            } else {
-                $user->setPassword($userInput['password']);
-            }
 
             if ($userInput['backgroundColor'] === '') {
                 $user->setBackgroundColor($user->getBackgroundColor());

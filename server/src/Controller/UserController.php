@@ -56,18 +56,18 @@ class UserController extends ApiController
         return $this->json($this->userService->createUser($dto, $auth0));
     }
 
-    #[Route('/api/users/{auth0}/createUpdate', methods: ['POST'])]
-    public function createUpdateUser(Request $request, string $auth0): Response
+    #[Route('/api/users/{auth0}/update', methods: ['POST'])]
+    public function updateUser(Request $request, string $auth0): Response
     {
         $dto = $this->getValidatedDto($request, CreateUserDto::class);
-        return $this->json($this->userService->createUpdateUser($dto, $auth0, $request));
+        return $this->json($this->userService->updateUser($auth0, $request));
     }
 
-    #[Route('/api/users/{auth0}/settings', methods: ['PUT'])]
-    public function editUser(Request $request, string $auth0): Response
-    {
-        return $this->json($this->userService->updateUser($request, $auth0));
-    }
+//    #[Route('/api/users/{auth0}/settings', methods: ['PUT'])]
+//    public function editUser(Request $request, string $auth0): Response
+//    {
+//        return $this->json($this->userService->updateUser($request, $auth0));
+//    }
 
     #[Route('/api/users/{userId}/stats', methods: ['PUT'])]
     public function updateUserStats(Request $request, int $userId): Response

@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import {
   createNewUser,
-  createUpdateUser,
   getUserByAuth,
+  updateUser,
 } from '../../services/UserApi';
 import useInput from '../../hooks/use-input';
 import { useQuery, useMutation } from '@tanstack/react-query';
@@ -58,15 +58,6 @@ function Profile() {
   } = useInput((value: string) => value.trim() !== '');
 
   const {
-    value: password,
-    isValid: passwordValid,
-    hasError: passwordError,
-    valueChangeHandler: passwordChangeHandler,
-    inputBlurHandler: passwordBlurHandler,
-    reset: passwordReset,
-  } = useInput((value: string) => value.trim() !== '');
-
-  const {
     isValid: bgColorValid,
     hasError: bgColorError,
     valueChangeHandler: bgColorChangeHandler,
@@ -114,15 +105,14 @@ function Profile() {
       }),
   });
 
-  const addUpdateUser: any = useMutation({
+  const updateUserCall: any = useMutation({
     mutationFn: () =>
       //@ts-ignore
-      createUpdateUser(userData.auth0, {
+      updateUser(userData.auth0, {
         firstName: firstName,
         lastName: lastName,
         email: email,
         username: username,
-        password: password,
         backgroundColor: bgColor,
         foregroundColor: fgColor,
       }),
@@ -150,7 +140,6 @@ function Profile() {
     lastNameValid &&
     emailValid &&
     usernameValid &&
-    passwordValid &&
     bgColorValid &&
     fgColorValid
   ) {
@@ -169,7 +158,6 @@ function Profile() {
     lastNameReset();
     emailReset();
     usernameReset();
-    passwordReset();
     bgColorReset();
     fgColorReset();
   };
@@ -268,26 +256,6 @@ function Profile() {
             {/*{usernameError && <p>Username cannot be empty.</p>}*/}
           </div>
           <div className="mb-6 md:flex md:items-center">
-            <div className="md:w-1/3">
-              <label
-                htmlFor="password"
-                className="mb-2 block text-sm font-medium text-gray-900 dark:text-white"
-              >
-                Password
-              </label>
-            </div>
-            <input
-              type="text"
-              id="password"
-              className="x block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 placeholder-black focus:ring-blue-500"
-              placeholder={userData?.password}
-              onChange={passwordChangeHandler}
-              onBlur={passwordBlurHandler}
-              value={password}
-            />
-            {/*{passwordError && <p>Password cannot be empty.</p>}*/}
-          </div>
-          <div className="mb-6 md:flex md:items-center">
             <div className="md:w-1/2">
               <label
                 htmlFor="bgColor"
@@ -356,7 +324,7 @@ function Profile() {
             className="float-right mb-6 rounded-full px-5 py-2.5 text-center text-sm"
             onClick={e => {
               submitHandler(e);
-              addUpdateUser.mutate();
+              updateUserCall.mutate();
               saveChangesHandler();
             }}
           >

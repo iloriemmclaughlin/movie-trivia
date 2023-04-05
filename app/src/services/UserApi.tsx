@@ -60,9 +60,9 @@ export async function getUserGames(userId: number): Promise<game[]> {
     });
 }
 
-export async function createUpdateUser(
+export async function updateUser(
   auth0: string,
-  params: createUserParams,
+  params: updateUserParams,
 ): Promise<user> {
   return await fetch(`http://localhost:8000/api/users/${auth0}/createUpdate`, {
     headers: {
