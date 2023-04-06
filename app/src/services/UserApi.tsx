@@ -1,10 +1,4 @@
-import {
-  user,
-  game,
-  createUserParams,
-  updateUserParams,
-  newUser,
-} from './DTOs';
+import { user, game, updateUserParams, newUser } from './DTOs';
 
 export async function getAllUsers(): Promise<user[]> {
   return await fetch(`http://localhost:8000/api/users`, {
@@ -64,7 +58,7 @@ export async function updateUser(
   auth0: string,
   params: updateUserParams,
 ): Promise<user> {
-  return await fetch(`http://localhost:8000/api/users/${auth0}/createUpdate`, {
+  return await fetch(`http://localhost:8000/api/users/${auth0}/update`, {
     headers: {
       'Content-Type': 'application/json',
     },

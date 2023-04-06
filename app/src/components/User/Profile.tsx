@@ -318,18 +318,20 @@ function Profile() {
               />
             </div>
           </div>
-          <button
-            type="submit"
-            style={{ backgroundColor: fgColor }}
-            className="float-right mb-6 rounded-full px-5 py-2.5 text-center text-sm"
-            onClick={e => {
-              submitHandler(e);
-              updateUserCall.mutate();
-              saveChangesHandler();
-            }}
-          >
-            Save Profile
-          </button>
+          <div className="flex justify-center">
+            <button
+              type="submit"
+              style={{ backgroundColor: fgColor }}
+              className="mr-1 mb-1 rounded px-6 py-3 text-sm font-bold uppercase text-black shadow outline-none transition-all duration-150 ease-linear hover:shadow-lg focus:outline-none"
+              onClick={e => {
+                submitHandler(e);
+                updateUserCall.mutate();
+                saveChangesHandler();
+              }}
+            >
+              Save Profile
+            </button>
+          </div>
         </form>
       </body>
     </Card>

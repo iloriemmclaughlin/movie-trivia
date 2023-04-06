@@ -35,9 +35,9 @@ const Homepage = () => {
     if (isAuthenticated && user) {
       refetchUser();
     }
-  }, [user]);
+  }, [refetchUser(), user]);
 
-  if (isLoading) return <div className="text-center">E.T. PHONE HOME...</div>;
+  // if (isLoading) return <div className="text-center">E.T. PHONE HOME...</div>;
 
   if (error) return <div>CANNOT COMPUTE.</div>;
 
@@ -111,7 +111,7 @@ const Homepage = () => {
             <button
               onClick={newGameHandler}
               style={fgColor}
-              className="rounded-full border-black bg-white py-1 px-3 font-bold text-black hover:border-2"
+              className="mr-1 mb-1 rounded px-6 py-3 text-sm font-bold uppercase text-black shadow outline-none transition-all duration-150 ease-linear hover:shadow-lg focus:outline-none"
             >
               New Game
             </button>

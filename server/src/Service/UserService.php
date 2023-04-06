@@ -239,7 +239,6 @@ class UserService
                 $user->setUsername($userInput['username']);
             }
 
-
             if ($userInput['backgroundColor'] === '') {
                 $user->setBackgroundColor($user->getBackgroundColor());
             } else {

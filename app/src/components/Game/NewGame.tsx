@@ -131,7 +131,7 @@ function NewGame() {
         <Timer onTimeExpired={onTimeExpired} />
         <body
           style={styleB}
-          className="flex aspect-auto items-center justify-center"
+          className="h-100 flex aspect-auto items-center justify-center"
         >
           {!timeExpired ? (
             <div className="w-full max-w-xl">
@@ -159,8 +159,8 @@ function NewGame() {
                         style={styleB}
                         className={
                           selectedAnswerIndex === index
-                            ? 'my-4 rounded-lg border-4 border-black'
-                            : 'my-4 rounded-lg'
+                            ? 'my-4 rounded-lg border-4 border-black p-2'
+                            : 'my-4 rounded-lg p-2'
                         }
                         onClick={() => onAnswerSelected(answer, index)}
                         key={answer}
@@ -174,7 +174,7 @@ function NewGame() {
               <button
                 onClick={finishGameHandler}
                 style={styleF}
-                className="float-left my-3 rounded-full py-1 px-3 font-bold text-black hover:bg-red-300"
+                className="float-left mr-1 mb-1 rounded px-6 py-3 text-sm font-bold uppercase text-black shadow outline-none transition-all duration-150 ease-linear hover:shadow-lg focus:outline-none"
               >
                 I GIVE UP!
               </button>
@@ -182,41 +182,55 @@ function NewGame() {
                 onClick={onClickNext}
                 disabled={selectedAnswerIndex === null}
                 style={styleF}
-                className="float-right my-3 rounded-full py-1 px-3 font-bold text-black hover:bg-red-300"
+                className="float-right mr-1 mb-1 rounded px-6 py-3 text-sm font-bold uppercase text-black shadow outline-none transition-all duration-150 ease-linear hover:shadow-lg focus:outline-none"
               >
                 Next Question
               </button>
             </div>
           ) : (
             <div>
-              <h3>Results</h3>
-              <p>
-                Total Questions:{' '}
-                <span>{result.correctAnswers + result.wrongAnswers}</span>
-              </p>
-              <p>
-                Total Score: <span>{result.score}</span>
-              </p>
-              <p>
-                Total Correct: <span>{result.correctAnswers}</span>
-              </p>
-              <p>
-                Total Wrong: <span>{result.wrongAnswers}</span>
-              </p>
-              <button
-                onClick={finishGameHandler}
+              <div
                 style={styleF}
-                className="float-left rounded-full border-4 py-1 px-3 font-bold text-black hover:border-black"
+                className="flex-3 my-3 rounded-full pt-4 pb-4 text-black"
               >
-                Finish
-              </button>
-              <button
-                onClick={playAgainHandler}
+                <h3 className="text-center text-3xl font-bold uppercase">
+                  Results
+                </h3>
+              </div>
+              <div
                 style={styleF}
-                className="float-right rounded-full border-4 py-1 px-3 font-bold text-black hover:border-black"
+                className="my-2 flex-1 rounded-lg pt-20 pb-20 pr-20 pl-20 text-black"
               >
-                Play Again
-              </button>
+                <div className="pb-5">
+                  <p>
+                    Total Questions:{' '}
+                    <span>{result.correctAnswers + result.wrongAnswers}</span>
+                  </p>
+                  <p>
+                    Total Score: <span>{result.score}</span>
+                  </p>
+                  <p>
+                    Total Correct: <span>{result.correctAnswers}</span>
+                  </p>
+                  <p>
+                    Total Wrong: <span>{result.wrongAnswers}</span>
+                  </p>
+                  <button
+                    onClick={finishGameHandler}
+                    style={styleB}
+                    className="mr-1 mb-1 rounded px-6 py-3 text-sm font-bold uppercase text-black shadow outline-none transition-all duration-150 ease-linear hover:shadow-lg focus:outline-none"
+                  >
+                    Finish
+                  </button>
+                  <button
+                    onClick={playAgainHandler}
+                    style={styleB}
+                    className="mr-1 mb-1 rounded px-6 py-3 text-sm font-bold uppercase text-black shadow outline-none transition-all duration-150 ease-linear hover:shadow-lg focus:outline-none"
+                  >
+                    Play Again
+                  </button>
+                </div>
+              </div>
             </div>
           )}
         </body>
