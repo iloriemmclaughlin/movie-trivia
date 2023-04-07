@@ -9,17 +9,18 @@ import { useQuery, useMutation } from '@tanstack/react-query';
 import Card from '../UI/Card';
 import { useAuth0 } from '@auth0/auth0-react';
 import { ChromePicker } from 'react-color';
+import useUserStore from '../../store/userStore';
 
 function Profile() {
   const { isAuthenticated, user } = useAuth0();
-  const [showBgColorPicker, setShowBgColorPicker] = useState(false);
-  const [showFgColorPicker, setShowFgColorPicker] = useState(false);
-  const bgClickHandler = () => {
-    setShowBgColorPicker(!showBgColorPicker);
-  };
-  const fgClickHandler = () => {
-    setShowFgColorPicker(!showFgColorPicker);
-  };
+  const currentUser = useUserStore(state => state.user);
+  console.log(currentUser);
+  // @ts-ignore
+  const backgroundColor = useUserStore(state => state.backgroundColor);
+  // @ts-ignore
+  const foregroundColor = useUserStore(state => state.foregroundColor);
+  const [bgColor, setBgColor] = useState(backgroundColor);
+  const [fgColor, setFgColor] = useState(foregroundColor);
 
   const {
     value: firstName,
@@ -77,21 +78,6 @@ function Profile() {
     window.location.assign('/');
   };
 
-  const {
-    isLoading,
-    error,
-    data: userData,
-    refetch: refetchUser,
-  } = useQuery({
-    queryKey: [`user`],
-    //@ts-ignore
-    queryFn: () => getUserByAuth(user.sub),
-    enabled: false,
-  });
-
-  const [bgColor, setBgColor] = useState('#7dd3fc');
-  const [fgColor, setFgColor] = useState('#e0f2fe');
-
   const newUser: any = useMutation({
     mutationFn: () =>
       createNewUser({
@@ -108,13 +94,13 @@ function Profile() {
   const updateUserCall: any = useMutation({
     mutationFn: () =>
       //@ts-ignore
-      updateUser(userData.auth0, {
+      updateUser(currentUser.auth0, {
         firstName: firstName,
         lastName: lastName,
         email: email,
         username: username,
-        backgroundColor: bgColor,
-        foregroundColor: fgColor,
+        backgroundColor: backgroundColor,
+        foregroundColor: foregroundColor,
       }),
   });
 
@@ -122,16 +108,11 @@ function Profile() {
     if (isAuthenticated && user) {
       newUser.mutate();
     }
-    if (userData) {
-      setBgColor(userData.backgroundColor);
-      setFgColor(userData.foregroundColor);
+    if (currentUser) {
+      setBgColor(backgroundColor);
+      setFgColor(foregroundColor);
     }
-  }, [refetchUser, user]);
-
-  if (isLoading)
-    return <div className="text-center">Loading your profile!</div>;
-
-  if (error) return <div>An error has occurred.</div>;
+  }, [user, currentUser]);
 
   let formIsValid = false;
 
@@ -162,180 +143,167 @@ function Profile() {
     fgColorReset();
   };
 
-  // const styleB = { backgroundColor: userData?.backgroundColor };
-  // if (userData) {
-  //   setColor({ backgroundColor: userData?.backgroundColor });
-  // }
-  // const styleF = { backgroundColor: userData?.foregroundColor };
-
-  return (
-    <Card>
-      <body
-        style={{ backgroundColor: bgColor }}
-        className="flex items-center justify-center"
-      >
-        <form className="w-full max-w-xl">
-          <div className="mt-6 mb-6 md:flex md:items-center">
-            <div className="md:w-1/3">
-              <label
-                htmlFor="firstName"
-                className="mb-2 block text-sm font-medium text-gray-900 dark:text-white"
-              >
-                First Name
-              </label>
-            </div>
-            <input
-              type="text"
-              id="firstName"
-              className="x block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 placeholder-black focus:ring-blue-500"
-              placeholder={userData?.firstName}
-              onChange={firstNameChangeHandler}
-              onBlur={firstNameBlurHandler}
-              value={firstName}
-            />
-            {/*{firstNameError && <p>First Name cannot be empty.</p>}*/}
-          </div>
-          <div className="mb-6 md:flex md:items-center">
-            <div className="md:w-1/3">
-              <label
-                htmlFor="lastName"
-                className="mb-2 block text-sm font-medium text-gray-900 dark:text-white"
-              >
-                Last Name
-              </label>
-            </div>
-            <input
-              type="text"
-              id="lastName"
-              className="x block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 placeholder-black focus:ring-blue-500"
-              placeholder={userData?.lastName}
-              onChange={lastNameChangeHandler}
-              onBlur={lastNameBlurHandler}
-              value={lastName}
-            />
-            {/*{lastNameError && <p>Last Name cannot be empty.</p>}*/}
-          </div>
-          <div className="mb-6 md:flex md:items-center">
-            <div className="md:w-1/3">
-              <label
-                htmlFor="email"
-                className="mb-2 block text-sm font-medium text-gray-900 dark:text-white"
-              >
-                Email Address
-              </label>
-            </div>
-            <input
-              type="text"
-              id="email"
-              className="x block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 placeholder-black focus:ring-blue-500"
-              placeholder={userData?.email}
-              onChange={emailChangeHandler}
-              onBlur={emailBlurHandler}
-              value={email}
-            />
-            {/*{emailError && <p>Email Address cannot be empty.</p>}*/}
-          </div>
-          <div className="mb-6 md:flex md:items-center">
-            <div className="md:w-1/3">
-              <label
-                htmlFor="username"
-                className="mb-2 block text-sm font-medium text-gray-900 dark:text-white"
-              >
-                Username
-              </label>
-            </div>
-            <input
-              type="text"
-              id="username"
-              className="x block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 placeholder-black focus:ring-blue-500"
-              placeholder={userData?.username}
-              onChange={usernameChangeHandler}
-              onBlur={usernameBlurHandler}
-              value={username}
-            />
-            {/*{usernameError && <p>Username cannot be empty.</p>}*/}
-          </div>
-          <div className="mb-6 md:flex md:items-center">
-            <div className="md:w-1/2">
-              <label
-                htmlFor="bgColor"
-                className="mb-2 block text-sm font-medium text-gray-900 dark:text-white"
-              >
-                Background Color ({userData?.backgroundColor})
-              </label>
-            </div>
-            <input
-              type="text"
-              id="bgColor"
-              className="x block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 placeholder-black focus:ring-blue-500"
-              placeholder={userData?.backgroundColor}
-              onChange={bgColorChangeHandler}
-              onBlur={bgColorBlurHandler}
-              value={bgColor}
-            />
-            {/*{bgColorError && <p>Background Color cannot be empty.</p>}*/}
-            <div className="ml-6">
-              <ChromePicker
-                className="flex"
-                color={bgColor}
-                onChange={e => setBgColor(e.hex)}
+  if (currentUser) {
+    return (
+      <Card>
+        <body
+          style={{ backgroundColor: bgColor }}
+          className="flex items-center justify-center"
+        >
+          <form className="w-full max-w-xl">
+            <div className="mt-6 mb-6 md:flex md:items-center">
+              <div className="md:w-1/3">
+                <label
+                  htmlFor="firstName"
+                  className="mb-2 block text-sm font-medium text-gray-900 dark:text-white"
+                >
+                  First Name
+                </label>
+              </div>
+              <input
+                type="text"
+                id="firstName"
+                className="x block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 placeholder-black focus:ring-blue-500"
+                placeholder={currentUser.firstName}
+                onChange={firstNameChangeHandler}
+                onBlur={firstNameBlurHandler}
+                value={firstName}
               />
-              {/*<button onClick={bgClickHandler}>Choose Color</button>*/}
-              {/*{showBgColorPicker ? (*/}
-              {/*  <SketchPicker*/}
-              {/*    color={bgColor}*/}
-              {/*    onChangeComplete={e => setBgColor(e.hex)}*/}
-              {/*  />*/}
-              {/*) : (*/}
-              {/*  ''*/}
-              {/*)}*/}
+              {/*{firstNameError && <p>First Name cannot be empty.</p>}*/}
             </div>
-          </div>
-          <div className="mb-6 md:flex md:items-center">
-            <div className="md:w-1/2">
-              <label
-                htmlFor="fgColor"
-                className="mb-2 block text-sm font-medium text-gray-900 dark:text-white"
-              >
-                Foreground Color ({userData?.foregroundColor})
-              </label>
-            </div>
-            <input
-              type="text"
-              id="fgColor"
-              className="x block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 placeholder-black focus:ring-blue-500"
-              placeholder={userData?.foregroundColor}
-              onChange={fgColorChangeHandler}
-              onBlur={fgColorBlurHandler}
-              value={fgColor}
-            />
-            {/*{fgColorError && <p>Foreground Color cannot be empty.</p>}*/}
-            <div className="ml-6">
-              <ChromePicker
-                className="flex"
-                color={fgColor}
-                onChange={e => setFgColor(e.hex)}
+            <div className="mb-6 md:flex md:items-center">
+              <div className="md:w-1/3">
+                <label
+                  htmlFor="lastName"
+                  className="mb-2 block text-sm font-medium text-gray-900 dark:text-white"
+                >
+                  Last Name
+                </label>
+              </div>
+              <input
+                type="text"
+                id="lastName"
+                className="x block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 placeholder-black focus:ring-blue-500"
+                placeholder={currentUser.lastName}
+                onChange={lastNameChangeHandler}
+                onBlur={lastNameBlurHandler}
+                value={lastName}
               />
+              {/*{lastNameError && <p>Last Name cannot be empty.</p>}*/}
             </div>
-          </div>
-          <div className="flex justify-center">
-            <button
-              type="submit"
-              style={{ backgroundColor: fgColor }}
-              className="mr-1 mb-1 rounded px-6 py-3 text-sm font-bold uppercase text-black shadow outline-none transition-all duration-150 ease-linear hover:shadow-lg focus:outline-none"
-              onClick={e => {
-                submitHandler(e);
-                updateUserCall.mutate();
-                saveChangesHandler();
-              }}
-            >
-              Save Profile
-            </button>
-          </div>
-        </form>
-      </body>
-    </Card>
-  );
+            <div className="mb-6 md:flex md:items-center">
+              <div className="md:w-1/3">
+                <label
+                  htmlFor="email"
+                  className="mb-2 block text-sm font-medium text-gray-900 dark:text-white"
+                >
+                  Email Address
+                </label>
+              </div>
+              <input
+                type="text"
+                id="email"
+                className="x block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 placeholder-black focus:ring-blue-500"
+                placeholder={currentUser.email}
+                onChange={emailChangeHandler}
+                onBlur={emailBlurHandler}
+                value={email}
+              />
+              {/*{emailError && <p>Email Address cannot be empty.</p>}*/}
+            </div>
+            <div className="mb-6 md:flex md:items-center">
+              <div className="md:w-1/3">
+                <label
+                  htmlFor="username"
+                  className="mb-2 block text-sm font-medium text-gray-900 dark:text-white"
+                >
+                  Username
+                </label>
+              </div>
+              <input
+                type="text"
+                id="username"
+                className="x block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 placeholder-black focus:ring-blue-500"
+                placeholder={currentUser.username}
+                onChange={usernameChangeHandler}
+                onBlur={usernameBlurHandler}
+                value={username}
+              />
+              {/*{usernameError && <p>Username cannot be empty.</p>}*/}
+            </div>
+            <div className="mb-6 md:flex md:items-center">
+              <div className="md:w-1/2">
+                <label
+                  htmlFor="bgColor"
+                  className="mb-2 block text-sm font-medium text-gray-900 dark:text-white"
+                >
+                  Background Color ({backgroundColor})
+                </label>
+              </div>
+              <input
+                type="text"
+                id="bgColor"
+                className="x block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 placeholder-black focus:ring-blue-500"
+                placeholder={currentUser.backgroundColor}
+                onChange={bgColorChangeHandler}
+                onBlur={bgColorBlurHandler}
+                value={bgColor}
+              />
+              {/*{bgColorError && <p>Background Color cannot be empty.</p>}*/}
+              <div className="ml-6">
+                <ChromePicker
+                  className="flex"
+                  color={bgColor}
+                  onChange={e => setBgColor(e.hex)}
+                />
+              </div>
+            </div>
+            <div className="mb-6 md:flex md:items-center">
+              <div className="md:w-1/2">
+                <label
+                  htmlFor="fgColor"
+                  className="mb-2 block text-sm font-medium text-gray-900 dark:text-white"
+                >
+                  Foreground Color ({foregroundColor})
+                </label>
+              </div>
+              <input
+                type="text"
+                id="fgColor"
+                className="x block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 placeholder-black focus:ring-blue-500"
+                placeholder={currentUser.foregroundColor}
+                onChange={fgColorChangeHandler}
+                onBlur={fgColorBlurHandler}
+                value={fgColor}
+              />
+              {/*{fgColorError && <p>Foreground Color cannot be empty.</p>}*/}
+              <div className="ml-6">
+                <ChromePicker
+                  className="flex"
+                  color={fgColor}
+                  onChange={e => setFgColor(e.hex)}
+                />
+              </div>
+            </div>
+            <div className="flex justify-center">
+              <button
+                type="submit"
+                style={{ backgroundColor: currentUser.foregroundColor }}
+                className="mr-1 mb-1 rounded px-6 py-3 text-sm font-bold uppercase text-black shadow outline-none transition-all duration-150 ease-linear hover:shadow-lg focus:outline-none"
+                onClick={e => {
+                  submitHandler(e);
+                  updateUserCall.mutate();
+                  saveChangesHandler();
+                }}
+              >
+                Save Profile
+              </button>
+            </div>
+          </form>
+        </body>
+      </Card>
+    );
+  }
 }
 
 export default Profile;

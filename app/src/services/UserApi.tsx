@@ -9,11 +9,9 @@ export async function getAllUsers(): Promise<user[]> {
   })
     .then(response => response.json())
     .then((data: user[]) => {
-      console.log('Success:', data);
       return data;
     })
     .catch(error => {
-      console.error('Error:', error);
       throw error;
     });
 }
@@ -27,11 +25,9 @@ export async function getUserByAuth(auth0: string): Promise<user> {
   })
     .then(response => response.json())
     .then((data: user) => {
-      console.log('Success:', data);
       return data;
     })
     .catch(error => {
-      console.error('Error:', error);
       throw error;
     });
 }
@@ -45,11 +41,9 @@ export async function getUserGames(userId: number): Promise<game[]> {
   })
     .then(response => response.json())
     .then((data: game[]) => {
-      console.log('Success:', data);
       return data;
     })
     .catch(error => {
-      console.error('Error:', error);
       throw error;
     });
 }
@@ -67,11 +61,9 @@ export async function updateUser(
   })
     .then(response => response.json())
     .then((data: user) => {
-      console.log('Success:', data);
       return data;
     })
     .catch(error => {
-      console.error('Error:', error);
       throw error;
     });
 }
@@ -89,11 +81,9 @@ export async function createNewUser(params: newUser): Promise<user> {
   )
     .then(response => response.json())
     .then((data: user) => {
-      console.log('Success:', data);
       return data;
     })
     .catch(error => {
-      console.error('Error:', error);
       throw error;
     });
 }
@@ -107,11 +97,9 @@ export async function deleteUser(userId: number): Promise<user> {
   })
     .then(response => response.json())
     .then((data: user) => {
-      console.log('Success:', data);
       return data;
     })
     .catch(error => {
-      console.error('Error:', error);
       throw error;
     });
 }

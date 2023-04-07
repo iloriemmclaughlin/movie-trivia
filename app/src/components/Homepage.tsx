@@ -9,37 +9,19 @@ import useUserStore from '../store/userStore';
 
 const Homepage = () => {
   const { isAuthenticated, user } = useAuth0();
+  // @ts-ignore
   const backgroundColor = useUserStore(state => state.backgroundColor);
+  // @ts-ignore
   const foregroundColor = useUserStore(state => state.foregroundColor);
-  const [bgColorValid, setBgColorValid] = useState(true);
-  const [fgColorValid, setFgColorValid] = useState(true);
 
   const newGameHandler = () => {
     console.log('clicked');
     return window.location.assign('/newGame');
   };
 
-  const {
-    isLoading,
-    error,
-    data: userData,
-    refetch: refetchUser,
-  } = useQuery({
-    queryKey: [`user`],
-    //@ts-ignore
-    queryFn: () => getUserByAuth(user.sub),
-    enabled: false,
-  });
-
-  useEffect(() => {
-    if (isAuthenticated && user) {
-      refetchUser();
-    }
-  }, [refetchUser(), user]);
-
   // if (isLoading) return <div className="text-center">E.T. PHONE HOME...</div>;
 
-  if (error) return <div>CANNOT COMPUTE.</div>;
+  // if (error) return <div>CANNOT COMPUTE.</div>;
 
   if (!isAuthenticated) {
     return (
@@ -52,54 +34,33 @@ const Homepage = () => {
     );
   }
 
-  // @ts-ignore
-  // if (userData?.backgroundColor === '') {
-  //   setBgColorValid(false);
-  // }
-
-  // @ts-ignore
-  const bgColor = {
-    backgroundColor: bgColorValid ? userData?.backgroundColor : backgroundColor,
-  };
-  const fgColor = {
-    backgroundColor: fgColorValid ? userData?.foregroundColor : foregroundColor,
-  };
-
   return (
     <Card>
-      <body
-        style={bgColor}
-        // style={{
-        //   backgroundColor: bgColorValid
-        //     ? userData?.backgroundColor
-        //     : backgroundColor,
-        // }}
-        className="w-auto"
-      >
+      <body style={{ backgroundColor: backgroundColor }} className="w-auto">
         <div className="grid grid-cols-1 gap-x-8 gap-y-4 pt-10 pb-2 pl-10 pr-10">
           <div
-            style={fgColor}
+            style={{ backgroundColor: foregroundColor }}
             className="flex-1 rounded-full bg-white pt-4 pb-4 text-black"
           >
             <h2 className="text-center text-3xl font-bold">LEADERBOARD</h2>
           </div>
           <div className="grid grid-cols-3 pl-10 pr-10">
             <div
-              style={fgColor}
+              style={{ backgroundColor: foregroundColor }}
               id="user"
               className="flex-1 bg-white pt-10 pb-10 text-black"
             >
               <h2 className="text-center text-2xl">USER</h2>
             </div>
             <div
-              style={fgColor}
+              style={{ backgroundColor: foregroundColor }}
               id="gamesPlayed"
               className="flex-1 bg-white pt-10 pb-10 text-black"
             >
               <h2 className="text-center text-2xl">GAMES PLAYED</h2>
             </div>
             <div
-              style={fgColor}
+              style={{ backgroundColor: foregroundColor }}
               id="highScore"
               className="flex-1 bg-white pt-10 pb-10 text-black"
             >
@@ -110,7 +71,7 @@ const Homepage = () => {
           <div className="text-center">
             <button
               onClick={newGameHandler}
-              style={fgColor}
+              style={{ backgroundColor: foregroundColor }}
               className="mr-1 mb-1 rounded px-6 py-3 text-sm font-bold uppercase text-black shadow outline-none transition-all duration-150 ease-linear hover:shadow-lg focus:outline-none"
             >
               New Game
