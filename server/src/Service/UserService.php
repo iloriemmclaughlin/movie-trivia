@@ -14,7 +14,6 @@ use App\Repository\UserTypeRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Doctrine\Persistence\ManagerRegistry;
-use function PHPUnit\Framework\isNull;
 
 
 class UserService
@@ -37,8 +36,6 @@ class UserService
         GameRepository $gameRepository,
         UserTypeService $userTypeService,
         EntityManagerInterface $entityManager,
-//        GameService $gameService,
-//        StatsService $statsService,
         ManagerRegistry $managerRegistry)
     {
         $this->userRepository = $userRepository;
@@ -47,8 +44,6 @@ class UserService
         $this->gameRepository = $gameRepository;
         $this->userTypeService = $userTypeService;
         $this->entityManager = $entityManager;
-//        $this->gameService = $gameService;
-//        $this->statsService = $statsService;
         $this->managerRegistry = $managerRegistry;
     }
 
@@ -79,7 +74,6 @@ class UserService
         $dto = [];
 
         foreach($games as $game) {
-//            $dto[] = $this->transformGameDto($game);
             $dto[] = [
                 'gameId' => $game->getId(),
                 'totalQuestions' => $game->getTotalQuestions(),
@@ -128,26 +122,6 @@ class UserService
         $this->statsRepository->save($newStats, true);
 
     }
-
-//    public function updateUser(Request $request, string $auth0): ?UserDto
-//    {
-//        $userInput = json_decode($request->getContent(), true);
-//
-//        $user = $this->userRepository->find($auth0);
-//
-//        $user->setFirstName($userInput['firstName']);
-//        $user->setLastName($userInput['lastName']);
-//        $user->setEmail($userInput['email']);
-//        $user->setUsername($userInput['username']);
-//        $user->setPassword($userInput['password']);
-//        $user->setBackgroundColor($userInput['backgroundColor']);
-//        $user->setForegroundColor($userInput['foregroundColor']);
-//
-//        $this->entityManager->persist($user);
-//        $this->entityManager->flush($user);
-//
-//        return $this->transformToDto($user);
-//    }
 
     public function updateUserStats(Request $request, int $userId): string
     {

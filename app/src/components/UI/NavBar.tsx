@@ -7,6 +7,7 @@ import { useQuery } from '@tanstack/react-query';
 import { getUserByAuth } from '../../services/UserApi';
 import { useAuth0 } from '@auth0/auth0-react';
 import useUserStore from '../../store/userStore';
+import Avatar from 'react-avatar';
 
 const NavBar = (props: PropsWithChildren) => {
   const { isAuthenticated, user } = useAuth0();
@@ -66,6 +67,8 @@ const NavBar = (props: PropsWithChildren) => {
     />
   );
 
+  const name = currentUser?.firstName + ' ' + currentUser?.lastName;
+
   return (
     <Card>
       <div
@@ -79,6 +82,19 @@ const NavBar = (props: PropsWithChildren) => {
         />
         <div className="pb-2 text-center text-3xl font-bold">
           M O V I E . T R I V I A
+          <div className="relative float-right mr-16">
+            {!loginPage ? (
+              <Avatar
+                className="absolute -mt-3"
+                name={name}
+                color={backgroundColor}
+                fgColor={foregroundColor}
+                size="65"
+              />
+            ) : (
+              ''
+            )}
+          </div>
         </div>
         <div className="float-right text-xl text-black">
           <button className="float-right pl-3">

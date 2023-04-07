@@ -2,17 +2,21 @@ import React, { useEffect, useState } from 'react';
 import Leaderboard from './Leaderboard';
 import { useAuth0 } from '@auth0/auth0-react';
 import Card from './Card';
-import { useQuery } from '@tanstack/react-query';
-import { getUserByAuth } from '../../services/UserApi';
 import LoginButton from '../Login/LoginButton';
 import useUserStore from '../../store/userStore';
+import Loading from './Loading';
 
 const Homepage = () => {
   const { isAuthenticated, user } = useAuth0();
+  const currentUser = useUserStore(state => state.user);
   // @ts-ignore
   const backgroundColor = useUserStore(state => state.backgroundColor);
   // @ts-ignore
   const foregroundColor = useUserStore(state => state.foregroundColor);
+
+  if (!currentUser) {
+    return <Loading />;
+  }
 
   const newGameHandler = () => {
     console.log('clicked');

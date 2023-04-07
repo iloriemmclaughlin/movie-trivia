@@ -12,7 +12,7 @@ const Login = () => {
   return (
     <Card>
       <div className="text-center">
-        <h1 className="text-xl">LOGIN TO PLAY!</h1>
+        <h1 className="text-xl uppercase">Login to play!</h1>
         <LoginButton />
       </div>
     </Card>

@@ -5,6 +5,7 @@ import { getUserByAuth } from '../../services/UserApi';
 import { getAllStats } from '../../services/StatsApi';
 import { useAuth0 } from '@auth0/auth0-react';
 import useUserStore from '../../store/userStore';
+import Avatar from 'react-avatar';
 
 const Leaderboard = () => {
   const { isAuthenticated, user } = useAuth0();
