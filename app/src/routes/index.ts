@@ -8,7 +8,6 @@ import userGamesRoute from './userGamesRoute';
 import profileRoute from './profileRoute';
 import adminRoute from './adminRoute';
 import homeRoute from './homeRoute';
-import testRoute from './testRoute';
 
 const routeTree = rootRoute.addChildren([
   indexRoute,
@@ -18,7 +17,6 @@ const routeTree = rootRoute.addChildren([
   userGamesRoute,
   profileRoute,
   adminRoute,
-  testRoute,
 ]);
 
 export const router = new Router({

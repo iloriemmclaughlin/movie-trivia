@@ -1,9 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import {
-  createNewUser,
-  getUserByAuth,
-  updateUser,
-} from '../../services/UserApi';
+import { createNewUser, updateUser } from '../../services/UserApi';
 import useInput from '../../hooks/use-input';
 import { useQuery, useMutation } from '@tanstack/react-query';
 import Card from '../UI/Card';
@@ -14,11 +10,11 @@ import useUserStore from '../../store/userStore';
 function Profile() {
   const { isAuthenticated, user } = useAuth0();
   const currentUser = useUserStore(state => state.user);
-  console.log(currentUser);
   // @ts-ignore
   const backgroundColor = useUserStore(state => state.backgroundColor);
   // @ts-ignore
   const foregroundColor = useUserStore(state => state.foregroundColor);
+
   const [bgColor, setBgColor] = useState(backgroundColor);
   const [fgColor, setFgColor] = useState(foregroundColor);
 
@@ -99,8 +95,8 @@ function Profile() {
         lastName: lastName,
         email: email,
         username: username,
-        backgroundColor: backgroundColor,
-        foregroundColor: foregroundColor,
+        backgroundColor: bgColor,
+        foregroundColor: fgColor,
       }),
   });
 
@@ -148,9 +144,9 @@ function Profile() {
       <Card>
         <body
           style={{ backgroundColor: bgColor }}
-          className="flex items-center justify-center"
+          className="flex min-h-screen justify-center"
         >
-          <form className="w-full max-w-xl">
+          <form>
             <div className="mt-6 mb-6 md:flex md:items-center">
               <div className="md:w-1/3">
                 <label
@@ -243,7 +239,7 @@ function Profile() {
               <input
                 type="text"
                 id="bgColor"
-                className="x block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 placeholder-black focus:ring-blue-500"
+                className="x ml-12 block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 placeholder-black focus:ring-blue-500"
                 placeholder={currentUser.backgroundColor}
                 onChange={bgColorChangeHandler}
                 onBlur={bgColorBlurHandler}
@@ -270,7 +266,7 @@ function Profile() {
               <input
                 type="text"
                 id="fgColor"
-                className="x block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 placeholder-black focus:ring-blue-500"
+                className="x ml-12 block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 placeholder-black focus:ring-blue-500"
                 placeholder={currentUser.foregroundColor}
                 onChange={fgColorChangeHandler}
                 onBlur={fgColorBlurHandler}
@@ -288,7 +284,7 @@ function Profile() {
             <div className="flex justify-center">
               <button
                 type="submit"
-                style={{ backgroundColor: currentUser.foregroundColor }}
+                style={{ backgroundColor: fgColor }}
                 className="mr-1 mb-1 rounded px-6 py-3 text-sm font-bold uppercase text-black shadow outline-none transition-all duration-150 ease-linear hover:shadow-lg focus:outline-none"
                 onClick={e => {
                   submitHandler(e);

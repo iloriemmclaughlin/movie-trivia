@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import Leaderboard from './Leaderboard';
 import { useAuth0 } from '@auth0/auth0-react';
-import Card from './UI/Card';
+import Card from './Card';
 import { useQuery } from '@tanstack/react-query';
-import { getUserByAuth } from '../services/UserApi';
-import LoginButton from './Login/LoginButton';
-import useUserStore from '../store/userStore';
+import { getUserByAuth } from '../../services/UserApi';
+import LoginButton from '../Login/LoginButton';
+import useUserStore from '../../store/userStore';
 
 const Homepage = () => {
   const { isAuthenticated, user } = useAuth0();
@@ -36,7 +36,10 @@ const Homepage = () => {
 
   return (
     <Card>
-      <body style={{ backgroundColor: backgroundColor }} className="w-auto">
+      <body
+        style={{ backgroundColor: backgroundColor }}
+        className="min-h-screen"
+      >
         <div className="grid grid-cols-1 gap-x-8 gap-y-4 pt-10 pb-2 pl-10 pr-10">
           <div
             style={{ backgroundColor: foregroundColor }}

@@ -6,15 +6,20 @@ import { getQuestions } from '../../services/QuestionApi';
 import { createUpdateGame } from '../../services/GameApi';
 import { getUserByAuth } from '../../services/UserApi';
 import { useAuth0 } from '@auth0/auth0-react';
+import useUserStore from '../../store/userStore';
 
 function NewGame() {
   const { isAuthenticated, user } = useAuth0();
+  const currentUser = useUserStore(state => state.user);
+  // @ts-ignore
+  const backgroundColor = useUserStore(state => state.backgroundColor);
+  // @ts-ignore
+  const foregroundColor = useUserStore(state => state.foregroundColor);
 
   const [activeQuestion, setActiveQuestion] = useState(0);
   const [selectedAnswer, setSelectedAnswer] = useState('');
   const [selectedAnswerIndex, setSelectedAnswerIndex] = useState(null);
   const [gameFinish, setGameFinish] = useState(false);
-  const [test, setTest] = useState(true);
   const [result, setResult] = useState({
     score: 0,
     correctAnswers: 0,
@@ -84,10 +89,6 @@ function NewGame() {
     return <div className="text-center">OPE. UNABLE TO LOAD QUESTIONS.</div>;
   }
 
-  // @ts-ignore
-  const { questionId, questionText, questionAnswer, questionOption } =
-    allQuestions;
-
   const onClickNext = () => {
     setSelectedAnswerIndex(null);
     setResult(prev =>
@@ -122,21 +123,19 @@ function NewGame() {
 
   // @ts-ignore
   const questionNum = number => (number > 100 ? number : `${number}`);
-  const styleB = { backgroundColor: userData?.backgroundColor };
-  const styleF = { backgroundColor: userData?.foregroundColor };
 
   if (allQuestions) {
     return (
       <Card>
         <Timer onTimeExpired={onTimeExpired} />
         <body
-          style={styleB}
-          className="h-100 flex aspect-auto items-center justify-center"
+          style={{ backgroundColor: backgroundColor }}
+          className="flex aspect-auto min-h-screen justify-center"
         >
           {!timeExpired ? (
             <div className="w-full max-w-xl">
               <div
-                style={styleF}
+                style={{ backgroundColor: foregroundColor }}
                 className="flex-3 my-3 rounded-full pt-4 pb-4 text-black"
               >
                 <h2 className="text-center text-3xl font-bold">
@@ -144,7 +143,7 @@ function NewGame() {
                 </h2>
               </div>
               <div
-                style={styleF}
+                style={{ backgroundColor: foregroundColor }}
                 className="my-2 flex-1 rounded-lg pt-20 pb-20 pr-20 pl-20 text-black"
               >
                 <div className="text-center">
@@ -156,7 +155,7 @@ function NewGame() {
                   {allQuestions[activeQuestion].questionOption.map(
                     (answer, index) => (
                       <li
-                        style={styleB}
+                        style={{ backgroundColor: backgroundColor }}
                         className={
                           selectedAnswerIndex === index
                             ? 'my-4 rounded-lg border-4 border-black p-2'
@@ -173,7 +172,7 @@ function NewGame() {
               </div>
               <button
                 onClick={finishGameHandler}
-                style={styleF}
+                style={{ backgroundColor: foregroundColor }}
                 className="float-left mr-1 mb-1 rounded px-6 py-3 text-sm font-bold uppercase text-black shadow outline-none transition-all duration-150 ease-linear hover:shadow-lg focus:outline-none"
               >
                 I GIVE UP!
@@ -181,16 +180,16 @@ function NewGame() {
               <button
                 onClick={onClickNext}
                 disabled={selectedAnswerIndex === null}
-                style={styleF}
+                style={{ backgroundColor: foregroundColor }}
                 className="float-right mr-1 mb-1 rounded px-6 py-3 text-sm font-bold uppercase text-black shadow outline-none transition-all duration-150 ease-linear hover:shadow-lg focus:outline-none"
               >
                 Next Question
               </button>
             </div>
           ) : (
-            <div>
+            <div className="min-h-screen">
               <div
-                style={styleF}
+                style={{ backgroundColor: foregroundColor }}
                 className="flex-3 my-3 rounded-full pt-4 pb-4 text-black"
               >
                 <h3 className="text-center text-3xl font-bold uppercase">
@@ -198,11 +197,11 @@ function NewGame() {
                 </h3>
               </div>
               <div
-                style={styleF}
+                style={{ backgroundColor: foregroundColor }}
                 className="my-2 flex-1 rounded-lg pt-20 pb-20 pr-20 pl-20 text-black"
               >
-                <div className="pb-5">
-                  <p>
+                <div className="pb-10 text-center uppercase">
+                  <p className="">
                     Total Questions:{' '}
                     <span>{result.correctAnswers + result.wrongAnswers}</span>
                   </p>
@@ -215,21 +214,21 @@ function NewGame() {
                   <p>
                     Total Wrong: <span>{result.wrongAnswers}</span>
                   </p>
-                  <button
-                    onClick={finishGameHandler}
-                    style={styleB}
-                    className="mr-1 mb-1 rounded px-6 py-3 text-sm font-bold uppercase text-black shadow outline-none transition-all duration-150 ease-linear hover:shadow-lg focus:outline-none"
-                  >
-                    Finish
-                  </button>
-                  <button
-                    onClick={playAgainHandler}
-                    style={styleB}
-                    className="mr-1 mb-1 rounded px-6 py-3 text-sm font-bold uppercase text-black shadow outline-none transition-all duration-150 ease-linear hover:shadow-lg focus:outline-none"
-                  >
-                    Play Again
-                  </button>
                 </div>
+                <button
+                  onClick={finishGameHandler}
+                  style={{ backgroundColor: backgroundColor }}
+                  className="mr-5 mb-1 rounded px-6 py-3 text-sm font-bold uppercase text-black shadow outline-none transition-all duration-150 ease-linear hover:shadow-lg focus:outline-none"
+                >
+                  Finish
+                </button>
+                <button
+                  onClick={playAgainHandler}
+                  style={{ backgroundColor: backgroundColor }}
+                  className="ml-5 mb-1 rounded px-6 py-3 text-sm font-bold uppercase text-black shadow outline-none transition-all duration-150 ease-linear hover:shadow-lg focus:outline-none"
+                >
+                  Play Again
+                </button>
               </div>
             </div>
           )}

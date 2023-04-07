@@ -4,12 +4,13 @@ import { useQuery } from '@tanstack/react-query';
 import { getUserByAuth } from '../../services/UserApi';
 import { user } from '../../services/DTOs';
 import { useAuth0 } from '@auth0/auth0-react';
+import useUserStore from '../../store/userStore';
 
 // @ts-ignore
 const DeleteUserModal = (props: { deleteUserCall: Function }) => {
-  const { isAuthenticated, user } = useAuth0();
+  // @ts-ignore
+  const foregroundColor = useUserStore(state => state.foregroundColor);
   const [showModal, setShowModal] = useState(false);
-  const [value, setValue] = useState('');
 
   const onClickCancelHandler = () => {
     setShowModal(false);
@@ -20,20 +21,10 @@ const DeleteUserModal = (props: { deleteUserCall: Function }) => {
     props.deleteUserCall();
   };
 
-  const { data: userData, refetch: refetchUser } = useQuery({
-    queryKey: [`user`],
-    //@ts-ignore
-    queryFn: () => getUserByAuth(user.sub),
-    enabled: false,
-  });
-
-  const bgColor = { backgroundColor: userData?.backgroundColor };
-  const fgColor = { backgroundColor: userData?.foregroundColor };
-
   return (
     <Card>
       <button
-        style={fgColor}
+        style={{ backgroundColor: foregroundColor }}
         className="mr-1 mb-1 rounded px-6 py-3 text-sm font-bold uppercase text-black shadow outline-none transition-all duration-150 ease-linear hover:shadow-lg focus:outline-none"
         type="button"
         onClick={() => setShowModal(true)}

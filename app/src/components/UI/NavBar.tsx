@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { PropsWithChildren, useEffect, useState } from 'react';
 import Card from './Card';
 import movieLogo from '../../assets/movielogo.jpg';
 import MenuItems from './MenuItems';
@@ -6,13 +6,19 @@ import LogoutButton from '../Login/LogoutButton';
 import { useQuery } from '@tanstack/react-query';
 import { getUserByAuth } from '../../services/UserApi';
 import { useAuth0 } from '@auth0/auth0-react';
+import useUserStore from '../../store/userStore';
 
-const NavBar = () => {
+const NavBar = (props: PropsWithChildren) => {
   const { isAuthenticated, user } = useAuth0();
   const [loginPage, setLoginPage] = useState(true);
+  const currentUser = useUserStore(state => state.user);
+  // @ts-ignore
+  const backgroundColor = useUserStore(state => state.backgroundColor);
+  // @ts-ignore
+  const foregroundColor = useUserStore(state => state.foregroundColor);
+  const [adminUser, setAdminUser] = useState(false);
 
   const [showMenuItems, setShowMenuItems] = useState(false);
-  const [adminItems, setAdminItems] = useState(false);
   const toggleMenu = () => {
     setShowMenuItems(!showMenuItems);
   };
@@ -29,66 +35,41 @@ const NavBar = () => {
     enabled: false,
   });
 
-  const userTypeId = userData?.userType.userTypeId;
-  const [bgColor, setBgColor] = useState('#7dd3fc');
   const [fgColor, setFgColor] = useState('#f3f4f6');
-  const [items, setItems] = useState([
-    { route: '/', name: 'Home' },
-    { route: '/games', name: 'Games' },
-    { route: '/profile', name: 'Profile' },
-    { route: '/admin', name: 'Admin' },
-  ]);
 
   useEffect(() => {
     if (isAuthenticated && user) {
       refetchUser();
       setLoginPage(false);
     }
-    if (userData) {
-      // console.log(userTypeId);
-      // setBgColor(userData.backgroundColor);
-      // setFgColor(userData.foregroundColor);
-      // if (userTypeId === 1) {
-      //   setItems([
-      //     { route: '/', name: 'Home' },
-      //     { route: '/games', name: 'Games' },
-      //     { route: '/profile', name: 'Profile' },
-      //     { route: '/admin', name: 'Admin' },
-      //   ]);
-      // }
+    if (currentUser && currentUser.userType.userTypeId === 1) {
+      setAdminUser(true);
     }
-  }, [refetchUser, user]);
+  }, [refetchUser, user, currentUser]);
 
-  // const itemsUser = [
-  //   { route: '/', name: 'Home' },
-  //   { route: '/games', name: 'Games' },
-  //   { route: '/profile', name: 'Profile' },
-  // ];
-  // const itemsAdmin = [
-  //   { route: '/', name: 'Home' },
-  //   { route: '/games', name: 'Games' },
-  //   { route: '/profile', name: 'Profile' },
-  //   { route: '/admin', name: 'Admin' },
-  // ];
-
-  // if (userTypeId === 1) {
-  //   setAdminItems(true);
-  // }
-
-  // const displayMenuItems = () => {
-  //   if (userTypeId === 1) {
-  //     setAdminItems(true);
-  //     return itemsAdmin;
-  //   } else {
-  //     return itemsUser;
-  //   }
-  // };
+  const menuItems = adminUser ? (
+    <MenuItems
+      items={[
+        { route: '/', name: 'Home' },
+        { route: '/games', name: 'Games' },
+        { route: '/profile', name: 'Profile' },
+        { route: '/admin', name: 'Admin' },
+      ]}
+    />
+  ) : (
+    <MenuItems
+      items={[
+        { route: '/', name: 'Home' },
+        { route: '/games', name: 'Games' },
+        { route: '/profile', name: 'Profile' },
+      ]}
+    />
+  );
 
   return (
     <Card>
       <div
         style={{ backgroundColor: fgColor }}
-        // style={{ backgroundColor: userData?.foregroundColor }}
         className="justify-content: space-between h-24 w-full flex-1 items-center px-6 py-6"
       >
         <img
@@ -111,15 +92,7 @@ const NavBar = () => {
             MENU
           </button>
         </div>
-        <div className="ml-20">
-          {showMenuItems ? (
-            <>
-              <MenuItems items={items} />
-            </>
-          ) : (
-            ''
-          )}
-        </div>
+        <div className="ml-20">{showMenuItems ? <>{menuItems}</> : ''}</div>
       </div>
     </Card>
   );

@@ -5,18 +5,12 @@ import { getQuestions } from '../../services/QuestionApi';
 import { deleteUser, getAllUsers, getUserByAuth } from '../../services/UserApi';
 import DeleteUserModal from './DeleteUserModal';
 import { useAuth0 } from '@auth0/auth0-react';
+import useUserStore from '../../store/userStore';
 
 const Admin = () => {
-  const { isAuthenticated, user } = useAuth0();
+  const backgroundColor = useUserStore(state => state.backgroundColor);
   const [clicked, setClicked] = useState(false);
   const [selectedUser, setSelectedUser] = useState(0);
-
-  const { data: userData, refetch: refetchUser } = useQuery({
-    queryKey: [`user`],
-    //@ts-ignore
-    queryFn: () => getUserByAuth(user.sub),
-    enabled: false,
-  });
 
   const {
     isLoading,
@@ -50,7 +44,6 @@ const Admin = () => {
   const onClickDelete = (info: user) => {
     setSelectedUser(info.userId);
     setClicked(true);
-    console.log('userId:' + info.userId);
   };
 
   const deleteUserCall = () => {
@@ -59,7 +52,7 @@ const Admin = () => {
 
   return (
     <Card>
-      <body style={{ backgroundColor: userData?.backgroundColor }} className="">
+      <body style={{ backgroundColor: backgroundColor }} className="">
         <div className="flex flex-col">
           <div className="overflow-x-auto sm:-mx-6 lg:-mx-8">
             <div className="inline-block min-w-full py-2 sm:px-6 lg:px-8">

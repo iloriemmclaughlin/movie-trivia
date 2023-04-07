@@ -1,13 +1,18 @@
-import React, { useEffect, useState } from 'react';
-import { stats } from '../services/DTOs';
-import Card from './UI/Card';
+import React, { useEffect } from 'react';
+import { stats } from '../../services/DTOs';
 import { useQuery } from '@tanstack/react-query';
-import { getUserByAuth } from '../services/UserApi';
-import { getAllStats } from '../services/StatsApi';
+import { getUserByAuth } from '../../services/UserApi';
+import { getAllStats } from '../../services/StatsApi';
 import { useAuth0 } from '@auth0/auth0-react';
+import useUserStore from '../../store/userStore';
 
 const Leaderboard = () => {
   const { isAuthenticated, user } = useAuth0();
+  const currentUser = useUserStore(state => state.user);
+  // @ts-ignore
+  const backgroundColor = useUserStore(state => state.backgroundColor);
+  // @ts-ignore
+  const foregroundColor = useUserStore(state => state.foregroundColor);
 
   const {
     isLoading,
@@ -38,16 +43,13 @@ const Leaderboard = () => {
 
   if (error) return <div>An error has occurred.</div>;
 
-  const bgColor = { backgroundColor: userData?.backgroundColor };
-  const fgColor = { backgroundColor: userData?.foregroundColor };
-
   if (statsData) {
     return (
       <ul>
         {statsData.map((stat, index: number) => (
           <div className="grid grid-cols-3 pl-10 pr-10">
             <div
-              style={fgColor}
+              style={{ backgroundColor: foregroundColor }}
               className="flex-1 bg-white pt-10 pb-10 text-black"
             >
               <li key={index}>
@@ -55,7 +57,7 @@ const Leaderboard = () => {
               </li>
             </div>
             <div
-              style={fgColor}
+              style={{ backgroundColor: foregroundColor }}
               className="flex-1 bg-white pt-10 pb-10 text-black"
             >
               <li key={index}>
@@ -63,7 +65,7 @@ const Leaderboard = () => {
               </li>
             </div>
             <div
-              style={fgColor}
+              style={{ backgroundColor: foregroundColor }}
               className="flex-1 bg-white pt-10 pb-10 text-black"
             >
               <li key={index}>
