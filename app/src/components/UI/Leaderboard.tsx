@@ -40,7 +40,7 @@ const Leaderboard = () => {
     }
   }, [refetchUser, user]);
 
-  if (isLoading) return <div>Loading...</div>;
+  if (isLoading) return <div className="text-center">Loading...</div>;
 
   if (error) return <div>An error has occurred.</div>;
 
@@ -51,15 +51,22 @@ const Leaderboard = () => {
           <div className="grid grid-cols-3 pl-10 pr-10">
             <div
               style={{ backgroundColor: foregroundColor }}
-              className="flex-1 bg-white pt-10 pb-10 text-black"
+              className=" flex-1 border-b border-black pt-10 pb-10 text-black"
             >
+              <Avatar
+                className="absolute -mt-3 ml-4"
+                name={stat.name}
+                color={stat.background_color}
+                fgColor={stat.foreground_color}
+                size="65"
+              />
               <li key={index}>
                 <h2 className="text-center">{stat.username}</h2>
               </li>
             </div>
             <div
               style={{ backgroundColor: foregroundColor }}
-              className="flex-1 bg-white pt-10 pb-10 text-black"
+              className="flex-1 border-b border-black pt-10 pb-10 text-black"
             >
               <li key={index}>
                 <h2 className="text-center">{stat.games_played}</h2>
@@ -67,7 +74,7 @@ const Leaderboard = () => {
             </div>
             <div
               style={{ backgroundColor: foregroundColor }}
-              className="flex-1 bg-white pt-10 pb-10 text-black"
+              className="flex-1 border-b border-black pt-10 pb-10 text-black"
             >
               <li key={index}>
                 <h2 className="text-center">{stat.high_score}</h2>

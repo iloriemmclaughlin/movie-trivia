@@ -1,7 +1,4 @@
 import create from 'zustand';
-import { useAuth0 } from '@auth0/auth0-react';
-import { useMutation, useQuery } from '@tanstack/react-query';
-import { getAllUsers, getUserByAuth } from '../services/UserApi';
 import { user } from '../services/DTOs';
 
 interface IUserDefault {

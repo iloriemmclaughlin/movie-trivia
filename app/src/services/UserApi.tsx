@@ -48,26 +48,6 @@ export async function getUserGames(userId: number): Promise<game[]> {
     });
 }
 
-export async function updateUser(
-  auth0: string,
-  params: updateUserParams,
-): Promise<user> {
-  return await fetch(`http://localhost:8000/api/users/${auth0}/update`, {
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    method: 'PUT',
-    body: JSON.stringify(params),
-  })
-    .then(response => response.json())
-    .then((data: user) => {
-      return data;
-    })
-    .catch(error => {
-      throw error;
-    });
-}
-
 export async function createNewUser(params: newUser): Promise<user> {
   return await fetch(
     `http://localhost:8000/api/users/createNew/${params.auth0}`,
@@ -79,6 +59,26 @@ export async function createNewUser(params: newUser): Promise<user> {
       body: JSON.stringify(params),
     },
   )
+    .then(response => response.json())
+    .then((data: user) => {
+      return data;
+    })
+    .catch(error => {
+      throw error;
+    });
+}
+
+export async function updateUser(
+  auth0: string,
+  params: updateUserParams,
+): Promise<user> {
+  return await fetch(`http://localhost:8000/api/users/${auth0}/update`, {
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    method: 'PUT',
+    body: JSON.stringify(params),
+  })
     .then(response => response.json())
     .then((data: user) => {
       return data;

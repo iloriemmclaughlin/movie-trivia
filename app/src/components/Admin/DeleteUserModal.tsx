@@ -1,9 +1,5 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import Card from '../UI/Card';
-import { useQuery } from '@tanstack/react-query';
-import { getUserByAuth } from '../../services/UserApi';
-import { user } from '../../services/DTOs';
-import { useAuth0 } from '@auth0/auth0-react';
 import useUserStore from '../../store/userStore';
 
 // @ts-ignore

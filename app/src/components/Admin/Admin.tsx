@@ -1,11 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import Card from '../UI/Card';
 import { useMutation, useQuery } from '@tanstack/react-query';
-import { getQuestions } from '../../services/QuestionApi';
 import { deleteUser, getAllUsers, getUserByAuth } from '../../services/UserApi';
 import DeleteUserModal from './DeleteUserModal';
-import { useAuth0 } from '@auth0/auth0-react';
 import useUserStore from '../../store/userStore';
+import Loading from '../UI/Loading';
 
 const Admin = () => {
   const backgroundColor = useUserStore(state => state.backgroundColor);
@@ -31,7 +30,7 @@ const Admin = () => {
     refetch();
   }, [refetch, users]);
 
-  if (isLoading) return <div className="text-center">Loading Users...</div>;
+  if (isLoading) return <Loading />;
 
   if (error)
     return <div className="text-center">OPE. No users available :(</div>;
@@ -52,7 +51,10 @@ const Admin = () => {
 
   return (
     <Card>
-      <body style={{ backgroundColor: backgroundColor }} className="">
+      <div
+        style={{ backgroundColor: backgroundColor }}
+        className="min-h-screen"
+      >
         <div className="flex flex-col">
           <div className="overflow-x-auto sm:-mx-6 lg:-mx-8">
             <div className="inline-block min-w-full py-2 sm:px-6 lg:px-8">
@@ -100,7 +102,7 @@ const Admin = () => {
             </div>
           </div>
         </div>
-      </body>
+      </div>
     </Card>
   );
 };

@@ -5,23 +5,16 @@ namespace App\Service;
 use App\Dto\Outgoing\StatsDto;
 use App\Entity\Stats;
 use App\Repository\StatsRepository;
-use Doctrine\Persistence\ManagerRegistry;
 
 class StatsService
 {
     private StatsRepository $statsRepository;
-    private ManagerRegistry $managerRegistry;
-    private UserService $userService;
 
     public function __construct(
         StatsRepository $statsRepository,
-        ManagerRegistry $managerRegistry,
-        UserService $userService,
     )
     {
         $this->statsRepository = $statsRepository;
-        $this->managerRegistry = $managerRegistry;
-        $this->userService = $userService;
     }
 
     public function returnAllStats(): array
@@ -33,7 +26,10 @@ class StatsService
             $allStats[] = [
                 'username' => $stat->getUserId()->getUsername(),
                 'games_played' => $stat->getGamesPlayed(),
-                'high_score' => $stat->getHighScore()
+                'high_score' => $stat->getHighScore(),
+                'name' => $stat->getUserId()->getFirstName() . ' ' . $stat->getUserId()->getLastName(),
+                'background_color' => $stat->getUserId()->getBackgroundColor(),
+                'foreground_color' => $stat->getUserId()->getForegroundColor(),
             ];
         }
 

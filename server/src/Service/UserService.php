@@ -4,47 +4,37 @@ namespace App\Service;
 
 use App\Dto\Incoming\CreateUserDto;
 use App\Dto\Outgoing\UserDto;
-use App\Dto\Outgoing\GameDto;
-use App\Entity\Game;
 use App\Entity\User;
 use App\Repository\GameRepository;
-use App\Repository\StatsRepository;
 use App\Repository\UserRepository;
 use App\Repository\UserTypeRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
-use Doctrine\Persistence\ManagerRegistry;
 
 
 class UserService
 {
     private UserRepository $userRepository;
     private UserTypeRepository $userTypeRepository;
-    private StatsRepository $statsRepository;
     private GameRepository $gameRepository;
     private UserTypeService $userTypeService;
     private EntityManagerInterface $entityManager;
     private GameService $gameService;
     private StatsService $statsService;
-    private ManagerRegistry $managerRegistry;
 
 
     public function __construct(
         UserRepository $userRepository,
         UserTypeRepository $userTypeRepository,
-        StatsRepository $statsRepository,
         GameRepository $gameRepository,
         UserTypeService $userTypeService,
-        EntityManagerInterface $entityManager,
-        ManagerRegistry $managerRegistry)
+        EntityManagerInterface $entityManager)
     {
         $this->userRepository = $userRepository;
         $this->userTypeRepository = $userTypeRepository;
-        $this->statsRepository = $statsRepository;
         $this->gameRepository = $gameRepository;
         $this->userTypeService = $userTypeService;
         $this->entityManager = $entityManager;
-        $this->managerRegistry = $managerRegistry;
     }
 
     public function getAllUsers()
@@ -80,12 +70,10 @@ class UserService
                 'score' => $game->getScore(),
                 'date' => $game->getDate(),
             ];
-
         }
 
         return $dto;
     }
-
 
     public function createUser(CreateUserDto $dto, $auth0): ?UserDto
     {
@@ -112,33 +100,59 @@ class UserService
 
     }
 
-    private function createUserStats($userId): void
+    public function updateUser($auth0, Request $request): UserDto
     {
-        $user = $this->userRepository->find($userId);
-        $newStats = $user->getStats();
-        $newStats->setGamesPlayed(0);
-        $newStats->setHighScore(0);
+        $user = $this->userRepository->findOneBy(['auth0' => $auth0]);
+        $userInput = json_decode($request->getContent(), true);
 
-        $this->statsRepository->save($newStats, true);
-
-    }
-
-    public function updateUserStats(Request $request, int $userId): string
-    {
-        $updatedStats = json_decode($request->getContent(), true);
-
-        $user = $this->userRepository->find($userId);
-
-        if (!$userId) {
-            return ('No user found for id' . $userId);
+        if ($userInput['firstName'] === '') {
+            $user->setFirstName($user->getFirstName());
+        } else {
+            $user->setFirstName($userInput['firstName']);
         }
 
-        $user->getStats()->setGamesPlayed($updatedStats['gamesPlayed']);
-        $user->getStats()->setHighScore($updatedStats['highScore']);
-        $this->userRepository->save($user);
-        $this->statsRepository->save($updatedStats);
+        if ($userInput['lastName'] === '') {
+            $user->setLastName($user->getLastName());
+        } else {
+            $user->setLastName($userInput['lastName']);
+        }
 
-        return ('Leaderboard have been successfully updated!');
+        if ($userInput['email'] === '') {
+            $user->setEmail($user->getEmail());
+        } else {
+            $user->setEmail($userInput['email']);
+        }
+
+        if ($userInput['username'] === '') {
+            $user->setUsername($user->getUsername());
+        } else {
+            $user->setUsername($userInput['username']);
+        }
+
+        if ($userInput['backgroundColor'] === '') {
+            $user->setBackgroundColor($user->getBackgroundColor());
+        } else {
+            $user->setBackgroundColor($userInput['backgroundColor']);
+        }
+
+        if ($userInput['foregroundColor'] === '') {
+            $user->setForegroundColor($user->getForegroundColor());
+        } else {
+            $user->setForegroundColor($userInput['foregroundColor']);
+        }
+
+        $this->entityManager->persist($user);
+        $this->entityManager->flush($user);
+
+
+        return $this->transformToDto($user);
+    }
+
+    public function getUserByAuth0(string $auth0): UserDto
+    {
+        $user = $this->userRepository->findOneBy(['auth0' => $auth0]);
+
+        return $this->transformToDto($user);
     }
 
     public function deleteUser(int $userId): string
@@ -170,73 +184,6 @@ class UserService
         );
     }
 
-    public function transformGameDto(Game $game): GameDto
-    {
-        $userId = $game->getUserId();
-        $user = $this->userRepository->find($userId);
 
-        return new GameDto(
-            $game->getId(),
-            $this->transformToDto($user),
-            $game->getScore(),
-            $game->getTotalQuestions(),
-            $game->getDate()
-        );
-    }
-
-    public function updateUser($auth0, Request $request): UserDto
-    {
-        $user = $this->userRepository->findOneBy(['auth0' => $auth0]);
-        $userInput = json_decode($request->getContent(), true);
-
-            if ($userInput['firstName'] === '') {
-                $user->setFirstName($user->getFirstName());
-            } else {
-                $user->setFirstName($userInput['firstName']);
-            }
-
-            if ($userInput['lastName'] === '') {
-                $user->setLastName($user->getLastName());
-            } else {
-                $user->setLastName($userInput['lastName']);
-            }
-
-            if ($userInput['email'] === '') {
-                $user->setEmail($user->getEmail());
-            } else {
-                $user->setEmail($userInput['email']);
-            }
-
-            if ($userInput['username'] === '') {
-                $user->setUsername($user->getUsername());
-            } else {
-                $user->setUsername($userInput['username']);
-            }
-
-            if ($userInput['backgroundColor'] === '') {
-                $user->setBackgroundColor($user->getBackgroundColor());
-            } else {
-                $user->setBackgroundColor($userInput['backgroundColor']);
-            }
-
-            if ($userInput['foregroundColor'] === '') {
-                $user->setForegroundColor($user->getForegroundColor());
-            } else {
-                $user->setForegroundColor($userInput['foregroundColor']);
-            }
-
-            $this->entityManager->persist($user);
-            $this->entityManager->flush($user);
-
-
-        return $this->transformToDto($user);
-    }
-
-    public function getUserByAuth0(string $auth0): UserDto
-    {
-        $user = $this->userRepository->findOneBy(['auth0' => $auth0]);
-
-        return $this->transformToDto($user);
-    }
 
 }

@@ -1,15 +1,21 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import Card from './Card';
 
 const Loading = () => {
-  // const [isLoading, setIsLoading] = useState(false);
-  //
-  // useEffect(() => {
-  //   setIsLoading(true);
-  //   setTimeout(() => {
-  //     setIsLoading(false);
-  //   }, 2000);
-  // }, []);
+  const loadingPhrases = [
+    'E.T. Phone Home...',
+    "Toto, I've a feeling we're not in Kansas anymore...",
+    'You had me at hello.',
+    'May the force be with you.',
+    "I'll have what she's having.",
+    'A martini. Shaken, not stirred.',
+    "There's no crying in baseball!",
+    "You can't handle the truth!",
+  ];
+
+  const randomPhrase = () => {
+    return loadingPhrases[Math.floor(Math.random() * loadingPhrases.length)];
+  };
 
   return (
     <Card>
@@ -31,9 +37,7 @@ const Loading = () => {
               fill="currentFill"
             />
           </svg>
-          <h1 className="p-10 text-xl uppercase text-white">
-            E.T. Phone Home...
-          </h1>
+          <h1 className="p-10 text-xl text-white">{randomPhrase()}</h1>
         </div>
       </div>
     </Card>

@@ -37,20 +37,12 @@ class GameController extends ApiController
         return $this->json($this->gameService->returnGameQuestions($gameId));
     }
 
-
     #[Route('/api/games/{userId}/createGame', methods: ['POST'])]
     public function createUpdateGame(Request $request, $userId): Response
     {
         $dto = $this->getValidatedDto($request, CreateGameDto::class);
         return $this->json($this->gameService->createUpdateGame($dto, $userId, $request));
     }
-
-//    #[Route('/api/games/stats/{userId}', methods: ['POST'])]
-//    public function createUpdateStats(Request $request, $userId): Response
-//    {
-//        $dto = $this->getValidatedDto($request, CreateStatsDto::class);
-//        return $this->json($this->gameService->createUpdateStats($dto, $userId, $request));
-//    }
 
     #[Route('/api/games/{gameId}', methods: ['DELETE'])]
     public function removeGame(int $gameId): Response
@@ -63,12 +55,6 @@ class GameController extends ApiController
     {
         $dto = $this->getValidatedDto($request, CreateGameQuestionDto::class);
         return $this->json($this->gameService->addGameQuestion($dto, $gameId, $questionId));
-    }
-
-    #[Route('/api/games/{gameId}/{questionId}', methods: ['PUT'])]
-    public function checkAnswer(int $gameId, int $questionId): Response
-    {
-        return $this->json($this->gameService->checkAnswer($gameId, $questionId));
     }
 
 }

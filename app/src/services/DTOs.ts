@@ -38,6 +38,9 @@ export interface stats {
   username: string;
   games_played: number;
   high_score: number;
+  name: string;
+  background_color: string;
+  foreground_color: string;
 }
 
 export interface game {

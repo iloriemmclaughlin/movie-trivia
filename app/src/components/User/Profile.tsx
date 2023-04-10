@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { createNewUser, updateUser } from '../../services/UserApi';
 import useInput from '../../hooks/use-input';
-import { useQuery, useMutation } from '@tanstack/react-query';
+import { useMutation } from '@tanstack/react-query';
 import Card from '../UI/Card';
 import { useAuth0 } from '@auth0/auth0-react';
 import { ChromePicker } from 'react-color';

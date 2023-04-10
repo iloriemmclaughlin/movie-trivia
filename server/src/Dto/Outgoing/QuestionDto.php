@@ -10,24 +10,6 @@ class QuestionDto
     private string $questionAnswer;
     private int $questionOptionId;
     private array $questionOption;
-//
-//    /**
-//     * @param int $questionId
-//     * @param string $questionType
-//     * @param string $questionText
-//     * @param string $questionAnswer
-//     * @param int $questionOptionId
-//     * @param string[] $questionOption
-//     */
-//    public function __construct(int $questionId, string $questionType, string $questionText, string $questionAnswer, int $questionOptionId, array $questionOption)
-//    {
-//        $this->questionId = $questionId;
-//        $this->questionType = $questionType;
-//        $this->questionText = $questionText;
-//        $this->questionAnswer = $questionAnswer;
-//        $this->questionOptionId = $questionOptionId;
-//        $this->questionOption = $questionOption;
-//    }
 
     /**
      * @return int

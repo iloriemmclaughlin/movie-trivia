@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import Leaderboard from './Leaderboard';
 import { useAuth0 } from '@auth0/auth0-react';
 import Card from './Card';
@@ -14,20 +14,15 @@ const Homepage = () => {
   // @ts-ignore
   const foregroundColor = useUserStore(state => state.foregroundColor);
 
-  if (!currentUser) {
-    return <Loading />;
-  }
-
   const newGameHandler = () => {
-    console.log('clicked');
     return window.location.assign('/newGame');
   };
 
-  // if (isLoading) return <div className="text-center">E.T. PHONE HOME...</div>;
-
   // if (error) return <div>CANNOT COMPUTE.</div>;
 
-  if (!isAuthenticated) {
+  if (!currentUser) {
+    return <Loading />;
+  } else if (!isAuthenticated && !currentUser) {
     return (
       <Card>
         <div className="text-center">
@@ -40,7 +35,7 @@ const Homepage = () => {
 
   return (
     <Card>
-      <body
+      <div
         style={{ backgroundColor: backgroundColor }}
         className="min-h-screen"
       >
@@ -55,21 +50,21 @@ const Homepage = () => {
             <div
               style={{ backgroundColor: foregroundColor }}
               id="user"
-              className="flex-1 bg-white pt-10 pb-10 text-black"
+              className="flex-1 pt-10 pb-10 text-black"
             >
               <h2 className="text-center text-2xl">USER</h2>
             </div>
             <div
               style={{ backgroundColor: foregroundColor }}
               id="gamesPlayed"
-              className="flex-1 bg-white pt-10 pb-10 text-black"
+              className="flex-1 pt-10 pb-10 text-black"
             >
               <h2 className="text-center text-2xl">GAMES PLAYED</h2>
             </div>
             <div
               style={{ backgroundColor: foregroundColor }}
               id="highScore"
-              className="flex-1 bg-white pt-10 pb-10 text-black"
+              className="flex-1 pt-10 pb-10 text-black"
             >
               <h2 className="text-center text-2xl">HIGH SCORE</h2>
             </div>
@@ -85,7 +80,7 @@ const Homepage = () => {
             </button>
           </div>
         </div>
-      </body>
+      </div>
     </Card>
   );
 };

@@ -7,6 +7,7 @@ import { createUpdateGame } from '../../services/GameApi';
 import { getUserByAuth } from '../../services/UserApi';
 import { useAuth0 } from '@auth0/auth0-react';
 import useUserStore from '../../store/userStore';
+import Loading from '../UI/Loading';
 
 function NewGame() {
   const { isAuthenticated, user } = useAuth0();
@@ -80,7 +81,7 @@ function NewGame() {
     }
   }, [refetchUser, user, timeExpired]);
 
-  if (isLoading) return <div className="text-center">GET READY TO PLAY!!!</div>;
+  if (isLoading) return <Loading />;
 
   if (error)
     return <div className="text-center">OPE. NO GAME FOR YOU TODAY.</div>;
@@ -128,7 +129,7 @@ function NewGame() {
     return (
       <Card>
         <Timer onTimeExpired={onTimeExpired} />
-        <body
+        <div
           style={{ backgroundColor: backgroundColor }}
           className="flex aspect-auto min-h-screen justify-center"
         >
@@ -232,7 +233,7 @@ function NewGame() {
               </div>
             </div>
           )}
-        </body>
+        </div>
       </Card>
     );
   }

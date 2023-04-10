@@ -3,29 +3,19 @@
 namespace App\Service;
 
 use App\Dto\Incoming\CreateGameDto;
-use App\Dto\Incoming\CreateStatsDto;
 use App\Dto\Outgoing\GameDto;
 use App\Dto\Incoming\CreateGameQuestionDto;
-use App\Dto\Outgoing\QuestionDto;
 use App\Dto\Outgoing\GameQuestionDto;
-use App\Dto\Outgoing\StatsDto;
-use App\Dto\Response\Transformer\GameQuestionResponseDtoTransformer;
-use App\Dto\Response\Transformer\GameResponseDtoTransformer;
-use App\Dto\Response\Transformer\QuestionResponseDtoTransformer;
 use App\Entity\Game;
 use App\Entity\GameQuestion;
-use App\Entity\Question;
 use App\Entity\Stats;
 use App\Repository\GameQuestionRepository;
 use App\Repository\GameRepository;
 use App\Repository\UserRepository;
 use App\Repository\QuestionRepository;
-use App\Service\QuestionService;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Persistence\ManagerRegistry;
-use DateTime;
 use Symfony\Component\HttpFoundation\Request;
-use phpDocumentor\Reflection\Types\Boolean;
 
 class GameService
 {
@@ -36,10 +26,8 @@ class GameService
     private GameQuestionRepository $gameQuestionRepository;
     private QuestionService $questionService;
     private ManagerRegistry $managerRegistry;
-    private GameResponseDtoTransformer $gameResponseDtoTransformer;
     private EntityManagerInterface $entityManager;
-    private QuestionResponseDtoTransformer $questionResponseDtoTransformer;
-    private GameQuestionResponseDtoTransformer $gameQuestionResponseDtoTransformer;
+
 
     public function __construct(
         GameRepository $gameRepository,
@@ -50,9 +38,7 @@ class GameService
         QuestionService $questionService,
         ManagerRegistry $managerRegistry,
         EntityManagerInterface $entityManager,
-        GameResponseDtoTransformer $gameResponseDtoTransformer,
-        QuestionResponseDtoTransformer $questionResponseDtoTransformer,
-        GameQuestionResponseDtoTransformer $gameQuestionResponseDtoTransformer)
+    )
     {
         $this->gameRepository = $gameRepository;
         $this->userRepository = $userRepository;
@@ -62,29 +48,19 @@ class GameService
         $this->questionService = $questionService;
         $this->entityManager = $entityManager;
         $this->managerRegistry = $managerRegistry;
-        $this->gameResponseDtoTransformer = $gameResponseDtoTransformer;
-        $this->questionResponseDtoTransformer = $questionResponseDtoTransformer;
-        $this->gameQuestionResponseDtoTransformer = $gameQuestionResponseDtoTransformer;
     }
 
     public function returnAllGames()
     {
         $games = $this->gameRepository->findAll();
+        $dto = [];
 
-        $dto = $this->gameResponseDtoTransformer->transformFromObjects($games);
+        foreach ($games as $game) {
+            $dto[] = $this->transformToDto($game);
+        }
 
         return $dto;
     }
-
-//    public function returnGameQuestions($gameId)
-//    {
-//        $game = $this->gameRepository->find($gameId);
-//        $gameQuestions = $game->getGameQuestions();
-//
-//        $dto = $this->gameQuestionResponseDtoTransformer->transformFromObjects($gameQuestions);
-//
-//        return $dto;
-//    }
 
     public function createUpdateGame(CreateGameDto $dto, $userId, Request $request): ?GameDto
     {
@@ -160,6 +136,17 @@ class GameService
         return ('Game has been successfully deleted!');
     }
 
+    public function transformToDto(Game $game): GameDto
+    {
+        return new GameDto(
+            $game->getId(),
+            $this->userService->transformToDto($game->getUserId()),
+            $game->getScore(),
+            $game->getTotalQuestions(),
+            $game->getDate()
+        );
+    }
+
     public function addGameQuestion(CreateGameQuestionDto $dto, $gameId, $questionId)
     {
         $gameQuestion = new GameQuestion();
@@ -171,17 +158,6 @@ class GameService
 
         return $this->transformGameQuestionDto($gameQuestion);
 
-    }
-
-    public function transformToDto(Game $game): GameDto
-    {
-        return new GameDto(
-            $game->getId(),
-            $this->userService->transformToDto($game->getUserId()),
-            $game->getScore(),
-            $game->getTotalQuestions(),
-            $game->getDate()
-        );
     }
 
     public function transformGameQuestionDto(GameQuestion $gameQuestion): GameQuestionDto
@@ -197,30 +173,6 @@ class GameService
             $this->questionService->transformToDto($question),
             $gameQuestion->getUserAnswer()
         );
-    }
-
-    private function transformStatsDto(Stats $stats): StatsDto
-    {
-        return new StatsDto(
-            $this->userService->transformToDto($stats->getUserId()),
-            $stats->getGamesPlayed(),
-            $stats->getHighScore()
-        );
-    }
-
-
-    public function checkAnswer($gameId, $questionId): Boolean
-    {
-        $question = $this->questionRepository->find($questionId);
-        $answer = $question->getQuestionAnswer();
-        $gameQuestion = $this->gameQuestionRepository->find($gameId);
-        $userResponse = $gameQuestion->getUserAnswer();
-
-        if ($answer === $userResponse) {
-            return true;
-        } else {
-            return false;
-        }
     }
 
 }

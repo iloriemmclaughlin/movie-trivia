@@ -14,13 +14,11 @@ class QuestionService
 {
     private QuestionRepository $questionRepository;
     private QuestionOptionRepository $questionOptionRepository;
-    private ManagerRegistry $managerRegistry;
 
-    public function __construct(QuestionRepository $questionRepository, QuestionOptionRepository $questionOptionRepository, ManagerRegistry $managerRegistry)
+    public function __construct(QuestionRepository $questionRepository, QuestionOptionRepository $questionOptionRepository)
     {
         $this->questionRepository = $questionRepository;
         $this->questionOptionRepository = $questionOptionRepository;
-        $this->managerRegistry = $managerRegistry;
     }
 
     public function returnAllQuestions()
@@ -43,29 +41,6 @@ class QuestionService
             $question->getQuestionText(),
             $question->getQuestionAnswer(),
         );
-    }
-
-    public function getRandomQuestion()
-    {
-        $questions = $this->questionRepository->find(1);
-        $options = $this->questionOptionRepository->findBy(['question_id' => $questions->getId()]);
-
-        $dto = new QuestionDto();
-
-        $dto->setQuestionId($questions->getId());
-        $dto->setQuestionType($questions->getQuestionTypeId()->getQuestionType());
-        $dto->setQuestionText($questions->getQuestionText());
-        $dto->setQuestionAnswer($questions->getQuestionAnswer());
-
-        $array = [];
-
-        foreach($options as $option) {
-            $array[] = $option->getOption();
-        }
-
-        $dto->setQuestionOption($array);
-
-        return $dto;
     }
 
     public function getAllQuestions()

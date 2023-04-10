@@ -1,7 +1,6 @@
 import React from 'react';
 import Card from '../UI/Card';
 import LoginButton from './LoginButton';
-import { Auth0Provider, useAuth0 } from '@auth0/auth0-react';
 
 const Login = () => {
   const newUserHandler = () => {

@@ -4,6 +4,7 @@ import { getUserByAuth, getUserGames } from '../../services/UserApi';
 import Card from '../UI/Card';
 import { useAuth0 } from '@auth0/auth0-react';
 import useUserStore from '../../store/userStore';
+import Loading from '../UI/Loading';
 
 const UserGames = () => {
   const { isAuthenticated, user } = useAuth0();
@@ -42,14 +43,17 @@ const UserGames = () => {
     }
   }, [refetchUser, user, currentUser]);
 
-  if (isLoading) return <div>Loading...</div>;
+  if (isLoading) return <Loading />;
 
   if (error) return <div>An error has occurred.</div>;
 
   if (userGameData) {
     return (
       <Card>
-        <body style={{ backgroundColor: backgroundColor }}>
+        <div
+          style={{ backgroundColor: backgroundColor }}
+          className="min-h-screen"
+        >
           <div className="grid grid-cols-1 gap-x-8 gap-y-4 pt-10 pb-2 pl-10 pr-10">
             <div
               style={{ backgroundColor: foregroundColor }}
@@ -89,26 +93,26 @@ const UserGames = () => {
             </div>
             <ul
               style={{ backgroundColor: foregroundColor }}
-              className="grid pt-10 pb-10 text-center text-black"
+              className="mr-10 ml-10 grid pb-5 text-center text-black"
             >
               {userGameData.map((game, index) => (
-                <div className="grid grid-cols-4 pl-10 pr-10">
-                  <div className="bg-dark flex-1 pt-10 pb-10 text-black">
+                <div className="grid grid-cols-4 border-b border-black pl-10 pr-10">
+                  <div className="flex-1  pt-10 pb-10 text-black">
                     <li key={index}>
                       <h2>{game.gameId}</h2>
                     </li>
                   </div>
-                  <div className="bg-dark flex-1 pt-10 pb-10 text-black">
+                  <div className="flex-1 pt-10 pb-10 text-black">
                     <li key={index}>
                       <h2>{game.totalQuestions}</h2>
                     </li>
                   </div>
-                  <div className="bg-dark flex-1 pt-10 pb-10 text-black">
+                  <div className="flex-1 pt-10 pb-10 text-black">
                     <li key={index}>
                       <h2>{game.score}</h2>
                     </li>
                   </div>
-                  <div className="bg-dark flex-1 pt-10 pb-10 text-black">
+                  <div className="flex-1 pt-10 pb-10 text-black">
                     <li key={index}>
                       <h2>{game.date}</h2>
                     </li>
@@ -117,7 +121,7 @@ const UserGames = () => {
               ))}
             </ul>
           </div>
-        </body>
+        </div>
       </Card>
     );
   }
