@@ -3,41 +3,44 @@ import Card from './Card';
 
 // @ts-ignore
 const Timer = props => {
-  const { initMinute = 0, initSeconds = 30 } = props;
-  const [minutes, setMinutes] = useState(initMinute);
-  const [seconds, setSeconds] = useState(initSeconds);
+  const timeInMilliseconds = 60000;
+  const intervalInMilliseconds = 100;
+
+  const [time, setTime] = useState(timeInMilliseconds);
+  const [referenceTime, setReferenceTime] = useState(Date.now());
 
   useEffect(() => {
-    let myInterval = setInterval(() => {
-      if (seconds > 0) {
-        setSeconds(seconds - 1);
-      }
-      if (seconds === 0) {
-        if (minutes === 0) {
-          clearInterval(myInterval);
-          props.onTimeExpired();
-        } else {
-          setMinutes(minutes - 1);
-          setSeconds(59);
-        }
-      }
-    }, 1000);
-    return () => {
-      clearInterval(myInterval);
+    const countdownToZero = () => {
+      setTime(prevTime => {
+        if (prevTime <= 0) return 0;
+
+        const now = Date.now();
+        const interval = now - referenceTime;
+        setReferenceTime(now);
+        return prevTime - interval;
+      });
     };
+
+    setTimeout(countdownToZero, intervalInMilliseconds);
+    if (time === 0) {
+      props.onTimeExpired();
+    }
   });
+
+  const minutes = Math.floor((time / 1000 / 60) << 0);
+  const seconds = Math.floor((time / 1000) % 60);
+  const formatted = minutes + ':' + (seconds < 10 ? '0' : '') + seconds;
 
   return (
     <Card>
       <div>
-        {minutes === 0 && seconds === 0 ? (
+        {time === 0 ? (
           <div className="bg-black pt-2 pb-2 text-center text-xl font-bold text-white">
             TIME'S UP!!!
           </div>
         ) : (
           <h1 className="bg-black pt-2 pb-2 text-center text-xl font-bold text-white">
-            {minutes < 10 ? `0${minutes}` : minutes}:
-            {seconds < 10 ? `0${seconds}` : seconds}
+            {formatted}
           </h1>
         )}
       </div>
