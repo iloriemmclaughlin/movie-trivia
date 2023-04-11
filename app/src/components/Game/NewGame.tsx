@@ -10,7 +10,7 @@ import useUserStore from '../../store/userStore';
 import Loading from '../UI/Loading';
 
 function NewGame() {
-  const { isAuthenticated, user } = useAuth0();
+  const { isAuthenticated, isLoading, user } = useAuth0();
   const currentUser = useUserStore(state => state.user);
   // @ts-ignore
   const backgroundColor = useUserStore(state => state.backgroundColor);
@@ -40,7 +40,7 @@ function NewGame() {
   };
 
   const {
-    isLoading,
+    isLoading: loadingQuestions,
     error,
     data: allQuestions,
     refetch,
@@ -81,10 +81,10 @@ function NewGame() {
     }
   }, [refetchUser, user, timeExpired]);
 
-  if (isLoading) return <Loading />;
+  if (isLoading || !currentUser) return <Loading />;
 
-  if (error)
-    return <div className="text-center">OPE. NO GAME FOR YOU TODAY.</div>;
+  // if (error)
+  //   return <div className="text-center">OPE. NO GAME FOR YOU TODAY.</div>;
 
   if (!allQuestions) {
     return <div className="text-center">OPE. UNABLE TO LOAD QUESTIONS.</div>;

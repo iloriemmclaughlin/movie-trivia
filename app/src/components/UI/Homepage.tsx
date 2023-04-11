@@ -7,7 +7,7 @@ import useUserStore from '../../store/userStore';
 import Loading from './Loading';
 
 const Homepage = () => {
-  const { isAuthenticated, user } = useAuth0();
+  const { isAuthenticated, user, isLoading } = useAuth0();
   const currentUser = useUserStore(state => state.user);
   // @ts-ignore
   const backgroundColor = useUserStore(state => state.backgroundColor);
@@ -20,9 +20,11 @@ const Homepage = () => {
 
   // if (error) return <div>CANNOT COMPUTE.</div>;
 
-  if (!currentUser) {
+  if (isLoading || !currentUser) {
     return <Loading />;
-  } else if (!isAuthenticated && !currentUser) {
+  }
+
+  if (!isAuthenticated && !currentUser) {
     return (
       <Card>
         <div className="text-center">
@@ -33,56 +35,58 @@ const Homepage = () => {
     );
   }
 
-  return (
-    <Card>
-      <div
-        style={{ backgroundColor: backgroundColor }}
-        className="min-h-screen"
-      >
-        <div className="grid grid-cols-1 gap-x-8 gap-y-4 pt-10 pb-2 pl-10 pr-10">
-          <div
-            style={{ backgroundColor: foregroundColor }}
-            className="flex-1 rounded-full bg-white pt-4 pb-4 text-black"
-          >
-            <h2 className="text-center text-3xl font-bold">LEADERBOARD</h2>
-          </div>
-          <div className="grid grid-cols-3 pl-10 pr-10">
+  if (currentUser) {
+    return (
+      <Card>
+        <div
+          style={{ backgroundColor: backgroundColor }}
+          className="min-h-screen"
+        >
+          <div className="grid grid-cols-1 gap-x-8 gap-y-4 pt-10 pb-2 pl-10 pr-10">
             <div
               style={{ backgroundColor: foregroundColor }}
-              id="user"
-              className="flex-1 pt-10 pb-10 text-black"
+              className="flex-1 rounded-full bg-white pt-4 pb-4 text-black"
             >
-              <h2 className="text-center text-2xl">USER</h2>
+              <h2 className="text-center text-3xl font-bold">LEADERBOARD</h2>
             </div>
-            <div
-              style={{ backgroundColor: foregroundColor }}
-              id="gamesPlayed"
-              className="flex-1 pt-10 pb-10 text-black"
-            >
-              <h2 className="text-center text-2xl">GAMES PLAYED</h2>
+            <div className="grid grid-cols-3 pl-10 pr-10">
+              <div
+                style={{ backgroundColor: foregroundColor }}
+                id="user"
+                className="flex-1 pt-10 pb-10 text-black"
+              >
+                <h2 className="text-center text-2xl">USER</h2>
+              </div>
+              <div
+                style={{ backgroundColor: foregroundColor }}
+                id="gamesPlayed"
+                className="flex-1 pt-10 pb-10 text-black"
+              >
+                <h2 className="text-center text-2xl">GAMES PLAYED</h2>
+              </div>
+              <div
+                style={{ backgroundColor: foregroundColor }}
+                id="highScore"
+                className="flex-1 pt-10 pb-10 text-black"
+              >
+                <h2 className="text-center text-2xl">HIGH SCORE</h2>
+              </div>
             </div>
-            <div
-              style={{ backgroundColor: foregroundColor }}
-              id="highScore"
-              className="flex-1 pt-10 pb-10 text-black"
-            >
-              <h2 className="text-center text-2xl">HIGH SCORE</h2>
+            <Leaderboard />
+            <div className="text-center">
+              <button
+                onClick={newGameHandler}
+                style={{ backgroundColor: foregroundColor }}
+                className="mr-1 mb-1 rounded px-6 py-3 text-sm font-bold uppercase text-black shadow outline-none transition-all duration-150 ease-linear hover:shadow-lg focus:outline-none"
+              >
+                New Game
+              </button>
             </div>
-          </div>
-          <Leaderboard />
-          <div className="text-center">
-            <button
-              onClick={newGameHandler}
-              style={{ backgroundColor: foregroundColor }}
-              className="mr-1 mb-1 rounded px-6 py-3 text-sm font-bold uppercase text-black shadow outline-none transition-all duration-150 ease-linear hover:shadow-lg focus:outline-none"
-            >
-              New Game
-            </button>
           </div>
         </div>
-      </div>
-    </Card>
-  );
+      </Card>
+    );
+  }
 };
 
 export default Homepage;

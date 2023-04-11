@@ -4,11 +4,13 @@ import useInput from '../../hooks/use-input';
 import { useMutation } from '@tanstack/react-query';
 import Card from '../UI/Card';
 import { useAuth0 } from '@auth0/auth0-react';
+// @ts-ignore
 import { ChromePicker } from 'react-color';
 import useUserStore from '../../store/userStore';
+import Loading from '../UI/Loading';
 
 function Profile() {
-  const { isAuthenticated, user } = useAuth0();
+  const { isAuthenticated, isLoading, user } = useAuth0();
   const currentUser = useUserStore(state => state.user);
   // @ts-ignore
   const backgroundColor = useUserStore(state => state.backgroundColor);
@@ -109,6 +111,10 @@ function Profile() {
       setFgColor(foregroundColor);
     }
   }, [user, currentUser]);
+
+  if (isLoading || !currentUser) {
+    return <Loading />;
+  }
 
   let formIsValid = false;
 
@@ -250,6 +256,7 @@ function Profile() {
                 <ChromePicker
                   className="flex"
                   color={bgColor}
+                  // @ts-ignore
                   onChange={e => setBgColor(e.hex)}
                 />
               </div>
@@ -277,6 +284,7 @@ function Profile() {
                 <ChromePicker
                   className="flex"
                   color={fgColor}
+                  // @ts-ignore
                   onChange={e => setFgColor(e.hex)}
                 />
               </div>
