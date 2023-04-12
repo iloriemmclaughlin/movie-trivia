@@ -13,9 +13,7 @@ const NavBar = (props: PropsWithChildren) => {
   const { isAuthenticated, user } = useAuth0();
   const [loginPage, setLoginPage] = useState(true);
   const currentUser = useUserStore(state => state.user);
-  // @ts-ignore
   const backgroundColor = useUserStore(state => state.backgroundColor);
-  // @ts-ignore
   const foregroundColor = useUserStore(state => state.foregroundColor);
   const [adminUser, setAdminUser] = useState(false);
 
@@ -24,12 +22,7 @@ const NavBar = (props: PropsWithChildren) => {
     setShowMenuItems(!showMenuItems);
   };
 
-  const {
-    isLoading,
-    error,
-    data: userData,
-    refetch: refetchUser,
-  } = useQuery({
+  const { refetch: refetchUser } = useQuery({
     queryKey: [`user`],
     //@ts-ignore
     queryFn: () => getUserByAuth(user.sub),
@@ -83,7 +76,7 @@ const NavBar = (props: PropsWithChildren) => {
         <div className="pb-2 text-center text-3xl font-bold">
           M O V I E . T R I V I A
           <div className="relative float-right mr-16">
-            {!loginPage ? (
+            {!loginPage && currentUser ? (
               <Avatar
                 className="absolute -mt-3"
                 name={name}

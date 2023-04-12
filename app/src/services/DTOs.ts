@@ -22,6 +22,8 @@ export interface newUser {
   lastName: string;
   email: string;
   password: string;
+  backgroundColor: string;
+  foregroundColor: string;
   auth0: string;
 }
 

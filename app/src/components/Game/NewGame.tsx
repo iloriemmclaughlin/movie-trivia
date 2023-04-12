@@ -8,13 +8,13 @@ import { getUserByAuth } from '../../services/UserApi';
 import { useAuth0 } from '@auth0/auth0-react';
 import useUserStore from '../../store/userStore';
 import Loading from '../UI/Loading';
+import Error from '../UI/Error';
 
+// Returns a new game for the logged in user; Displays results when timer has run out, marking the game finished
 function NewGame() {
-  const { isAuthenticated, isLoading, user } = useAuth0();
+  const { isAuthenticated, isLoading, user, error } = useAuth0();
   const currentUser = useUserStore(state => state.user);
-  // @ts-ignore
   const backgroundColor = useUserStore(state => state.backgroundColor);
-  // @ts-ignore
   const foregroundColor = useUserStore(state => state.foregroundColor);
 
   const [activeQuestion, setActiveQuestion] = useState(0);
@@ -39,12 +39,7 @@ function NewGame() {
     return window.location.assign('/newGame');
   };
 
-  const {
-    isLoading: loadingQuestions,
-    error,
-    data: allQuestions,
-    refetch,
-  } = useQuery({
+  const { data: allQuestions, refetch } = useQuery({
     queryKey: [`allQuestions`],
     queryFn: () => getQuestions(),
     enabled: false,
@@ -83,12 +78,7 @@ function NewGame() {
 
   if (isLoading || !currentUser) return <Loading />;
 
-  // if (error)
-  //   return <div className="text-center">OPE. NO GAME FOR YOU TODAY.</div>;
-
-  if (!allQuestions) {
-    return <div className="text-center">OPE. UNABLE TO LOAD QUESTIONS.</div>;
-  }
+  if (error) return <Error />;
 
   const onClickNext = () => {
     setSelectedAnswerIndex(null);
@@ -101,6 +91,7 @@ function NewGame() {
           }
         : { ...prev, wrongAnswers: prev.wrongAnswers + 1 },
     );
+    // @ts-ignore
     if (activeQuestion !== allQuestions.length - 1) {
       setActiveQuestion(prev => prev + 1);
     } else {
@@ -113,6 +104,7 @@ function NewGame() {
   // @ts-ignore
   const onAnswerSelected = (answer, index) => {
     setSelectedAnswerIndex(index);
+    // @ts-ignore
     if (answer === allQuestions[activeQuestion].questionAnswer) {
       // @ts-ignore
       setSelectedAnswer(true);
@@ -125,7 +117,7 @@ function NewGame() {
   // @ts-ignore
   const questionNum = number => (number > 100 ? number : `${number}`);
 
-  if (allQuestions) {
+  if (allQuestions && currentUser) {
     return (
       <Card>
         <Timer onTimeExpired={onTimeExpired} />

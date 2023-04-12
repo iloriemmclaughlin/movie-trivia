@@ -6,13 +6,13 @@ import { getAllStats } from '../../services/StatsApi';
 import { useAuth0 } from '@auth0/auth0-react';
 import useUserStore from '../../store/userStore';
 import Avatar from 'react-avatar';
+import Error from './Error';
 
+// Returns list of all users and their top game scores
 const Leaderboard = () => {
   const { isAuthenticated, user } = useAuth0();
   const currentUser = useUserStore(state => state.user);
-  // @ts-ignore
   const backgroundColor = useUserStore(state => state.backgroundColor);
-  // @ts-ignore
   const foregroundColor = useUserStore(state => state.foregroundColor);
 
   const {
@@ -26,7 +26,7 @@ const Leaderboard = () => {
     enabled: false,
   });
 
-  const { data: userData, refetch: refetchUser } = useQuery({
+  const { refetch: refetchUser } = useQuery({
     queryKey: [`user`],
     //@ts-ignore
     queryFn: () => getUserByAuth(user.sub),
@@ -42,7 +42,7 @@ const Leaderboard = () => {
 
   if (isLoading) return <div className="text-center">Loading...</div>;
 
-  if (error) return <div>An error has occurred.</div>;
+  if (error) return <Error />;
 
   if (statsData) {
     return (
@@ -54,7 +54,7 @@ const Leaderboard = () => {
               className=" flex-1 border-b border-black pt-10 pb-10 text-black"
             >
               <Avatar
-                className="absolute -mt-3 ml-4"
+                className="absolute -mt-3 ml-4 font-bold"
                 name={stat.name}
                 color={stat.background_color}
                 fgColor={stat.foreground_color}

@@ -5,13 +5,13 @@ import Card from '../UI/Card';
 import { useAuth0 } from '@auth0/auth0-react';
 import useUserStore from '../../store/userStore';
 import Loading from '../UI/Loading';
+import Error from '../UI/Error';
 
+// Returns the list of played games for the logged in user
 const UserGames = () => {
   const { isAuthenticated, user } = useAuth0();
   const currentUser = useUserStore(state => state.user);
-  // @ts-ignore
   const backgroundColor = useUserStore(state => state.backgroundColor);
-  // @ts-ignore
   const foregroundColor = useUserStore(state => state.foregroundColor);
 
   const { data: userData, refetch: refetchUser } = useQuery({
@@ -43,11 +43,11 @@ const UserGames = () => {
     }
   }, [refetchUser, user, currentUser]);
 
-  if (isLoading) return <Loading />;
+  if (isLoading || !currentUser) return <Loading />;
 
-  if (error) return <div>An error has occurred.</div>;
+  if (error) return <Error />;
 
-  if (userGameData) {
+  if (userGameData && currentUser) {
     return (
       <Card>
         <div

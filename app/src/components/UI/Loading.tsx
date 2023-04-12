@@ -1,6 +1,7 @@
 import React from 'react';
 import Card from './Card';
 
+// Returns loading page with rotating list of movie quotes
 const Loading = () => {
   const loadingPhrases = [
     'E.T. Phone Home...',

@@ -8,11 +8,7 @@ const UserState = (props: PropsWithChildren) => {
   const { isAuthenticated, user } = useAuth0();
   const currentUser = useUserStore(state => state.updateUser);
 
-  const {
-    isLoading,
-    data: userData,
-    refetch: refetchUser,
-  } = useQuery({
+  const { refetch: refetchUser } = useQuery({
     queryKey: [`user`],
     //@ts-ignore
     queryFn: () => getUserByAuth(user.sub),

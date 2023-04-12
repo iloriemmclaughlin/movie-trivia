@@ -3,11 +3,6 @@ import Card from '../UI/Card';
 import LoginButton from './LoginButton';
 
 const Login = () => {
-  const newUserHandler = () => {
-    window.location.assign('/createUser');
-  };
-
-  // @ts-ignore
   return (
     <Card>
       <div className="text-center">

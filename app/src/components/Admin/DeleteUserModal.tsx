@@ -2,9 +2,8 @@ import React, { useState } from 'react';
 import Card from '../UI/Card';
 import useUserStore from '../../store/userStore';
 
-// @ts-ignore
+// Modal used in Admin component to delete user
 const DeleteUserModal = (props: { deleteUserCall: Function }) => {
-  // @ts-ignore
   const foregroundColor = useUserStore(state => state.foregroundColor);
   const [showModal, setShowModal] = useState(false);
 

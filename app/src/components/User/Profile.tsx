@@ -8,13 +8,13 @@ import { useAuth0 } from '@auth0/auth0-react';
 import { ChromePicker } from 'react-color';
 import useUserStore from '../../store/userStore';
 import Loading from '../UI/Loading';
+import Error from '../UI/Error';
 
+// Returns profile of logged in user; updates changes made to profile onClick
 function Profile() {
-  const { isAuthenticated, isLoading, user } = useAuth0();
+  const { isAuthenticated, isLoading, error, user } = useAuth0();
   const currentUser = useUserStore(state => state.user);
-  // @ts-ignore
   const backgroundColor = useUserStore(state => state.backgroundColor);
-  // @ts-ignore
   const foregroundColor = useUserStore(state => state.foregroundColor);
 
   const [bgColor, setBgColor] = useState(backgroundColor);
@@ -23,53 +23,41 @@ function Profile() {
   const {
     value: firstName,
     isValid: firstNameValid,
-    hasError: firstNameError,
     valueChangeHandler: firstNameChangeHandler,
     inputBlurHandler: firstNameBlurHandler,
-    reset: firstNameReset,
   } = useInput((value: string) => value.trim() !== '');
 
   const {
     value: lastName,
     isValid: lastNameValid,
-    hasError: lastNameError,
     valueChangeHandler: lastNameChangeHandler,
     inputBlurHandler: lastNameBlurHandler,
-    reset: lastNameReset,
   } = useInput((value: string) => value.trim() !== '');
 
   const {
     value: email,
     isValid: emailValid,
-    hasError: emailError,
     valueChangeHandler: emailChangeHandler,
     inputBlurHandler: emailBlurHandler,
-    reset: emailReset,
   } = useInput((value: string) => value.includes('@'));
 
   const {
     value: username,
     isValid: usernameValid,
-    hasError: usernameError,
     valueChangeHandler: usernameChangeHandler,
     inputBlurHandler: usernameBlurHandler,
-    reset: usernameReset,
   } = useInput((value: string) => value.trim() !== '');
 
   const {
     isValid: bgColorValid,
-    hasError: bgColorError,
     valueChangeHandler: bgColorChangeHandler,
     inputBlurHandler: bgColorBlurHandler,
-    reset: bgColorReset,
   } = useInput((value: string) => value.trim() !== '');
 
   const {
     isValid: fgColorValid,
-    hasError: fgColorError,
     valueChangeHandler: fgColorChangeHandler,
     inputBlurHandler: fgColorBlurHandler,
-    reset: fgColorReset,
   } = useInput((value: string) => value.trim() !== '');
 
   const saveChangesHandler = () => {
@@ -84,6 +72,8 @@ function Profile() {
         email: '',
         username: '',
         password: '',
+        backgroundColor: backgroundColor,
+        foregroundColor: foregroundColor,
         // @ts-ignore
         auth0: user.sub,
       }),
@@ -100,6 +90,7 @@ function Profile() {
         backgroundColor: bgColor,
         foregroundColor: fgColor,
       }),
+    onSuccess: data => saveChangesHandler(),
   });
 
   useEffect(() => {
@@ -114,6 +105,10 @@ function Profile() {
 
   if (isLoading || !currentUser) {
     return <Loading />;
+  }
+
+  if (error) {
+    return <Error />;
   }
 
   let formIsValid = false;
@@ -136,13 +131,6 @@ function Profile() {
     if (!formIsValid) {
       return;
     }
-
-    firstNameReset();
-    lastNameReset();
-    emailReset();
-    usernameReset();
-    bgColorReset();
-    fgColorReset();
   };
 
   if (currentUser) {
@@ -171,7 +159,6 @@ function Profile() {
                 onBlur={firstNameBlurHandler}
                 value={firstName}
               />
-              {/*{firstNameError && <p>First Name cannot be empty.</p>}*/}
             </div>
             <div className="mb-6 md:flex md:items-center">
               <div className="md:w-1/3">
@@ -191,7 +178,6 @@ function Profile() {
                 onBlur={lastNameBlurHandler}
                 value={lastName}
               />
-              {/*{lastNameError && <p>Last Name cannot be empty.</p>}*/}
             </div>
             <div className="mb-6 md:flex md:items-center">
               <div className="md:w-1/3">
@@ -211,7 +197,6 @@ function Profile() {
                 onBlur={emailBlurHandler}
                 value={email}
               />
-              {/*{emailError && <p>Email Address cannot be empty.</p>}*/}
             </div>
             <div className="mb-6 md:flex md:items-center">
               <div className="md:w-1/3">
@@ -231,7 +216,6 @@ function Profile() {
                 onBlur={usernameBlurHandler}
                 value={username}
               />
-              {/*{usernameError && <p>Username cannot be empty.</p>}*/}
             </div>
             <div className="mb-6 md:flex md:items-center">
               <div className="md:w-1/2">
@@ -239,7 +223,7 @@ function Profile() {
                   htmlFor="bgColor"
                   className="mb-2 block text-sm font-medium text-gray-900 dark:text-white"
                 >
-                  Background Color ({backgroundColor})
+                  Background Color
                 </label>
               </div>
               <input
@@ -251,7 +235,6 @@ function Profile() {
                 onBlur={bgColorBlurHandler}
                 value={bgColor}
               />
-              {/*{bgColorError && <p>Background Color cannot be empty.</p>}*/}
               <div className="ml-6">
                 <ChromePicker
                   className="flex"
@@ -267,7 +250,7 @@ function Profile() {
                   htmlFor="fgColor"
                   className="mb-2 block text-sm font-medium text-gray-900 dark:text-white"
                 >
-                  Foreground Color ({foregroundColor})
+                  Foreground Color
                 </label>
               </div>
               <input
@@ -279,7 +262,6 @@ function Profile() {
                 onBlur={fgColorBlurHandler}
                 value={fgColor}
               />
-              {/*{fgColorError && <p>Foreground Color cannot be empty.</p>}*/}
               <div className="ml-6">
                 <ChromePicker
                   className="flex"
@@ -297,7 +279,6 @@ function Profile() {
                 onClick={e => {
                   submitHandler(e);
                   updateUserCall.mutate();
-                  saveChangesHandler();
                 }}
               >
                 Save Profile

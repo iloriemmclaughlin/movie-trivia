@@ -3,7 +3,7 @@ import Card from './Card';
 
 // @ts-ignore
 const Timer = props => {
-  const timeInMilliseconds = 60000;
+  const timeInMilliseconds = 61200;
   const intervalInMilliseconds = 100;
 
   const [time, setTime] = useState(timeInMilliseconds);

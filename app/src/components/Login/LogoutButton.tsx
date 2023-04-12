@@ -4,16 +4,14 @@ import Card from '../UI/Card';
 
 const LogoutButton = () => {
   const { logout } = useAuth0();
+  const logoutHandler = () => {
+    logout({ logoutParams: { returnTo: window.location.origin } });
+    window.location.assign('/login');
+  };
 
   return (
     <Card>
-      <button
-        onClick={() =>
-          logout({ logoutParams: { returnTo: window.location.origin } })
-        }
-      >
-        LOGOUT
-      </button>
+      <button onClick={() => logoutHandler()}>LOGOUT</button>
     </Card>
   );
 };

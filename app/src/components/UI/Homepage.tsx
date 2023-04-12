@@ -5,9 +5,11 @@ import Card from './Card';
 import LoginButton from '../Login/LoginButton';
 import useUserStore from '../../store/userStore';
 import Loading from './Loading';
+import Error from './Error';
 
+// Returns the homepage containing the leaderboard component; allows user to start new game
 const Homepage = () => {
-  const { isAuthenticated, user, isLoading } = useAuth0();
+  const { isAuthenticated, user, isLoading, error } = useAuth0();
   const currentUser = useUserStore(state => state.user);
   // @ts-ignore
   const backgroundColor = useUserStore(state => state.backgroundColor);
@@ -18,13 +20,9 @@ const Homepage = () => {
     return window.location.assign('/newGame');
   };
 
-  // if (error) return <div>CANNOT COMPUTE.</div>;
-
-  if (isLoading || !currentUser) {
+  if (isLoading) {
     return <Loading />;
-  }
-
-  if (!isAuthenticated && !currentUser) {
+  } else if (!isAuthenticated && !user) {
     return (
       <Card>
         <div className="text-center">
@@ -33,6 +31,10 @@ const Homepage = () => {
         </div>
       </Card>
     );
+  }
+
+  if (error) {
+    return <Error />;
   }
 
   if (currentUser) {
