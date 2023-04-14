@@ -3,6 +3,7 @@ import { useAuth0 } from '@auth0/auth0-react';
 import useUserStore from '../../store/userStore';
 import { useQuery } from '@tanstack/react-query';
 import { getUserByAuth } from '../../services/UserApi';
+import Loading from './Loading';
 
 const UserState = (props: PropsWithChildren) => {
   const { isAuthenticated, user } = useAuth0();

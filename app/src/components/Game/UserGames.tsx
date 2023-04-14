@@ -97,7 +97,7 @@ const UserGames = () => {
             >
               {userGameData.map((game, index) => (
                 <div className="grid grid-cols-4 border-b border-black pl-10 pr-10">
-                  <div className="flex-1  pt-10 pb-10 text-black">
+                  <div className="flex-1 pr-12 pt-10 pb-10 text-black">
                     <li key={index}>
                       <h2>{game.gameId}</h2>
                     </li>
@@ -107,12 +107,12 @@ const UserGames = () => {
                       <h2>{game.totalQuestions}</h2>
                     </li>
                   </div>
-                  <div className="flex-1 pt-10 pb-10 text-black">
+                  <div className="flex-1 pt-10 pb-10 pl-5 text-black">
                     <li key={index}>
                       <h2>{game.score}</h2>
                     </li>
                   </div>
-                  <div className="flex-1 pt-10 pb-10 text-black">
+                  <div className="flex-1 pl-12 pt-10 pb-10 text-black">
                     <li key={index}>
                       <h2>{game.date}</h2>
                     </li>

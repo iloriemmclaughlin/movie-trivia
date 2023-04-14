@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { stats } from '../../services/DTOs';
 import { useQuery } from '@tanstack/react-query';
 import { getUserByAuth } from '../../services/UserApi';
@@ -51,7 +51,7 @@ const Leaderboard = () => {
           <div className="grid grid-cols-3 pl-10 pr-10">
             <div
               style={{ backgroundColor: foregroundColor }}
-              className=" flex-1 border-b border-black pt-10 pb-10 text-black"
+              className="flex-1 border-b border-black pt-10 pb-10 text-black"
             >
               <Avatar
                 className="absolute -mt-3 ml-4 font-bold"

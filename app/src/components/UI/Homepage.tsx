@@ -20,9 +20,7 @@ const Homepage = () => {
     return window.location.assign('/newGame');
   };
 
-  if (isLoading) {
-    return <Loading />;
-  } else if (!isAuthenticated && !user) {
+  if (!isLoading && !isAuthenticated && !user) {
     return (
       <Card>
         <div className="text-center">
@@ -31,13 +29,15 @@ const Homepage = () => {
         </div>
       </Card>
     );
+  } else if (isLoading || !currentUser) {
+    return <Loading />;
   }
 
   if (error) {
     return <Error />;
   }
 
-  if (currentUser) {
+  if (currentUser && !isLoading) {
     return (
       <Card>
         <div
