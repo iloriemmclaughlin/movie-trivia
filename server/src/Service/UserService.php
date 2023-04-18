@@ -19,8 +19,6 @@ class UserService
     private GameRepository $gameRepository;
     private UserTypeService $userTypeService;
     private EntityManagerInterface $entityManager;
-    private GameService $gameService;
-    private StatsService $statsService;
 
 
     public function __construct(
@@ -88,15 +86,15 @@ class UserService
             $user->setEmail($dto->getEmail());
             $user->setUsername($dto->getUsername());
             $user->setPassword($dto->getPassword());
-            $user->setBackgroundColor('#7dd3fc');
-            $user->setForegroundColor('#e0f2fe');
+            $user->setBackgroundColor($dto->getBackgroundColor());
+            $user->setForegroundColor($dto->getForegroundColor());
             $user->setAuth0($dto->getAuth0());
             $this->userRepository->save($user, true);
 
             return $this->transformToDto($user);
+        } else {
+            return $this->transformToDto($user);
         }
-
-        return $this->transformToDto($user);
 
     }
 
@@ -164,6 +162,8 @@ class UserService
         }
 
         $this->userRepository->remove($user, true);
+        $users = $this->userRepository->findAll();
+        $this->entityManager->flush($users);
 
         return ('User has been successfully deleted!');
     }
